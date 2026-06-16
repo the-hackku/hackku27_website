@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import * as fs from "fs";
 import * as path from "path";
-
-const prisma = new PrismaClient();
 
 async function main() {
   const csvPath = process.argv[2];

@@ -1,7 +1,7 @@
 import ScheduleGrid from "@/components/ScheduleGrid";
 // import BeginnerWorkshops from "@/components/BeginnerWorkshops";
 import { prisma } from "@/lib/prisma";
-import { Event } from "@prisma/client";
+import { Event } from "@/prisma/generated/browser";
 import constants from "@/constants";
 
 /**

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { EventType } from "@prisma/client";
+import { EventType } from "@/prisma/generated/browser";
 import {
   IconMapPin,
   IconCalendar,

@@ -9,7 +9,7 @@ import {
   Prisma,
   TravelReimbursement,
   User,
-} from "@prisma/client";
+} from "@/prisma/generated/client";
 
 export type AdminThemedRoom = {
   id: string;
@@ -564,7 +564,7 @@ export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
 
 // app/actions/admin.ts
 export async function getEventById(eventId: string) {
-  isAdmin(); // Ensure only admins can access
+  await isAdmin(); // Ensure only admins can access
   try {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
@@ -724,7 +724,7 @@ export async function batchUpdateReimbursements(
 }
 
 export async function backupRegistrationScript() {
-  isAdmin();
+  await isAdmin();
   try {
     await batchBackupRegistration();
     return { success: true, message: "Backup completed successfully!" };
@@ -735,7 +735,7 @@ export async function backupRegistrationScript() {
 }
 
 export async function getTotalRegistrationNumber() {
-  isAdmin();
+  await isAdmin();
   const totalRegistrations = await prisma.participantInfo.count();
   return totalRegistrations;
 }

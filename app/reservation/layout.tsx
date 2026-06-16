@@ -1,9 +1,9 @@
 // app/reservation/layout.tsx
 import { ReactNode } from "react";
-import { getServerSession } from "next-auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/authoptions";
+
 
 /**
  * Layout that checks if the current user already has a reservation.
@@ -15,7 +15,7 @@ export default async function ReservationLayout({
   children: ReactNode;
 }) {
   // 1) Ensure the user is logged in
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.id) {
     // If not logged in, redirect to sign-in (or wherever you want).
     redirect("/signin");

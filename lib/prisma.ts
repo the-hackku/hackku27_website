@@ -1,17 +1,30 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/prisma/generated/client";
+import { PrismaNeonHttp } from "@prisma/adapter-neon";
+import { neonConfig } from "@neondatabase/serverless";
 
-declare global {
-  // Extend the NodeJS global type with `prisma`
-  export interface Global {
-    prisma: PrismaClient | undefined;
+if (process.env.NODE_ENV !== "production") {
+  neonConfig.fetchEndpoint = (host) => {
+    return host.includes("localtest.me")
+      ? `http://${host}:4444/sql`
+      : `https://${host}/sql`;
   }
 }
 
-export const prisma =
-  (global as unknown as Global).prisma ||
-  new PrismaClient({
-    log: ["query", "info", "warn", "error"], // Optional: Add logging for debugging
+const adapter = new PrismaNeonHttp(process.env.DATABASE_URL!, {});
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    adapter,
+    log: ["query", "info", "warn", "error"],
   });
+};
 
-if (process.env.NODE_ENV !== "production")
-  (global as unknown as Global).prisma = prisma;
+declare global {
+  var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
+}
+
+export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+
+// Reuses the same client across hot reloads in a development environment
+if (process.env.NODE_ENV !== "production") {
+  globalThis.prismaGlobal = prisma;
+}

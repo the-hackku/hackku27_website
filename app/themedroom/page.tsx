@@ -23,7 +23,7 @@ import {
 // Actions
 import { searchUsersByEmail } from "@/app/actions/reimbursement";
 import { createThemedRoomReservation } from "../actions/reservationRequest";
-import { RoomTheme } from "@prisma/client";
+import { RoomTheme } from "@/prisma/generated/browser";
 
 // Enums (should match your Prisma schema)
 const THEMES = [

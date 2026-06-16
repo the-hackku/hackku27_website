@@ -15,12 +15,12 @@ import {
   getHackathonCheckinCount,
 } from "@/app/actions/admin";
 import { ColumnDef } from "@tanstack/react-table";
-import { ROLE, TravelReimbursement } from "@prisma/client";
+import { ROLE, TravelReimbursement } from "@/prisma/generated/browser";
 import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
 import { EventDetailsDialog } from "@/components/admin/EventDetailsDialog"; // Import EventDetailsDialog
 import Link from "next/link";
 import { format } from "date-fns";
-import { ParticipantInfo } from "@prisma/client";
+import { ParticipantInfo } from "@/prisma/generated/browser";
 import { IconArrowUpRight } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import AnalyticsChart from "@/components/admin/charts/AnalyticsChart";

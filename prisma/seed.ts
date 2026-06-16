@@ -1,4 +1,4 @@
-import { PrismaClient, ROLE } from '@prisma/client'
+import { PrismaClient, ROLE } from '@/prisma/generated/client'
 import * as readline from 'readline'
 import constants from '../constants'
 

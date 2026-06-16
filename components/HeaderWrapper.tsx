@@ -1,12 +1,12 @@
 import RegisterAlert from "./RegisterAlert";
 import Header from "./Header";
 import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/authoptions";
-import { getServerSession } from "next-auth";
+
+import { auth } from "@/auth";
 
 export default async function HeaderWrapper() {
   // 1. Try to get the session; null if not logged in
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session) {
     // 2. If user is NOT logged in, no alert, just the basic Header

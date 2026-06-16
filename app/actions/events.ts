@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { isAdmin } from "@/middlewares/isAdmin";
-import { EventType } from "@prisma/client";
+import { EventType } from "@/prisma/generated/client";
 import { revalidatePath } from "next/cache";
 
 // app/actions/events.ts

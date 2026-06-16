@@ -1,9 +1,9 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authoptions";
-import { TimeSlot, RoomTheme } from "@prisma/client";
+import { auth } from "@/auth";
+
+import { TimeSlot, RoomTheme } from "@/prisma/generated/client";
 
 // 1) Import your Google Sheets export function
 import {
@@ -19,7 +19,7 @@ export async function createReservationRequest(input: {
 }) {
   try {
     // 1) Get the current user from session
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session?.user?.id) {
       throw new Error("Not authenticated! Please sign in first.");
     }
@@ -55,7 +55,7 @@ export async function createThemedRoomReservation(data: {
   timeSlot: TimeSlot;
   theme: RoomTheme;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.id) {
     throw new Error("Not authenticated. Please sign in.");
   }

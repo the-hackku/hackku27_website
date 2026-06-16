@@ -2,11 +2,11 @@
 
 ## Overview
 
-The **HackKU Management System** manages hackathon logistics for HackKU 2026, from participant registration to event check-ins. It provides organizers and admins with tools to manage users, events, and real-time attendance through a web interface.
+The **HackKU Management System** manages hackathon logistics for HackKU 2027, from participant registration to event check-ins. It provides organizers and admins with tools to manage users, events, and real-time attendance through a web interface.
 
 ## Features
 
-- **User Registration & Login**: Sign in using email magic links or OAuth (Google, GitHub, Discord).
+- **User Registration & Login**: Sign in using email magic links or OAuth (Google, GitHub, Discord, MyMLH).
 - **QR Code Check-Ins**: Participants receive QR codes to check into events.
 - **Admin Dashboard**: Full control over users, events, and check-in stats.
 - **Real-time Tracking**: Track attendance and check-ins in real time.
@@ -14,23 +14,23 @@ The **HackKU Management System** manages hackathon logistics for HackKU 2026, fr
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS, shadcn/ui
+- **Frontend**: Next.js 16 (App Router), React, TypeScript, Tailwind CSS, shadcn/ui
 - **Backend**: Next.js server actions, Prisma ORM, PostgreSQL
-- **Auth**: NextAuth v4 — email magic links + Google / GitHub / Discord OAuth
+- **Auth**: Auth.js v5 — email magic links + Google / GitHub / Discord OAuth
 - **Storage**: Vercel Blob (resume PDFs)
-- **Email**: Mailgun (via `MAILGUN_EMAIL_SERVER`)
+- **Email**: Resend
 - **Deployment**: Vercel
 
 ## Development Setup
 
-> **Node version**: Use Node 18 or 20. Most webpack/library issues are caused by a mismatched Node version.
+> **Bun version**: Use Bun v1.4. Most webpack/library issues are caused by a mismatched Bun version.
 
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/the-hackku/hackku26-website
-cd hackku26-website
-npm install
+git clone https://github.com/the-hackku/hackku27_website
+cd hackku27_website
+bun install
 ```
 
 ### 2. Configure environment variables
@@ -61,10 +61,10 @@ Required variables:
 A Docker Compose file is included for local Postgres:
 
 ```bash
-npm run db:up
+bun run db:up
 ```
 
-This starts a `postgres:16` container on port `5432` with:
+This starts a `postgres:18` container on port `5432` with:
 - User: `hackku`, Password: `hackku`, Database: `hackku_dev`
 
 Set `DATABASE_URL` accordingly:
@@ -76,7 +76,7 @@ DATABASE_URL="postgresql://hackku:hackku@localhost:5432/hackku_dev"
 ### 4. Run database migrations
 
 ```bash
-npx prisma migrate dev
+bunx prisma migrate dev
 ```
 
 This applies all migrations and regenerates the Prisma client. Re-run this after any schema changes.
@@ -84,7 +84,7 @@ This applies all migrations and regenerates the Prisma client. Re-run this after
 ### 5. Start the development server
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Visit `http://localhost:3000`.
@@ -92,10 +92,10 @@ Visit `http://localhost:3000`.
 ### Other useful commands
 
 ```bash
-npm run build          # Production build
-npm run lint           # Run ESLint
-npm run db:down        # Stop the local Postgres container
-npx prisma studio      # Browse the database in a GUI
+bun run build          # Production build
+bun run lint           # Run ESLint
+bun run db:down        # Stop the local Postgres container
+bunx prisma studio      # Browse the database in a GUI
 ```
 
 ## Important Files
@@ -106,8 +106,8 @@ npx prisma studio      # Browse the database in a GUI
 
 ```ts
 const constants = {
-  hackathonName: "HackKU26",
-  dates: "April 17th - 19th, 2026",
+  hackathonName: "HackKU27",
+  dates: "April 17th - 19th, 2027",
   location: "The University of Kansas",
   discordInvite: "https://discord.gg/...",
   instagramUrl: "https://instagram.com/hackku",

@@ -1,7 +1,6 @@
 "use server";
 
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authoptions";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 /**
@@ -14,7 +13,7 @@ import { prisma } from "@/lib/prisma";
 export async function searchUsersByEmail(emailQuery: string) {
   if (!emailQuery) return [];
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const userEmail = session?.user?.email; // Current user's email
 
   try {
@@ -69,7 +68,7 @@ export async function submitTravelReimbursement({
   groupMemberEmails?: string[];
   isGroup: boolean;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }
@@ -178,7 +177,7 @@ export async function handleGroupInvite(
   reimbursementId: string,
   accept: boolean
 ) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }
@@ -254,7 +253,7 @@ export async function updateTravelReimbursement({
   reason: string;
   groupMemberEmails?: string[]; // Allow passing new members
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("Not authenticated");
   }
@@ -330,7 +329,7 @@ export async function updateTravelReimbursement({
 }
 
 export async function getReimbursementDetails() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }
@@ -380,7 +379,7 @@ import type {
   TravelReimbursement,
   ReimbursementInvite,
   ParticipantInfo,
-} from "@prisma/client";
+} from "@/prisma/generated/client";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -427,7 +426,7 @@ export async function userHasReimbursement(
  * Fetches the user and includes reimbursement details.
  */
 export async function getUserWithReimbursement(): Promise<UserWithReimbursement | null> {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }
@@ -513,7 +512,7 @@ export async function getUserReimbursementStatus() {
 }
 
 export async function deleteTravelReimbursement(reimbursementId: string) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }
@@ -547,7 +546,7 @@ export async function inviteUserToReimbursement(
   reimbursementId: string,
   userId: string
 ) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }
@@ -608,7 +607,7 @@ export async function inviteUserToReimbursement(
  * Fetch users who have been invited to a reimbursement request.
  */
 export async function getInvitedUsers(reimbursementId: string) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }

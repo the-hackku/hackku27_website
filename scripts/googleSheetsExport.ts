@@ -2,17 +2,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import { google } from "googleapis";
-import dotenv from "dotenv";
 // 1. Import Prisma types
 import type {
   User as PrismaUser,
   ParticipantInfo as PrismaParticipantInfo,
   ReservationRequest,
   ThemedRoomReservation,
-} from "@prisma/client";
+} from "@/prisma/generated/client";
 import { prisma } from "@/lib/prisma";
-
-dotenv.config();
 
 // Replace with your own Google Sheet ID and desired range:
 const SHEET_ID = "1BHgfhH0E5Ro5FuzsFgvt-wtNWI9sQ4QPqdk7aNInUi0";

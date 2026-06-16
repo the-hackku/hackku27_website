@@ -1,8 +1,7 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/authoptions";
+import { auth } from "@/auth";
 
 export async function isAdmin() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session || session.user.role !== "ADMIN") {
     throw new Error("You are not authorized to perform this action.");
@@ -12,7 +11,7 @@ export async function isAdmin() {
 }
 
 export async function isAdminOrVolunteer(){
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if(!session || !(session.user.role == "ADMIN" || session.user.role == "VOLUNTEER")) {
     throw new Error("You are not authorized to perform this action.");
   }

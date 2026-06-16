@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "react-notion-x/src/styles.css";
 
 .border {
   border-color: hsl(var(--border));

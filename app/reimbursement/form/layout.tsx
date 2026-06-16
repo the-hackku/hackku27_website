@@ -1,13 +1,13 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/authoptions";
+
 import { prisma } from "@/lib/prisma";
 
 export default async function ReimbursementLayout({}: // children,
 {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   // 🚀 If the user is not authenticated, redirect to the signin page
   if (!session?.user?.email) {

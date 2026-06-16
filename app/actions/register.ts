@@ -1,20 +1,18 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authoptions";
+import { auth } from "@/auth";
+
 import { revalidatePath } from "next/cache";
 import {
   exportRegistrationToGoogleSheet,
   UserWithParticipantInfo,
 } from "@/scripts/googleSheetsExport";
 import { RegistrationData } from "@/app/actions/schemas";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export async function registerUser(data: RegistrationData, resumeUrl?: string) {
   // Authenticate the user.
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }

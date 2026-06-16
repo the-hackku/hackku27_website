@@ -1,16 +1,30 @@
 # Create a temp db service for dev environments
 services:
   db:
-    image: postgres:16
+    image: postgres:18
     restart: always
     environment:
       POSTGRES_USER: hackku
       POSTGRES_PASSWORD: hackku
       POSTGRES_DB: hackku_dev
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
+  neon-proxy:
+    image: ghcr.io/timowilhelm/local-neon-http-proxy:main
+    environment:
+      - PG_CONNECTION_STRING=postgres://hackku:hackku@db:5432/hackku_dev
+    ports:
+      - '4444:4444'
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:

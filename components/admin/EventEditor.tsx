@@ -1,6 +1,6 @@
 "use client";
 
-import { Event, EventType } from "@prisma/client";
+import { Event, EventType } from "@/prisma/generated/browser";
 import { useState } from "react";
 import { updateEvent } from "@/app/actions/events";
 import { toast } from "sonner";

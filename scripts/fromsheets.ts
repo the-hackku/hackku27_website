@@ -3,16 +3,12 @@
 // RUN: npx ts-node scripts/fromsheets.ts
 
 import { google } from "googleapis";
-import { PrismaClient, ROLE } from "@prisma/client";
-
 import fs from "fs";
 import path from "path";
-import dotenv from "dotenv";
+import { prisma } from "@/lib/prisma";
+import { ROLE } from "@/prisma/generated/client";
 
-const prisma = new PrismaClient();
 const sheets = google.sheets("v4");
-
-dotenv.config();
 
 // NOTE: Replace SHEET_ID with the ID of the Google Sheet which has registrant data
 //       This can be found in the URL of the sheet.
