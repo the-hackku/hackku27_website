@@ -94,3 +94,21 @@ html, body {
 *:not(svg):not(svg *), *:not(svg):not(svg *)::before, *:not(svg):not(svg *)::after {
   font-family: inherit;
 }
+
+/* ── Floating bubbles ── */
+@keyframes bubble-rise {
+  0%   { transform: translateY(0);        opacity: 0;   }
+  8%   { opacity: 1; }
+  85%  { opacity: 0.8; }
+  100% { transform: translateY(-110vh);   opacity: 0;   }
+}
+
+.bubble {
+  position: fixed;
+  bottom: -120px;
+  border-radius: 50%;
+  background: #c8c8c8;
+  pointer-events: none;
+  animation: bubble-rise linear infinite;
+  z-index: -1;
+}

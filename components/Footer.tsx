@@ -18,8 +18,7 @@ export default function Footer() {
   if (pathname === "/info") return null;
 
   return (
-    <footer className="bg-gray-100 text-gray-600 py-6 w-full">
-      <div className="container mx-auto px-4 flex justify-between items-center">
+    <footer className="bg-gray-100 text-gray-600 py-6 w-full relative z-10 border-t-[2.5px] border-t-[#d7d7d7]">      <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Social Links on the left */}
         <div className="flex space-x-4 text-gray-500">
           <Link

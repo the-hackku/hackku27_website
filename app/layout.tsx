@@ -46,7 +46,7 @@ export default async function RootLayout({
             <Providers>
               <div className="flex flex-col min-h-screen">
                 <HeaderWrapper />
-                <main className="flex-grow">{children}</main>
+                <main className="flex-grow relative z-10">{children}</main>
                 <Footer />
                 <Toaster />
                 <Analytics />
