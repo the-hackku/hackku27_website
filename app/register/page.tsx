@@ -8,9 +8,8 @@
 //   );
 // }
 
-import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
-
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
 
