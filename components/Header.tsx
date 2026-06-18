@@ -3,8 +3,7 @@ import Image from "next/image";
 export function Header() {
   return (
     <header
-      className="relative overflow-hidden bg-transparent"
-      style={{ height: "clamp(180px, 22vh, 340px)" }}
+      className="relative overflow-hidden bg-transparent h-[10vw]"
     >
       {/* SVG wave cutout */}
       <svg
@@ -41,14 +40,14 @@ export function Header() {
         className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
         style={{ top: "25%" }}
       >
+      <div style={{ width: "20vw", position: "relative", aspectRatio: "4 / 1" }}>
         <Image
           src="/images/branding/logo_color_grey.png"
           alt="HackKU"
-          width={320}
-          height={80}
-          style={{ height: "clamp(40px, 11vh, 120px)", width: "auto" }}
-          priority
+          fill
+          style={{ objectFit: "contain" }}
         />
+      </div>
       </div>
     </header>
   );
