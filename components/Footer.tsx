@@ -23,14 +23,14 @@ export default function Footer() {
 
       {/* Left - Social Links */}
       <div className="flex items-center gap-[1.2vh] text-gray-500">
-        <Link
+        {/* <Link
           href={constants.discordInvite}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-blue-400 transition-colors"
         >
           <IconBrandDiscord className="w-[2.2vh] h-[2.2vh]" />
-        </Link>
+        </Link> */}
 
         <Link
           href="https://www.instagram.com/thehackku/"
