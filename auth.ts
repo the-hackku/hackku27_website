@@ -125,6 +125,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user && user) {
         session.user.id = user.id;
         session.user.role = user.role || "HACKER";
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          include: { ParticipantInfo: true },
+        });
+        if (dbUser) {
+          session.user.isRegistered = Boolean(dbUser.ParticipantInfo);
+        }
         session.user.multiFactorEnabled = user.multiFactorEnabled || false;
         if (session.user.multiFactorEnabled) {
           const cookieStore = await cookies();

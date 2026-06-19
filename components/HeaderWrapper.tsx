@@ -1,7 +1,6 @@
 import RegisterAlert from "./RegisterAlert";
 import Header from "./Header";
 import { prisma } from "@/lib/prisma";
-
 import { auth } from "@/auth";
 
 export default async function HeaderWrapper() {
