@@ -1,6 +1,5 @@
 // scripts/zipResumes.ts
 
-import fetch from "node-fetch";
 // import { prisma } from "../lib/prisma.ts"; //swap with this when running node scripts/zipResumes.ts
 import { prisma } from "../lib/prisma";
 import AdmZip from "adm-zip";

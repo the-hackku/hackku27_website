@@ -2,7 +2,7 @@
 "use client";
 
 import React from "react";
-import { QRCodeSVG } from "qrcode.react";
+//import { QRCodeSVG } from "qrcode.react";
 
 interface QrCodeComponentProps {
   qrCodeData: string | null;
@@ -16,6 +16,7 @@ const QrCodeComponent = ({ qrCodeData, error, size }: QrCodeComponentProps) => {
   }
 
   return (
+    /*
     <>
       {qrCodeData ? (
         <QRCodeSVG value={qrCodeData} size={size || 200} />
@@ -23,6 +24,10 @@ const QrCodeComponent = ({ qrCodeData, error, size }: QrCodeComponentProps) => {
         <p>Loading QR Code...</p>
       )}
     </>
+    */
+   <>
+    <p>QR Code generation is currently disabled.</p>
+   </>
   );
 };
 
