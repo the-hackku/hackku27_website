@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth/next";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";

@@ -53,7 +53,7 @@ export const formSchema = z
       message: "You must agree to the MLH Code of Conduct.",
     }),
     shareWithMLH: z.boolean().refine((value) => value === true, {
-      message: "You must agree to share your data with MLH.",
+      message: "You must agree to share your data with MLH and DEV.",
     }),
     receiveEmails: z.boolean().optional(),
     photoWaiver: z.boolean().refine((value) => value === true, {

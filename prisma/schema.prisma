@@ -7,6 +7,8 @@ datasource db {
   provider  = "postgresql"
 }
 
+// Models
+
 model User {
   id                   String               @id @default(cuid(2))
   name                 String?
@@ -16,25 +18,33 @@ model User {
   image                String?
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
-  travelReimbursementId String? 
-  travelReimbursement  TravelReimbursement? @relation(fields: [travelReimbursementId], references: [id], onDelete: SetNull, name: "travelReimbursement")
-  
+  multiFactorEnabled   Boolean              @default(false)
+  totpSecret           String?
+  totpBackupCodes      String[]             @default([])
   accounts             Account[]
-  Authenticator        Authenticator[]
+  authenticators       Authenticator[]
+  sessions             Session[]
+
+  travelReimbursementId String?
+  travelReimbursement  TravelReimbursement? @relation(fields: [travelReimbursementId], references: [id], onDelete: SetNull, name: "travelReimbursement")
+  reimbursementInvites ReimbursementInvite[]
+  createdReimbursement TravelReimbursement? @relation("reimbursementCreator")
+  
   checkinsAsAdmin      Checkin[]            @relation("AdminCheckin")
   checkinsAsUser       Checkin[]            @relation("UserCheckedIn")
+  prefillData          PrefillData?         @relation()
   ParticipantInfo      ParticipantInfo?
   scansAsAdmin         Scan[]               @relation("AdminScanner")
   scansAsUser          Scan[]               @relation("UserScanned")
-  sessions             Session[]
 
-  reimbursementInvites ReimbursementInvite[]
+  createdTickets       Ticket[]             @relation("createdTickets")
+  claimedTickets       Ticket[]             @relation("claimedTickets")
 
-  // References the reimbursement created by this user (if they are the leader)
-  createdReimbursement TravelReimbursement? @relation("creator")
+  teamId               String?
+  team                 Team?                @relation("teamMembers", fields: [teamId], references: [id])
+  createdTeam          Team?                @relation("teamCreator")
+  project              Project?             @relation("projectCreator")
 }
-
-
 
 model Account {
   userId            String
@@ -59,6 +69,7 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  mfaVerified  Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -104,11 +115,12 @@ model Scan {
   id         String   @id @default(cuid())
   userId     String
   eventId    String
-  adminId    String
+  adminId    String?
+  selfScan   Boolean  @default(false)
   checkinId  String?
   successful Boolean
   createdAt  DateTime @default(now())
-  admin      User     @relation("AdminScanner", fields: [adminId], references: [id])
+  admin      User?    @relation("AdminScanner", fields: [adminId], references: [id])
   checkin    Checkin? @relation(fields: [checkinId], references: [id])
   event      Event    @relation(fields: [eventId], references: [id])
   user       User     @relation("UserScanned", fields: [userId], references: [id])
@@ -118,9 +130,10 @@ model Checkin {
   id        String   @id @default(cuid())
   userId    String
   eventId   String
-  adminId   String
+  adminId   String?
+  selfCheckin Boolean  @default(false)
   createdAt DateTime @default(now())
-  admin     User     @relation("AdminCheckin", fields: [adminId], references: [id])
+  admin     User?     @relation("AdminCheckin", fields: [adminId], references: [id])
   event     Event    @relation(fields: [eventId], references: [id])
   user      User     @relation("UserCheckedIn", fields: [userId], references: [id])
   Scan      Scan[]
@@ -160,6 +173,47 @@ model ParticipantInfo {
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model PrefillData {
+  id                    String @id @default(cuid())
+  userId                String @unique
+  user                  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName             String?
+  lastName              String?
+  countryOfResidence    String?
+  currentSchool         String?
+  levelOfStudy          String?
+  major                 String?
+  race                  String?
+  genderIdentity        String?
+  age                   Int?
+  phoneNumber           String?
+}
+
+model Team {
+  id        String   @id @default(cuid())
+  creatorId String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  inviteCode String  @unique @default(cuid())
+  creator   User     @relation("teamCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  members   User[]   @relation("teamMembers")
+  project   Project?
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  teamId      String?  @unique
+  creatorId   String?  @unique
+  name        String
+  description String?
+  devpostURL  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  team        Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  creator     User?    @relation("projectCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+}
+
 model TravelReimbursement {
   id                   String   @id @default(cuid())
   userId               String   @unique
@@ -169,11 +223,23 @@ model TravelReimbursement {
   distance             Float
   estimatedCost        Float
   createdAt            DateTime @default(now())
-  updatedAt            DateTime @default(now())
-
-  creator              User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "creator")
+  updatedAt            DateTime @updatedAt
+  creator              User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "reimbursementCreator")
   members              User[]   @relation("travelReimbursement") 
   invites              ReimbursementInvite[]
+}
+
+model ReimbursementInvite {
+  id                 String   @id @default(cuid())
+  reimbursementId    String
+  userId            String
+  status            ReimbursementInviteStatus @default(PENDING)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reimbursement     TravelReimbursement   @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reimbursementId]) // Prevents duplicate invites
 }
 
 model ThemedRoom {
@@ -191,24 +257,47 @@ model ReservationRequest {
   outOfState   Boolean
   themedRoomId String?
   createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @default(now())
-
+  updatedAt    DateTime    @updatedAt
   themedRoom   ThemedRoom? @relation(fields: [themedRoomId], references: [id], onDelete: SetNull)
 }
 
 model ThemedRoomReservation {
   id           String     @id @default(cuid())
-  userId       String   @unique
+  userId       String     @unique
   teamName     String
   memberEmails String
   timeSlot     TimeSlot
   theme        RoomTheme
   createdAt    DateTime   @default(now())
-
-@@unique([theme, timeSlot], name: "theme_timeSlot")
-
+  updatedAt    DateTime   @updatedAt
+  @@unique([theme, timeSlot], name: "theme_timeSlot")
 }
 
+model InfoPageContent {
+  id            String   @id @default("singleton")
+  title         String   @default("HackKU Hacker Doc")
+  content       String   @default("")
+  titleImageUrl String?
+  logoUrl       String?
+  updatedAt     DateTime @updatedAt
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  type        TicketType
+  createdById String?
+  claimedById String?
+  status      TicketStatus @default(OPEN)
+  location    String
+  category    String?
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  createdBy   User?        @relation("createdTickets", fields: [createdById], references: [id], onDelete: Cascade)
+  claimedBy   User?        @relation("claimedTickets", fields: [claimedById], references: [id])
+}
+
+// Enums
 
 enum TimeSlot {
   FRI_8_11PM
@@ -226,25 +315,12 @@ enum TimeSlot {
 }
 
 enum RoomTheme {
-  DUNGEONS_AND_DRAGONS
-  HOW_TO_TRAIN_YOUR_DRAGON
-  DARK_FAIRY
+  THEME_1
+  THEME_2
+  THEME_3
 }
 
-model ReimbursementInvite {
-  id                 String   @id @default(cuid())
-  reimbursementId    String
-  userId            String
-  status            InviteStatus @default(PENDING)
-  createdAt         DateTime @default(now())
-
-  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reimbursement     TravelReimbursement   @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, reimbursementId]) // Prevents duplicate invites
-}
-
-enum InviteStatus {
+enum ReimbursementInviteStatus {
   PENDING
   ACCEPTED
   DECLINED
@@ -266,11 +342,13 @@ enum ROLE {
   JUDGE
 }
 
-model InfoPageContent {
-  id            String   @id @default("singleton")
-  title         String   @default("HackKU Hacker Doc")
-  content       String   @default("")
-  titleImageUrl String?
-  logoUrl       String?
-  updatedAt     DateTime @updatedAt
+enum TicketType {
+  MENTOR_HELP
+  INCIDENT_REPORT
+}
+
+enum TicketStatus {
+  OPEN
+  CLAIMED
+  RESOLVED
 }

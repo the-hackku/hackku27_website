@@ -32,6 +32,7 @@ export type ThemedRoomReservationMinAggregateOutputType = {
   timeSlot: $Enums.TimeSlot | null
   theme: $Enums.RoomTheme | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ThemedRoomReservationMaxAggregateOutputType = {
@@ -42,6 +43,7 @@ export type ThemedRoomReservationMaxAggregateOutputType = {
   timeSlot: $Enums.TimeSlot | null
   theme: $Enums.RoomTheme | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ThemedRoomReservationCountAggregateOutputType = {
@@ -52,6 +54,7 @@ export type ThemedRoomReservationCountAggregateOutputType = {
   timeSlot: number
   theme: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -64,6 +67,7 @@ export type ThemedRoomReservationMinAggregateInputType = {
   timeSlot?: true
   theme?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type ThemedRoomReservationMaxAggregateInputType = {
@@ -74,6 +78,7 @@ export type ThemedRoomReservationMaxAggregateInputType = {
   timeSlot?: true
   theme?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type ThemedRoomReservationCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type ThemedRoomReservationCountAggregateInputType = {
   timeSlot?: true
   theme?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -167,6 +173,7 @@ export type ThemedRoomReservationGroupByOutputType = {
   timeSlot: $Enums.TimeSlot
   theme: $Enums.RoomTheme
   createdAt: Date
+  updatedAt: Date
   _count: ThemedRoomReservationCountAggregateOutputType | null
   _min: ThemedRoomReservationMinAggregateOutputType | null
   _max: ThemedRoomReservationMaxAggregateOutputType | null
@@ -198,6 +205,7 @@ export type ThemedRoomReservationWhereInput = {
   timeSlot?: Prisma.EnumTimeSlotFilter<"ThemedRoomReservation"> | $Enums.TimeSlot
   theme?: Prisma.EnumRoomThemeFilter<"ThemedRoomReservation"> | $Enums.RoomTheme
   createdAt?: Prisma.DateTimeFilter<"ThemedRoomReservation"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ThemedRoomReservation"> | Date | string
 }
 
 export type ThemedRoomReservationOrderByWithRelationInput = {
@@ -208,6 +216,7 @@ export type ThemedRoomReservationOrderByWithRelationInput = {
   timeSlot?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ThemedRoomReservationWhereUniqueInput = Prisma.AtLeast<{
@@ -222,6 +231,7 @@ export type ThemedRoomReservationWhereUniqueInput = Prisma.AtLeast<{
   timeSlot?: Prisma.EnumTimeSlotFilter<"ThemedRoomReservation"> | $Enums.TimeSlot
   theme?: Prisma.EnumRoomThemeFilter<"ThemedRoomReservation"> | $Enums.RoomTheme
   createdAt?: Prisma.DateTimeFilter<"ThemedRoomReservation"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ThemedRoomReservation"> | Date | string
 }, "id" | "userId" | "theme_timeSlot">
 
 export type ThemedRoomReservationOrderByWithAggregationInput = {
@@ -232,6 +242,7 @@ export type ThemedRoomReservationOrderByWithAggregationInput = {
   timeSlot?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ThemedRoomReservationCountOrderByAggregateInput
   _max?: Prisma.ThemedRoomReservationMaxOrderByAggregateInput
   _min?: Prisma.ThemedRoomReservationMinOrderByAggregateInput
@@ -248,6 +259,7 @@ export type ThemedRoomReservationScalarWhereWithAggregatesInput = {
   timeSlot?: Prisma.EnumTimeSlotWithAggregatesFilter<"ThemedRoomReservation"> | $Enums.TimeSlot
   theme?: Prisma.EnumRoomThemeWithAggregatesFilter<"ThemedRoomReservation"> | $Enums.RoomTheme
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ThemedRoomReservation"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ThemedRoomReservation"> | Date | string
 }
 
 export type ThemedRoomReservationCreateInput = {
@@ -258,6 +270,7 @@ export type ThemedRoomReservationCreateInput = {
   timeSlot: $Enums.TimeSlot
   theme: $Enums.RoomTheme
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ThemedRoomReservationUncheckedCreateInput = {
@@ -268,6 +281,7 @@ export type ThemedRoomReservationUncheckedCreateInput = {
   timeSlot: $Enums.TimeSlot
   theme: $Enums.RoomTheme
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ThemedRoomReservationUpdateInput = {
@@ -278,6 +292,7 @@ export type ThemedRoomReservationUpdateInput = {
   timeSlot?: Prisma.EnumTimeSlotFieldUpdateOperationsInput | $Enums.TimeSlot
   theme?: Prisma.EnumRoomThemeFieldUpdateOperationsInput | $Enums.RoomTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ThemedRoomReservationUncheckedUpdateInput = {
@@ -288,6 +303,7 @@ export type ThemedRoomReservationUncheckedUpdateInput = {
   timeSlot?: Prisma.EnumTimeSlotFieldUpdateOperationsInput | $Enums.TimeSlot
   theme?: Prisma.EnumRoomThemeFieldUpdateOperationsInput | $Enums.RoomTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ThemedRoomReservationCreateManyInput = {
@@ -298,6 +314,7 @@ export type ThemedRoomReservationCreateManyInput = {
   timeSlot: $Enums.TimeSlot
   theme: $Enums.RoomTheme
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ThemedRoomReservationUpdateManyMutationInput = {
@@ -308,6 +325,7 @@ export type ThemedRoomReservationUpdateManyMutationInput = {
   timeSlot?: Prisma.EnumTimeSlotFieldUpdateOperationsInput | $Enums.TimeSlot
   theme?: Prisma.EnumRoomThemeFieldUpdateOperationsInput | $Enums.RoomTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ThemedRoomReservationUncheckedUpdateManyInput = {
@@ -318,6 +336,7 @@ export type ThemedRoomReservationUncheckedUpdateManyInput = {
   timeSlot?: Prisma.EnumTimeSlotFieldUpdateOperationsInput | $Enums.TimeSlot
   theme?: Prisma.EnumRoomThemeFieldUpdateOperationsInput | $Enums.RoomTheme
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ThemedRoomReservationTheme_timeSlotCompoundUniqueInput = {
@@ -333,6 +352,7 @@ export type ThemedRoomReservationCountOrderByAggregateInput = {
   timeSlot?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ThemedRoomReservationMaxOrderByAggregateInput = {
@@ -343,6 +363,7 @@ export type ThemedRoomReservationMaxOrderByAggregateInput = {
   timeSlot?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ThemedRoomReservationMinOrderByAggregateInput = {
@@ -353,6 +374,7 @@ export type ThemedRoomReservationMinOrderByAggregateInput = {
   timeSlot?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type EnumTimeSlotFieldUpdateOperationsInput = {
@@ -373,6 +395,7 @@ export type ThemedRoomReservationSelect<ExtArgs extends runtime.Types.Extensions
   timeSlot?: boolean
   theme?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["themedRoomReservation"]>
 
 export type ThemedRoomReservationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -383,6 +406,7 @@ export type ThemedRoomReservationSelectCreateManyAndReturn<ExtArgs extends runti
   timeSlot?: boolean
   theme?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["themedRoomReservation"]>
 
 export type ThemedRoomReservationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -393,6 +417,7 @@ export type ThemedRoomReservationSelectUpdateManyAndReturn<ExtArgs extends runti
   timeSlot?: boolean
   theme?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["themedRoomReservation"]>
 
 export type ThemedRoomReservationSelectScalar = {
@@ -403,9 +428,10 @@ export type ThemedRoomReservationSelectScalar = {
   timeSlot?: boolean
   theme?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type ThemedRoomReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "teamName" | "memberEmails" | "timeSlot" | "theme" | "createdAt", ExtArgs["result"]["themedRoomReservation"]>
+export type ThemedRoomReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "teamName" | "memberEmails" | "timeSlot" | "theme" | "createdAt" | "updatedAt", ExtArgs["result"]["themedRoomReservation"]>
 
 export type $ThemedRoomReservationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ThemedRoomReservation"
@@ -418,6 +444,7 @@ export type $ThemedRoomReservationPayload<ExtArgs extends runtime.Types.Extensio
     timeSlot: $Enums.TimeSlot
     theme: $Enums.RoomTheme
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["themedRoomReservation"]>
   composites: {}
 }
@@ -848,6 +875,7 @@ export interface ThemedRoomReservationFieldRefs {
   readonly timeSlot: Prisma.FieldRef<"ThemedRoomReservation", 'TimeSlot'>
   readonly theme: Prisma.FieldRef<"ThemedRoomReservation", 'RoomTheme'>
   readonly createdAt: Prisma.FieldRef<"ThemedRoomReservation", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"ThemedRoomReservation", 'DateTime'>
 }
     
 

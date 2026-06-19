@@ -28,16 +28,18 @@ export type ReimbursementInviteMinAggregateOutputType = {
   id: string | null
   reimbursementId: string | null
   userId: string | null
-  status: $Enums.InviteStatus | null
+  status: $Enums.ReimbursementInviteStatus | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ReimbursementInviteMaxAggregateOutputType = {
   id: string | null
   reimbursementId: string | null
   userId: string | null
-  status: $Enums.InviteStatus | null
+  status: $Enums.ReimbursementInviteStatus | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ReimbursementInviteCountAggregateOutputType = {
@@ -46,6 +48,7 @@ export type ReimbursementInviteCountAggregateOutputType = {
   userId: number
   status: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -56,6 +59,7 @@ export type ReimbursementInviteMinAggregateInputType = {
   userId?: true
   status?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type ReimbursementInviteMaxAggregateInputType = {
@@ -64,6 +68,7 @@ export type ReimbursementInviteMaxAggregateInputType = {
   userId?: true
   status?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type ReimbursementInviteCountAggregateInputType = {
@@ -72,6 +77,7 @@ export type ReimbursementInviteCountAggregateInputType = {
   userId?: true
   status?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -151,8 +157,9 @@ export type ReimbursementInviteGroupByOutputType = {
   id: string
   reimbursementId: string
   userId: string
-  status: $Enums.InviteStatus
+  status: $Enums.ReimbursementInviteStatus
   createdAt: Date
+  updatedAt: Date
   _count: ReimbursementInviteCountAggregateOutputType | null
   _min: ReimbursementInviteMinAggregateOutputType | null
   _max: ReimbursementInviteMaxAggregateOutputType | null
@@ -180,8 +187,9 @@ export type ReimbursementInviteWhereInput = {
   id?: Prisma.StringFilter<"ReimbursementInvite"> | string
   reimbursementId?: Prisma.StringFilter<"ReimbursementInvite"> | string
   userId?: Prisma.StringFilter<"ReimbursementInvite"> | string
-  status?: Prisma.EnumInviteStatusFilter<"ReimbursementInvite"> | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFilter<"ReimbursementInvite"> | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFilter<"ReimbursementInvite"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ReimbursementInvite"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   reimbursement?: Prisma.XOR<Prisma.TravelReimbursementScalarRelationFilter, Prisma.TravelReimbursementWhereInput>
 }
@@ -192,6 +200,7 @@ export type ReimbursementInviteOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   reimbursement?: Prisma.TravelReimbursementOrderByWithRelationInput
 }
@@ -204,8 +213,9 @@ export type ReimbursementInviteWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ReimbursementInviteWhereInput | Prisma.ReimbursementInviteWhereInput[]
   reimbursementId?: Prisma.StringFilter<"ReimbursementInvite"> | string
   userId?: Prisma.StringFilter<"ReimbursementInvite"> | string
-  status?: Prisma.EnumInviteStatusFilter<"ReimbursementInvite"> | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFilter<"ReimbursementInvite"> | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFilter<"ReimbursementInvite"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ReimbursementInvite"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   reimbursement?: Prisma.XOR<Prisma.TravelReimbursementScalarRelationFilter, Prisma.TravelReimbursementWhereInput>
 }, "id" | "userId_reimbursementId">
@@ -216,6 +226,7 @@ export type ReimbursementInviteOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ReimbursementInviteCountOrderByAggregateInput
   _max?: Prisma.ReimbursementInviteMaxOrderByAggregateInput
   _min?: Prisma.ReimbursementInviteMinOrderByAggregateInput
@@ -228,14 +239,16 @@ export type ReimbursementInviteScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ReimbursementInvite"> | string
   reimbursementId?: Prisma.StringWithAggregatesFilter<"ReimbursementInvite"> | string
   userId?: Prisma.StringWithAggregatesFilter<"ReimbursementInvite"> | string
-  status?: Prisma.EnumInviteStatusWithAggregatesFilter<"ReimbursementInvite"> | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusWithAggregatesFilter<"ReimbursementInvite"> | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ReimbursementInvite"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ReimbursementInvite"> | Date | string
 }
 
 export type ReimbursementInviteCreateInput = {
   id?: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReimbursementInvitesInput
   reimbursement: Prisma.TravelReimbursementCreateNestedOneWithoutInvitesInput
 }
@@ -244,14 +257,16 @@ export type ReimbursementInviteUncheckedCreateInput = {
   id?: string
   reimbursementId: string
   userId: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReimbursementInviteUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReimbursementInvitesNestedInput
   reimbursement?: Prisma.TravelReimbursementUpdateOneRequiredWithoutInvitesNestedInput
 }
@@ -260,30 +275,34 @@ export type ReimbursementInviteUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reimbursementId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReimbursementInviteCreateManyInput = {
   id?: string
   reimbursementId: string
   userId: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReimbursementInviteUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReimbursementInviteUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reimbursementId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReimbursementInviteListRelationFilter = {
@@ -307,6 +326,7 @@ export type ReimbursementInviteCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ReimbursementInviteMaxOrderByAggregateInput = {
@@ -315,6 +335,7 @@ export type ReimbursementInviteMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ReimbursementInviteMinOrderByAggregateInput = {
@@ -323,6 +344,7 @@ export type ReimbursementInviteMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ReimbursementInviteCreateNestedManyWithoutUserInput = {
@@ -409,22 +431,24 @@ export type ReimbursementInviteUncheckedUpdateManyWithoutReimbursementNestedInpu
   deleteMany?: Prisma.ReimbursementInviteScalarWhereInput | Prisma.ReimbursementInviteScalarWhereInput[]
 }
 
-export type EnumInviteStatusFieldUpdateOperationsInput = {
-  set?: $Enums.InviteStatus
+export type EnumReimbursementInviteStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ReimbursementInviteStatus
 }
 
 export type ReimbursementInviteCreateWithoutUserInput = {
   id?: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
   reimbursement: Prisma.TravelReimbursementCreateNestedOneWithoutInvitesInput
 }
 
 export type ReimbursementInviteUncheckedCreateWithoutUserInput = {
   id?: string
   reimbursementId: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReimbursementInviteCreateOrConnectWithoutUserInput = {
@@ -460,22 +484,25 @@ export type ReimbursementInviteScalarWhereInput = {
   id?: Prisma.StringFilter<"ReimbursementInvite"> | string
   reimbursementId?: Prisma.StringFilter<"ReimbursementInvite"> | string
   userId?: Prisma.StringFilter<"ReimbursementInvite"> | string
-  status?: Prisma.EnumInviteStatusFilter<"ReimbursementInvite"> | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFilter<"ReimbursementInvite"> | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFilter<"ReimbursementInvite"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ReimbursementInvite"> | Date | string
 }
 
 export type ReimbursementInviteCreateWithoutReimbursementInput = {
   id?: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReimbursementInvitesInput
 }
 
 export type ReimbursementInviteUncheckedCreateWithoutReimbursementInput = {
   id?: string
   userId: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReimbursementInviteCreateOrConnectWithoutReimbursementInput = {
@@ -507,57 +534,65 @@ export type ReimbursementInviteUpdateManyWithWhereWithoutReimbursementInput = {
 export type ReimbursementInviteCreateManyUserInput = {
   id?: string
   reimbursementId: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReimbursementInviteUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reimbursement?: Prisma.TravelReimbursementUpdateOneRequiredWithoutInvitesNestedInput
 }
 
 export type ReimbursementInviteUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reimbursementId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReimbursementInviteUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reimbursementId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReimbursementInviteCreateManyReimbursementInput = {
   id?: string
   userId: string
-  status?: $Enums.InviteStatus
+  status?: $Enums.ReimbursementInviteStatus
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ReimbursementInviteUpdateWithoutReimbursementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReimbursementInvitesNestedInput
 }
 
 export type ReimbursementInviteUncheckedUpdateWithoutReimbursementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReimbursementInviteUncheckedUpdateManyWithoutReimbursementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumInviteStatusFieldUpdateOperationsInput | $Enums.InviteStatus
+  status?: Prisma.EnumReimbursementInviteStatusFieldUpdateOperationsInput | $Enums.ReimbursementInviteStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -568,6 +603,7 @@ export type ReimbursementInviteSelect<ExtArgs extends runtime.Types.Extensions.I
   userId?: boolean
   status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reimbursement?: boolean | Prisma.TravelReimbursementDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reimbursementInvite"]>
@@ -578,6 +614,7 @@ export type ReimbursementInviteSelectCreateManyAndReturn<ExtArgs extends runtime
   userId?: boolean
   status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reimbursement?: boolean | Prisma.TravelReimbursementDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reimbursementInvite"]>
@@ -588,6 +625,7 @@ export type ReimbursementInviteSelectUpdateManyAndReturn<ExtArgs extends runtime
   userId?: boolean
   status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reimbursement?: boolean | Prisma.TravelReimbursementDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reimbursementInvite"]>
@@ -598,9 +636,10 @@ export type ReimbursementInviteSelectScalar = {
   userId?: boolean
   status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type ReimbursementInviteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "reimbursementId" | "userId" | "status" | "createdAt", ExtArgs["result"]["reimbursementInvite"]>
+export type ReimbursementInviteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "reimbursementId" | "userId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["reimbursementInvite"]>
 export type ReimbursementInviteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reimbursement?: boolean | Prisma.TravelReimbursementDefaultArgs<ExtArgs>
@@ -624,8 +663,9 @@ export type $ReimbursementInvitePayload<ExtArgs extends runtime.Types.Extensions
     id: string
     reimbursementId: string
     userId: string
-    status: $Enums.InviteStatus
+    status: $Enums.ReimbursementInviteStatus
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["reimbursementInvite"]>
   composites: {}
 }
@@ -1054,8 +1094,9 @@ export interface ReimbursementInviteFieldRefs {
   readonly id: Prisma.FieldRef<"ReimbursementInvite", 'String'>
   readonly reimbursementId: Prisma.FieldRef<"ReimbursementInvite", 'String'>
   readonly userId: Prisma.FieldRef<"ReimbursementInvite", 'String'>
-  readonly status: Prisma.FieldRef<"ReimbursementInvite", 'InviteStatus'>
+  readonly status: Prisma.FieldRef<"ReimbursementInvite", 'ReimbursementInviteStatus'>
   readonly createdAt: Prisma.FieldRef<"ReimbursementInvite", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"ReimbursementInvite", 'DateTime'>
 }
     
 

@@ -58,6 +58,7 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
   });
 
   // (Optional) Export to Google Sheets.
+  /*
   try {
     const userWithInfo: UserWithParticipantInfo = {
       ...user,
@@ -67,9 +68,10 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
   } catch (error) {
     console.error("Error updating Google Sheet:", error);
   }
+    */
 
   // Optionally, revalidate the profile page if you're using ISR.
-  revalidatePath("/profile");
+  //revalidatePath("/profile");
 
   return { success: true };
 }

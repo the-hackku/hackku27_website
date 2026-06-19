@@ -21,6 +21,7 @@ import { ComboboxSelect } from "@/components/customui/ComboSelect";
 import { RegistrationData, formSchema } from "@/app/actions/schemas";
 import { registerUser } from "@/app/actions/register";
 import constants from "@/constants";
+import { PrefillData } from "@/prisma/generated/browser";
 
 // import { predefinedSchools } from "./schools"
 import {
@@ -33,41 +34,50 @@ import {
 
 const LOCAL_STORAGE_KEY = "hackku26_registration_form";
 
-export function RegistrationForm() {
+export function RegistrationForm({ prefillData }: { prefillData: PrefillData | null }) {
   const [showChaperoneFields, setShowChaperoneFields] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [progress, setProgress] = useState(0);
   const router = useRouter();
-
-  const form = useForm<RegistrationData>({
-    resolver: zodResolver(formSchema),
-    mode: "onChange",
-    // Initialize with empty defaultValues
-    defaultValues: {},
-  });
-
-  // Load saved data on mount
-  useEffect(() => {
-    if (typeof window !== "undefined") {
+  let defaults = {};
+  if (prefillData) {
+    defaults = {
+      firstName: prefillData.firstName || undefined,
+      lastName: prefillData.lastName || undefined,
+      phoneNumber: Number(prefillData.phoneNumber?.slice(1)) ?? undefined,
+      age: prefillData.age ?? undefined,
+      countryOfResidence: prefillData.countryOfResidence || undefined,
+      currentSchool: prefillData.currentSchool || undefined,
+      levelOfStudy: prefillData.levelOfStudy || undefined,
+    };
+  }
+  if (typeof window !== "undefined") {
       const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (savedData) {
         try {
           const parsedData = JSON.parse(savedData);
           delete parsedData.resume; // Ensure 'resume' is not included
-          form.reset(parsedData);
+          console.log("Loaded saved form data:", parsedData);
+          defaults = parsedData;
         } catch (error) {
           console.error("Failed to parse saved form data:", error);
           localStorage.removeItem(LOCAL_STORAGE_KEY);
+          defaults = {};
         }
       }
     }
-  }, [form]);
+  const form = useForm<RegistrationData>({
+    resolver: zodResolver(formSchema),
+    mode: "onChange",
+    // Initialize with empty defaultValues
+    defaultValues: defaults,
+  });
 
   // Function to check if a field is required based on the Zod schema
   const isFieldRequired = useCallback(
     (fieldName: keyof RegistrationData) => {
       const values = form.getValues();
-      const fieldSchema = formSchema._def.schema.shape[fieldName];
+      const fieldSchema = formSchema.shape[fieldName];
 
       // Chaperone fields are required only if levelOfStudy is "High School"
       if (
@@ -97,14 +107,14 @@ export function RegistrationForm() {
       label: "First Name",
       placeholder: "First name",
       required: isFieldRequired("firstName"),
-      type: "text", // Default to text
+      type: "text",
     },
     {
       name: "lastName" as const,
       label: "Last Name",
       placeholder: "Last name",
       required: isFieldRequired("lastName"),
-      type: "text", // Default to text
+      type: "text",
     },
     {
       name: "phoneNumber" as const,
@@ -137,10 +147,7 @@ export function RegistrationForm() {
     { label: "Prefer not to Answer", value: "Prefer not to Answer" },
   ];
 
-  const hispanicOrLatinoOptions: {
-    label: string;
-    value: HispanicOrLatino;
-  }[] = [
+  const hispanicOrLatinoOptions: { label: string; value: HispanicOrLatino }[] = [
     { label: "Yes", value: "Yes" },
     { label: "No", value: "No" },
     { label: "Prefer not to answer", value: "Prefer not to answer" },
@@ -220,10 +227,11 @@ export function RegistrationForm() {
   // Calculate progress and check form validity
   useEffect(() => {
     const calculateProgress = () => {
+      console.log("Calculating progress...");
       const values = form.getValues();
 
       const requiredFields = Object.keys(
-        formSchema._def.schema.shape
+        formSchema.shape
       ) as (keyof RegistrationData)[];
 
       const dynamicRequiredFields = requiredFields.filter((key) =>
@@ -238,7 +246,7 @@ export function RegistrationForm() {
         } else if (Array.isArray(value)) {
           return value.length > 0 ? count + 1 : count;
         } else {
-          return value !== undefined && value !== "" ? count + 1 : count;
+          return value !== undefined && value !== "" && value !== "Select..." ? count + 1 : count;
         }
       }, 0);
 
@@ -247,12 +255,12 @@ export function RegistrationForm() {
       let calculatedProgress = Math.round(
         (filledFields / totalRequiredFields) * 100
       );
+      console.log(calculatedProgress, filledFields, totalRequiredFields);
 
-      // Ensure the progress is set to 100% when the form is valid
       if (form.formState.isValid) {
         calculatedProgress = 100;
       } else {
-        calculatedProgress = Math.min(calculatedProgress, 100);
+        calculatedProgress = Math.min(calculatedProgress, 99); // Caps at 99% if not valid
       }
 
       setProgress(calculatedProgress);
@@ -498,7 +506,7 @@ export function RegistrationForm() {
             />
             <div>
               <p className="mb-2 text-sm">
-                When planning HackKU26, inclusivity is our top priority! How can
+                When planning HackKU27, inclusivity is our top priority! How can
                 we best accommodate you for the best hackathon experience
                 possible?
               </p>
@@ -585,9 +593,18 @@ export function RegistrationForm() {
                 name="shareWithMLH"
                 label={
                   <>
-                    I authorize sharing my registration information with Major
+                    I authorize you to share my registration information with Major
                     League Hacking for event administration, ranking, and MLH
-                    administration in-line with the{" "}
+                    administration (including the creation of linked accounts on MLH
+                    and{" "}
+                    <Link
+                      href="https://dev.to"
+                      target="_blank"
+                      className="underline"
+                    >
+                      DEV
+                    </Link>
+                    ) in-line with the{" "}
                     <Link
                       href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
                       target="_blank"
@@ -609,7 +626,7 @@ export function RegistrationForm() {
               />
               <FormCheckboxField
                 name="receiveEmails"
-                label="I authorize MLH to send me occasional emails about relevant events, career opportunities, and community announcements."
+                label="I authorize MLH and DEV to send me occasional emails about relevant events, career opportunities, and community announcements."
                 required={isFieldRequired("receiveEmails")}
               />
             </div>

@@ -43,6 +43,8 @@ import {
  * Profile Page
  */
 export default async function ProfilePage() {
+  redirect("/"); // Temporary redirect while we finalize the profile page design and features
+  /*
   // 1. Load user with reimbursement
   const userSession = await getUserWithReimbursement().catch((err) => {
     console.error("Error fetching user with reimbursement:", err);
@@ -178,7 +180,7 @@ export default async function ProfilePage() {
             </div>
 
             <TabsContent value="profileInfo">
-              {/* Check-in Level + Progress */}
+              {\/* Check-in Level + Progress *\/}
               <div className="w-full space-y-2  px-2 text-center gap-0">
                 <div>
                   <span className="text-md font-semibold">
@@ -217,7 +219,7 @@ export default async function ProfilePage() {
               </div>
               <hr className="my-4 border-gray-200" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* HackerPass Card */}
+                {\/* HackerPass Card *\/}
 
                 <Card className="shadow-none">
                   <CardHeader className="pb-2">
@@ -267,7 +269,7 @@ export default async function ProfilePage() {
                   </CardContent>
                 </Card>
 
-                {/* User Info Card */}
+                {\/* User Info Card *\/}
                 <Card className="shadow-sm">
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-center">
@@ -283,7 +285,7 @@ export default async function ProfilePage() {
 
                   <CardContent>
                     <div className="space-y-4">
-                      {/* Name & Email */}
+                      {\/* Name & Email *\/}
                       {fullName && (
                         <div className="flex items-center space-x-2">
                           <IconUser className="text-primary" size={20} />
@@ -297,8 +299,8 @@ export default async function ProfilePage() {
 
                       <hr className="my-4 border-gray-200" />
 
-                      {/* If user has Reimbursement */}
-                      {/* {participant && hasReimb && (
+                      {\/* If user has Reimbursement *\/}
+                      {participant && hasReimb && (
                         <div className="flex flex-col space-y-2">
                           {canEdit && (
                             <div className="flex items-center gap-2">
@@ -315,10 +317,10 @@ export default async function ProfilePage() {
                             </div>
                           )}
                         </div>
-                      )} */}
+                      )}
                     </div>
 
-                    {/* If the user is a group leader, show invite statuses */}
+                    {\/* If the user is a group leader, show invite statuses *\/}
                     {userSession.createdReimbursement &&
                       userSession.createdReimbursement.invites.length > 0 && (
                         <div className="p-4 mt-4 border-l-4 border-blue-400 bg-blue-50">
@@ -356,7 +358,7 @@ export default async function ProfilePage() {
                         </div>
                       )}
 
-                    {/* [Line B] Show group if the user has an accepted membership with a reimbursement */}
+                    {\/* [Line B] Show group if the user has an accepted membership with a reimbursement *\/}
                     {pendingInvites.length > 0 && (
                       <div className="p-4 mt-4 border-l-4 border-yellow-400 bg-yellow-50">
                         <h3 className="text-md font-semibold mb-2">
@@ -377,7 +379,7 @@ export default async function ProfilePage() {
                         ))}
                       </div>
                     )}
-                    {/* [NEW] Show reimbursement group if user accepted an invite */}
+                    {\/* [NEW] Show reimbursement group if user accepted an invite *\/}
                     {userSession.travelReimbursement &&
                       !userSession.createdReimbursement && (
                         <div className="p-4 mt-4 border-l-4 border-green-400 bg-green-50 space-x-2">
@@ -490,4 +492,5 @@ export default async function ProfilePage() {
       </Card>
     </div>
   );
+  */
 }

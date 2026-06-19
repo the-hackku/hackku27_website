@@ -87,10 +87,30 @@ export type Checkin = Prisma.CheckinModel
  */
 export type ParticipantInfo = Prisma.ParticipantInfoModel
 /**
+ * Model PrefillData
+ * 
+ */
+export type PrefillData = Prisma.PrefillDataModel
+/**
+ * Model Team
+ * 
+ */
+export type Team = Prisma.TeamModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel
+/**
  * Model TravelReimbursement
  * 
  */
 export type TravelReimbursement = Prisma.TravelReimbursementModel
+/**
+ * Model ReimbursementInvite
+ * 
+ */
+export type ReimbursementInvite = Prisma.ReimbursementInviteModel
 /**
  * Model ThemedRoom
  * 
@@ -107,12 +127,12 @@ export type ReservationRequest = Prisma.ReservationRequestModel
  */
 export type ThemedRoomReservation = Prisma.ThemedRoomReservationModel
 /**
- * Model ReimbursementInvite
- * 
- */
-export type ReimbursementInvite = Prisma.ReimbursementInviteModel
-/**
  * Model InfoPageContent
  * 
  */
 export type InfoPageContent = Prisma.InfoPageContentModel
+/**
+ * Model Ticket
+ * 
+ */
+export type Ticket = Prisma.TicketModel
