@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import QrScanner from "qr-scanner";
+//import QrScanner from "qr-scanner";
 
 interface ScannerComponentProps {
   onScanResult: (result: string) => void; // Prop to send scan result to parent
@@ -14,7 +14,7 @@ const ScannerComponent: React.FC<ScannerComponentProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const scanLock = useRef(false); // Introduce a scan lock
-
+  /*
   useEffect(() => {
     if (videoRef.current) {
       const qrScanner = new QrScanner(
@@ -51,6 +51,7 @@ const ScannerComponent: React.FC<ScannerComponentProps> = ({
       }, 3000); // Adjust to your validation time
     }
   };
+  */
 
   return (
     <div>
