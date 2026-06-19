@@ -18,26 +18,19 @@ export default function Footer() {
   if (pathname === "/info") return null;
 
   return (
-  <footer className="bg-gray-100 text-gray-600 h-[8vh] w-full relative z-10 border-t-[0.3vh] border-t-[#d7d7d7]">
-    <div className="container mx-auto px-[2vh] h-full flex align-center justify-center items-center gap-[25vh]">
+  <footer className="bg-gray-100 text-gray-600 w-full relative z-10 border-t border-t-[#d7d7d7]"
+    style={{ minHeight: "clamp(48px, 8vh, 80px)" }}>
+    <div className="container mx-auto px-4 h-full flex flex-wrap items-center justify-between gap-3 py-3"
+      style={{ minHeight: "clamp(48px, 8vh, 80px)" }}>
 
       {/* Left - Social Links */}
-      <div className="flex items-center gap-[1.2vh] text-gray-500">
-        {/* <Link
-          href={constants.discordInvite}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-blue-400 transition-colors"
-        >
-          <IconBrandDiscord className="w-[2.2vh] h-[2.2vh]" />
-        </Link> */}
-
+      <div className="flex items-center gap-3 text-gray-500">
         <Link
           href="https://www.instagram.com/thehackku/"
           target="_blank"
           className="hover:text-pink-600 transition-colors"
         >
-          <IconBrandInstagram className="w-[2.2vh] h-[2.2vh]" />
+          <IconBrandInstagram className="w-5 h-5" />
         </Link>
 
         <Link
@@ -46,7 +39,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           className="hover:text-blue-700 transition-colors"
         >
-          <IconBrandLinkedin className="w-[2.2vh] h-[2.2vh]" />
+          <IconBrandLinkedin className="w-5 h-5" />
         </Link>
 
         <Link
@@ -55,12 +48,12 @@ export default function Footer() {
           rel="noopener noreferrer"
           className="hover:text-gray-900 transition-colors"
         >
-          <IconBrandGithub className="w-[2.2vh] h-[2.2vh]" />
+          <IconBrandGithub className="w-5 h-5" />
         </Link>
       </div>
 
       {/* Center text */}
-      <div className="text-gray-400 underline underline-offset-[0.3vh] text-[1.4vh]">
+      <div className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm">
         <Link
           href="/mlh/code-of-conduct"
           target="_blank"
@@ -71,7 +64,7 @@ export default function Footer() {
       </div>
 
       {/* Right text */}
-      <div className="text-right text-[1.4vh] text-gray-500">
+      <div className="text-right text-xs sm:text-sm text-gray-500">
         ©2027 HackKU Team
       </div>
 

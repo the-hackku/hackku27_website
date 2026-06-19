@@ -17,17 +17,18 @@ export function getDoodleImages(): string[] {
 
     for (const entry of entries) {
       if (entry.isDirectory()) {
-        // Pick ONE random image from the subfolder
+        // Use ALL images from subfolders
         const subDir = path.join(DOODLES_DIR, entry.name);
         const subFiles = fs
           .readdirSync(subDir)
           .filter((f) => IMAGE_EXT.test(f));
-        if (subFiles.length > 0) {
-          candidates.push(`/images/doodles/${entry.name}/${randomItem(subFiles)}`);
+        for (const file of subFiles) {
+          candidates.push(
+            `/images/doodles/${encodeURIComponent(entry.name)}/${encodeURIComponent(file)}`
+          );
         }
       } else if (IMAGE_EXT.test(entry.name)) {
-        // Use every direct image file
-        candidates.push(`/images/doodles/${entry.name}`);
+        candidates.push(`/images/doodles/${encodeURIComponent(entry.name)}`);
       }
     }
   } catch {

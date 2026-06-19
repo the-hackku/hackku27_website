@@ -134,9 +134,18 @@ const SignInPage = () => {
   }
 
   return (
-    <div className="container max-w-md mx-auto py-8 px-4 sm:px-6">
+    <div className="container mx-auto py-8 px-4 sm:px-6">
       {!emailSent ? (
-        <Card className="border rounded-lg p-4 shadow-sm">
+        <Card className="border rounded-lg p-4 shadow-sm bg-[#ffffff] fixed top-[7vw] justify-self-center w-[30vw] mb-[2vw]"
+        style={{
+            borderRadius: "0 0 4vw 4vw",
+            borderTopLeftRadius: "50% 1vw",
+            borderTopRightRadius: "50% 1vw",
+            width: "25vw",
+            height: "35vw",
+            minWidth: "480px",
+          }}
+        >
           <CardHeader>
             <CardTitle className="text-center text-xl sm:text-xl">
               Sign In or Sign Up
@@ -149,7 +158,7 @@ const SignInPage = () => {
 
             {/* Google, Discord, GitHub Sign-In Buttons */}
             <div className="flex flex-col gap-3 mb-6">
-              {/*
+{/*               
               <Button
                 onClick={handleMyMLHSignIn}
                 className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base bg-[#f5f5f5] text-black rounded-md transition hover:brightness-90"

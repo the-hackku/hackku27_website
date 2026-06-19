@@ -4,8 +4,15 @@
 
 body {
   background-color: hsl(var(--background));
-  background-image: radial-gradient(circle, #c8c8c8 .025vw, transparent .05vw);
-  background-size: .75vw .75vw;
+  background-image: radial-gradient(circle, #c8c8c8 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+
+@media (min-width: 768px) {
+  body {
+    background-image: radial-gradient(circle, #c8c8c8 1px, transparent 1px);
+    background-size: .75vw .75vw;
+  }
 }
 
 
@@ -75,3 +82,4 @@ html, body {
 *:not(svg):not(svg *), *:not(svg):not(svg *)::before, *:not(svg):not(svg *)::after {
   font-family: inherit;
 }
+
