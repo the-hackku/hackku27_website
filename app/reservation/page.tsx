@@ -30,14 +30,14 @@ import { createReservationRequest } from "@/app/actions/reservationRequest";
 const reservationSchema = z.object({
   teamName: z.string().min(1, { message: "Team Name is required." }),
   isOutOfStateOrHighSchool: z.enum(["Yes", "No"], {
-    errorMap: () => ({ message: "Please select Yes or No." }),
+    error: "Please select Yes or No.",
   }),
   // An array of user objects. We expect the user to add them via search.
   groupMembers: z
     .array(
       z.object({
         id: z.string(),
-        email: z.string().email(),
+        email: z.email(),
         name: z.string(),
       })
     )

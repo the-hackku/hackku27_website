@@ -160,6 +160,7 @@ export const raceOptions = [
   { label: "Prefer not to answer", value: "Prefer not to answer" },
 ];
 
+/* These require types from the form schema, so they are defined in the RegistrationForm component
 export const genderIdentityOptions = [
   { label: "Male", value: "Male" },
   { label: "Female", value: "Female" },
@@ -188,3 +189,4 @@ export const levelOfStudyOptions = [
   { label: "High School", value: "High School" },
   { label: "Other", value: "Other" },
 ];
+*/

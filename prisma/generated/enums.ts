@@ -28,21 +28,21 @@ export type TimeSlot = (typeof TimeSlot)[keyof typeof TimeSlot]
 
 
 export const RoomTheme = {
-  DUNGEONS_AND_DRAGONS: 'DUNGEONS_AND_DRAGONS',
-  HOW_TO_TRAIN_YOUR_DRAGON: 'HOW_TO_TRAIN_YOUR_DRAGON',
-  DARK_FAIRY: 'DARK_FAIRY'
+  THEME_1: 'THEME_1',
+  THEME_2: 'THEME_2',
+  THEME_3: 'THEME_3'
 } as const
 
 export type RoomTheme = (typeof RoomTheme)[keyof typeof RoomTheme]
 
 
-export const InviteStatus = {
+export const ReimbursementInviteStatus = {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',
   DECLINED: 'DECLINED'
 } as const
 
-export type InviteStatus = (typeof InviteStatus)[keyof typeof InviteStatus]
+export type ReimbursementInviteStatus = (typeof ReimbursementInviteStatus)[keyof typeof ReimbursementInviteStatus]
 
 
 export const EventType = {
@@ -65,3 +65,20 @@ export const ROLE = {
 } as const
 
 export type ROLE = (typeof ROLE)[keyof typeof ROLE]
+
+
+export const TicketType = {
+  MENTOR_HELP: 'MENTOR_HELP',
+  INCIDENT_REPORT: 'INCIDENT_REPORT'
+} as const
+
+export type TicketType = (typeof TicketType)[keyof typeof TicketType]
+
+
+export const TicketStatus = {
+  OPEN: 'OPEN',
+  CLAIMED: 'CLAIMED',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus]

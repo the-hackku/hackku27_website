@@ -309,7 +309,7 @@ export type AuthenticatorCreateInput = {
   credentialDeviceType: string
   credentialBackedUp: boolean
   transports?: string | null
-  user: Prisma.UserCreateNestedOneWithoutAuthenticatorInput
+  user: Prisma.UserCreateNestedOneWithoutAuthenticatorsInput
 }
 
 export type AuthenticatorUncheckedCreateInput = {
@@ -331,7 +331,7 @@ export type AuthenticatorUpdateInput = {
   credentialDeviceType?: Prisma.StringFieldUpdateOperationsInput | string
   credentialBackedUp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   transports?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  user?: Prisma.UserUpdateOneRequiredWithoutAuthenticatorNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutAuthenticatorsNestedInput
 }
 
 export type AuthenticatorUncheckedUpdateInput = {
@@ -481,10 +481,6 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type AuthenticatorCreateWithoutUserInput = {

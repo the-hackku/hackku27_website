@@ -14,6 +14,7 @@ import {
   IconBrandGoogleFilled,
   IconLoader,
 } from "@tabler/icons-react";
+import Image from "next/image";
 
 interface SignInForm {
   email: string;
@@ -25,7 +26,7 @@ const SignInPage = () => {
   const [resendTimer, setResendTimer] = useState(60);
   // This state will hold the name of the provider that is currently loading.
   const [activeLoadingButton, setActiveLoadingButton] = useState<
-    "google" | "discord" | "github" | "email" | "resend" | null
+    "google" | "discord" | "github" | "mymlh" | "email" | "resend" | null
   >(null);
   const router = useRouter();
   const {
@@ -51,6 +52,11 @@ const SignInPage = () => {
     setActiveLoadingButton("discord");
     signIn("discord", { callbackUrl: "/register" });
   };
+
+  const handleMyMLHSignIn = () => {
+    setActiveLoadingButton("mymlh");
+    signIn("mymlh", { callbackUrl: "/register" });
+  }
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -138,12 +144,28 @@ const SignInPage = () => {
           </CardHeader>
           <CardContent>
             <p className="text-center text-muted-foreground text-sm mb-6">
-              Registered on the <b>Google Form</b>? Sign in with the same email
-              or use an OAuth provider below to link your account.
+              Sign in with the your email or use an OAuth provider below to link your account.
             </p>
 
             {/* Google, Discord, GitHub Sign-In Buttons */}
             <div className="flex flex-col gap-3 mb-6">
+              {/*
+              <Button
+                onClick={handleMyMLHSignIn}
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base bg-[#f5f5f5] text-black rounded-md transition hover:brightness-90"
+                style={{ backgroundColor: "#ffffff" }}
+              >
+                <Image
+                  src="/images/branding/mlh-logo.svg"
+                  alt="MLH Logo"
+                  width={40}
+                  height={20}
+                />
+                {activeLoadingButton === "mymlh"
+                  ? "Loading..."
+                  : "Continue with MyMLH"}
+              </Button>
+              */}
               <Button
                 onClick={handleGoogleSignIn}
                 className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base bg-[#4285F4] text-white rounded-md transition hover:brightness-90"

@@ -1,14 +1,17 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
+import Passkey from "next-auth/providers/passkey";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
 import ResendProvider from "next-auth/providers/resend";
+import { cookies } from "next/headers";
 import { htmlTemplate } from "@/utils/htmltemplate";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  experimental: { enableWebAuthn: true},
   providers: [
     ResendProvider({
       apiKey: process.env.AUTH_RESEND_KEY,
@@ -65,72 +68,131 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
       },
     }),
+    Passkey,
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
     GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
     }),
     DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
-    }),
-  ],
-  callbacks: {
-    async signIn({ account, profile, user }) {
-      console.log("signIn callback triggered with:", { account, profile, user });
-      if (!account) return true;
-
-      if (account.provider !== "resend") {
-        const userEmail = user.email ?? profile?.email;
-        if (!userEmail || typeof userEmail !== "string") return false;
-
-        const existingUser = await prisma.user.findUnique({
-          where: { email: userEmail },
-          include: { accounts: true },
-        });
-        if (existingUser) {
-          const linkedAccount = existingUser.accounts.find(
-            (acc) => acc.provider === account.provider
-          );
-
-          if (!linkedAccount) {
-            // Links new OAuth identity directly to the established profile record
-            await prisma.account.create({
-              data: {
-                userId: existingUser.id,
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-                type: account.type,
-                access_token: account.access_token,
-                refresh_token: account.refresh_token,
-                expires_at: account.expires_at,
-                token_type: account.token_type,
-                scope: account.scope,
-                id_token: account.id_token,
-                session_state: account.session_state,
-              },
-            });
-            console.log(`✅ Linked ${account.provider} to existing user account record`);
-          }
-          return true;
+      clientId: process.env.AUTH_DISCORD_ID,
+      clientSecret: process.env.AUTH_DISCORD_SECRET,
+      authorization: {
+        params: {
+          scope: "identify email guilds"
         }
       }
-      return true;
-    },
-
+    }),
+    {
+      id: "mymlh",
+      name: "MyMLH",
+      type: "oauth",
+      authorization: {
+        url: "https://www.mlh.com/oauth/authorize",
+        params: {
+          scope: "public user:read:email user:read:phone user:read:demographics user:read:education user:read:profile user:read:event_preferences"
+        }
+      },
+      token: "https://my.mlh.io/oauth/token",
+      userinfo: "https://api.mlh.com/v4/users/me",
+      profile(profile) {
+        return {
+          id: profile.id,
+          first_name: profile.first_name,
+          last_name: profile.last_name,
+          name: `${profile.first_name} ${profile.last_name}`,
+          email: profile.email,
+          image: profile.avatar_url,
+          role: "HACKER",
+          multiFactorEnabled: false,
+          phone_number: profile.phone_number,
+          profile: {
+            country_of_residence: profile.country_of_residence || null,
+            race_or_ethnicity: profile.race_or_ethnicity || null,
+            gender: profile.gender || null,
+            age: profile.age || null,
+          },
+          education: profile.education || null
+        }
+      }
+    }
+  ],
+  callbacks: {
     async session({ session, user }) {
-      // In Auth.js v5 database sessions, user metadata passes directly into the user property parameter
       if (session.user && user) {
         session.user.id = user.id;
-        session.user.role = (user as any).role || "HACKER"; // Falls back safely to HACKER role defaults
+        session.user.role = user.role || "HACKER";
+        session.user.multiFactorEnabled = user.multiFactorEnabled || false;
+        if (session.user.multiFactorEnabled) {
+          const cookieStore = await cookies();
+          const sessionToken = cookieStore.get("authjs.session-token")?.value || cookieStore.get("__Secure-authjs.session-token")?.value;
+          if (sessionToken) {
+            const dbSession = await prisma.session.findUnique({
+              where: { sessionToken },
+              include: { user: true },
+            });
+            if (dbSession) {
+              session.user.mfaVerified = dbSession.mfaVerified;
+            } else {
+              session.user.mfaVerified = false;
+            }
+          }
+        }
       }
       return session;
     },
   },
+  events: {
+    async linkAccount( { user, account, profile }) {
+      if (account.provider === "mymlh") {
+        console.log("MyMLH account linked for user:", user.email);
+        if (!user.id) return; // Shouldn't happen, but silences TypeScript
+        console.log("MyMLH profile data:", profile);
+        let school, major = null;
+        if (profile.education && profile.education.length > 0) {
+          const currentEducation = profile.education.find((edu: any) => edu.current);
+          if (currentEducation) {
+            school = currentEducation.school_name || null;
+            major = currentEducation.major || null;
+          }
+        }
+        await prisma.prefillData.upsert({
+          where: { userId: user.id },
+          create: {
+            userId: user.id,
+            firstName: profile.first_name ?? null,
+            lastName: profile.last_name ?? null,
+            phoneNumber: profile.phone_number ?? null,
+            age: profile.profile?.age ?? null,
+            countryOfResidence: profile.profile?.country_of_residence ?? null,
+            currentSchool: school,
+            major: major,
+            race: profile.profile?.race_or_ethnicity ?? null
+          },
+          update: {
+            firstName: profile.first_name ?? null,
+            lastName: profile.last_name ?? null,
+            phoneNumber: profile.phone_number ?? null,
+            age: profile.profile?.age ?? null,
+            countryOfResidence: profile.profile?.country_of_residence ?? null,
+            currentSchool: school,
+            major: major,
+            race: profile.profile?.race_or_ethnicity ?? null
+          }
+        });
+      }
+    }
+  },
   pages: {
     signIn: "/signin",
   },
+  logger: {
+    warn(code) {
+      if (code === "experimental-webauthn") return; // We acknowledge this is experimental
+      console.warn(code);
+    }
+  }
 });

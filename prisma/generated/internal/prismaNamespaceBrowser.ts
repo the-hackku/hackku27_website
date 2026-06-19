@@ -60,12 +60,16 @@ export const ModelName = {
   Scan: 'Scan',
   Checkin: 'Checkin',
   ParticipantInfo: 'ParticipantInfo',
+  PrefillData: 'PrefillData',
+  Team: 'Team',
+  Project: 'Project',
   TravelReimbursement: 'TravelReimbursement',
+  ReimbursementInvite: 'ReimbursementInvite',
   ThemedRoom: 'ThemedRoom',
   ReservationRequest: 'ReservationRequest',
   ThemedRoomReservation: 'ThemedRoomReservation',
-  ReimbursementInvite: 'ReimbursementInvite',
-  InfoPageContent: 'InfoPageContent'
+  InfoPageContent: 'InfoPageContent',
+  Ticket: 'Ticket'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -93,7 +97,11 @@ export const UserScalarFieldEnum = {
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  travelReimbursementId: 'travelReimbursementId'
+  multiFactorEnabled: 'multiFactorEnabled',
+  totpSecret: 'totpSecret',
+  totpBackupCodes: 'totpBackupCodes',
+  travelReimbursementId: 'travelReimbursementId',
+  teamId: 'teamId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -122,6 +130,7 @@ export const SessionScalarFieldEnum = {
   sessionToken: 'sessionToken',
   userId: 'userId',
   expires: 'expires',
+  mfaVerified: 'mfaVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -172,6 +181,7 @@ export const ScanScalarFieldEnum = {
   userId: 'userId',
   eventId: 'eventId',
   adminId: 'adminId',
+  selfScan: 'selfScan',
   checkinId: 'checkinId',
   successful: 'successful',
   createdAt: 'createdAt'
@@ -185,6 +195,7 @@ export const CheckinScalarFieldEnum = {
   userId: 'userId',
   eventId: 'eventId',
   adminId: 'adminId',
+  selfCheckin: 'selfCheckin',
   createdAt: 'createdAt'
 } as const
 
@@ -227,6 +238,50 @@ export const ParticipantInfoScalarFieldEnum = {
 export type ParticipantInfoScalarFieldEnum = (typeof ParticipantInfoScalarFieldEnum)[keyof typeof ParticipantInfoScalarFieldEnum]
 
 
+export const PrefillDataScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  countryOfResidence: 'countryOfResidence',
+  currentSchool: 'currentSchool',
+  levelOfStudy: 'levelOfStudy',
+  major: 'major',
+  race: 'race',
+  genderIdentity: 'genderIdentity',
+  age: 'age',
+  phoneNumber: 'phoneNumber'
+} as const
+
+export type PrefillDataScalarFieldEnum = (typeof PrefillDataScalarFieldEnum)[keyof typeof PrefillDataScalarFieldEnum]
+
+
+export const TeamScalarFieldEnum = {
+  id: 'id',
+  creatorId: 'creatorId',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  inviteCode: 'inviteCode'
+} as const
+
+export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
+
+
+export const ProjectScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  creatorId: 'creatorId',
+  name: 'name',
+  description: 'description',
+  devpostURL: 'devpostURL',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+
+
 export const TravelReimbursementScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -240,6 +295,18 @@ export const TravelReimbursementScalarFieldEnum = {
 } as const
 
 export type TravelReimbursementScalarFieldEnum = (typeof TravelReimbursementScalarFieldEnum)[keyof typeof TravelReimbursementScalarFieldEnum]
+
+
+export const ReimbursementInviteScalarFieldEnum = {
+  id: 'id',
+  reimbursementId: 'reimbursementId',
+  userId: 'userId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReimbursementInviteScalarFieldEnum = (typeof ReimbursementInviteScalarFieldEnum)[keyof typeof ReimbursementInviteScalarFieldEnum]
 
 
 export const ThemedRoomScalarFieldEnum = {
@@ -272,21 +339,11 @@ export const ThemedRoomReservationScalarFieldEnum = {
   memberEmails: 'memberEmails',
   timeSlot: 'timeSlot',
   theme: 'theme',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ThemedRoomReservationScalarFieldEnum = (typeof ThemedRoomReservationScalarFieldEnum)[keyof typeof ThemedRoomReservationScalarFieldEnum]
-
-
-export const ReimbursementInviteScalarFieldEnum = {
-  id: 'id',
-  reimbursementId: 'reimbursementId',
-  userId: 'userId',
-  status: 'status',
-  createdAt: 'createdAt'
-} as const
-
-export type ReimbursementInviteScalarFieldEnum = (typeof ReimbursementInviteScalarFieldEnum)[keyof typeof ReimbursementInviteScalarFieldEnum]
 
 
 export const InfoPageContentScalarFieldEnum = {
@@ -299,6 +356,22 @@ export const InfoPageContentScalarFieldEnum = {
 } as const
 
 export type InfoPageContentScalarFieldEnum = (typeof InfoPageContentScalarFieldEnum)[keyof typeof InfoPageContentScalarFieldEnum]
+
+
+export const TicketScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  createdById: 'createdById',
+  claimedById: 'claimedById',
+  status: 'status',
+  location: 'location',
+  category: 'category',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
 
 
 export const SortOrder = {

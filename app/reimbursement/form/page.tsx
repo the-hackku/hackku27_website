@@ -42,13 +42,13 @@ const reimbursementSchema = z
     distance: z.preprocess(
       (val) => (val === "" ? undefined : Number(val)),
       z
-        .number({ required_error: "Distance is required." })
+        .number({ message: "Distance is required." })
         .positive({ message: "Distance must be positive." })
     ),
     estimatedCost: z.preprocess(
       (val) => (val === "" ? undefined : Number(val)),
       z
-        .number({ required_error: "Estimated cost is required." })
+        .number({ message: "Estimated cost is required." })
         .nonnegative({ message: "Estimated cost must be non-negative." })
     ),
     reason: z.string().min(10, {
@@ -80,7 +80,7 @@ const reimbursementSchema = z
 
 declare global {
   interface Window {
-    google: typeof google;
+    google: any;
   }
 }
 
