@@ -12,7 +12,8 @@ interface Props {
 export function Header({ isAdmin, isVolunteer }: Props) {
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-40 overflow-hidden bg-transparent h-[10vw]"
+      className="fixed top-0 left-0 right-0 z-40 overflow-hidden bg-transparent"
+      style={{ height: "clamp(160px, 10vw, 230px)" }}
     >
       {/* SVG wave cutout */}
       <svg
@@ -40,7 +41,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
           d="M0 290 L260 290 C340 290 380 290 480 235 C530 210 590 200 640 200 L800 200 C850 200 910 210 960 235 C1060 290 1100 290 1440 290"
           fill="none"
           stroke="#d7d7d7"
-          strokeWidth="2.5"
+          strokeWidth="5"
           strokeLinecap="round"
         />
       </svg>
@@ -54,37 +55,37 @@ export function Header({ isAdmin, isVolunteer }: Props) {
           <motion.div
             whileHover={{
               scale: 1.05,
-              y: 5,
+              y: 2,
               transition: { duration: 0.2 },
             }}
           >
             <Image
               src="/images/mlh-badge.svg"
               alt="MLH Badge"
-              width={200}
-              height={200}
-              className="w-auto h-[7vw]"
+              width={0}
+              height={0}
+              style={{ width: "clamp(28px, 5vw, 80px)", height: "clamp(46px, 8vw, 140px)" }}
               priority={true}
             />
           </motion.div>
         </Link>
       </div>
-      <div
-        className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{ top: "25%" }}
-      >
-        <Link href="/">
-          <div style={{ width: "20vw", position: "relative", aspectRatio: "4 / 1" }}>
-            <Image
-              src="/images/branding/logo_color_grey.png"
-              alt="HackKU"
-              fill
-              style={{ objectFit: "contain" }}
-              priority={true}
-            />
-          </div>
-        </Link>
-      </div>
+<div className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 z-50">
+  <Link href="/">
+    <Image
+      src="/images/branding/logo_nobackground.png"
+      alt="HackKU"
+      width={160}
+      height={40}
+      style={{
+        width: "clamp(50px, 8vw, 130px)",
+        height: "auto",
+        objectFit: "contain",
+      }}
+      priority
+    />
+  </Link>
+</div>
     </header>
   );
 }

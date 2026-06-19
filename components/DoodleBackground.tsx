@@ -78,7 +78,7 @@ export default function DoodleBackground({ images }: { images: string[] }) {
             position: "absolute",
             top:     `${d.top}vh`,
             left:    `${d.left}vw`,
-            width:   `${d.size}vw`,
+            width:   `clamp(60px, ${d.size}vw, 160px)`,
             opacity: d.opacity,
             transform: `rotate(${d.rotate}deg)`,
           }}

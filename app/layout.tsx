@@ -6,7 +6,6 @@ import HeaderWrapper from "@/components/HeaderWrapper";
 import DoodleBackground from "@/components/DoodleBackground";
 import { getDoodleImages } from "@/lib/getDoodles";
 import Footer from "@/components/Footer";
-import { auth } from "@/auth";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers/ProgressBarProvider";
@@ -29,7 +28,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const session = await auth();
   const doodleImages = getDoodleImages();
 
   return (
@@ -45,12 +43,12 @@ export default async function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          <NextAuthProvider session={session}>
+          <NextAuthProvider>
             <Providers>
               <div className="flex flex-col min-h-screen">
                 <DoodleBackground images={doodleImages} />
                 <HeaderWrapper />
-                <main className="flex-grow relative z-10 pt-[10vw]">{children}</main>
+                <main className="flex-grow relative z-10" style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}>{children}</main>
                 <Footer />
                 <Toaster />
                 <Analytics />
