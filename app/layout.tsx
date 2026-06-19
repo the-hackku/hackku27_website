@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/providers/NextAuthProvider";
 import HeaderWrapper from "@/components/HeaderWrapper";
+import DoodleBackground from "@/components/DoodleBackground";
+import { getDoodleImages } from "@/lib/getDoodles";
 import Footer from "@/components/Footer";
-
 import { auth } from "@/auth";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers/ProgressBarProvider";
 import { Analytics } from "@vercel/analytics/react";
+
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  variable: "--font-roboto-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "HackKU27",
@@ -24,14 +30,15 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth();
+  const doodleImages = getDoodleImages();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={robotoMono.className}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`antialiased min-h-screen flex flex-col`}
       >
         <ThemeProvider
           attribute="class"
@@ -41,8 +48,9 @@ export default async function RootLayout({
           <NextAuthProvider session={session}>
             <Providers>
               <div className="flex flex-col min-h-screen">
+                <DoodleBackground images={doodleImages} />
                 <HeaderWrapper />
-                <main className="flex-grow">{children}</main>
+                <main className="flex-grow relative z-10 pt-[10vw]">{children}</main>
                 <Footer />
                 <Toaster />
                 <Analytics />

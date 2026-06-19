@@ -1,32 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "react-notion-x/src/styles.css";
 
-.border {
-  border-color: hsl(var(--border));
-}
-
 body {
   background-color: hsl(var(--background));
+  background-image: radial-gradient(circle, #c8c8c8 .025vw, transparent .05vw);
+  background-size: .75vw .75vw;
 }
 
-/* custom font */
-@font-face {
-  font-family: "DFVN GLD Display Black";
-  src: url("/fonts/DFVN_GLD.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "AGENCYR";
-  src: url("/fonts/AGENCYR.TTF") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
 
 @layer base {
   :root {
@@ -85,6 +66,12 @@ body {
   }
 }
 
-html {
+html, body {
   -webkit-text-size-adjust: 100%;
+  font-family: "Roboto Mono", monospace !important;
+}
+
+
+*:not(svg):not(svg *), *:not(svg):not(svg *)::before, *:not(svg):not(svg *)::after {
+  font-family: inherit;
 }
