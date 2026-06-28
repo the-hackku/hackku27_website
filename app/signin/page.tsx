@@ -85,7 +85,7 @@ const SignInPage = () => {
   const sendMagicLink = async (email: string) => {
     setError(null);
     try {
-      const result = await signIn("email", {
+      const result = await signIn("resend", {
         email,
         redirect: false,
         callbackUrl: "/register",
@@ -289,7 +289,7 @@ const SignInPage = () => {
             </p>
             <p className="text-center text-gray-600 mt-2 text-sm sm:text-base p-2 bg-indigo-50 rounded">
               Emails sent to <b>@ku.edu</b> or any other <b>institutional email</b>{" "} 
-              may be marked as spam — please add <b>auth@hackku.org</b>{" "}
+              may be marked as spam — please add <b>signin@auth.hackku.org</b>{" "}
               to your safe senders list, or{" "}
               <b>sign in with an OAuth provider below instead</b>.
             </p>
