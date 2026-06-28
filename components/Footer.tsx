@@ -53,13 +53,30 @@ export default function Footer() {
       </div>
 
       {/* Center text */}
-      <div className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm">
+      <div>
         <Link
-          href="/mlh/code-of-conduct"
+          href="/legal/code-of-conduct"
           target="_blank"
           rel="noopener noreferrer"
+          className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
         >
-          MLH Code of Conduct
+          Code of Conduct
+        </Link>
+        <Link
+          href="/legal/privacy-policy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
+        >
+          Privacy Policy
+        </Link>
+        <Link
+          href="/legal/waiver"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
+        >
+          Photo Release & Waiver
         </Link>
       </div>
 

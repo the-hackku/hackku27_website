@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /api/
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /wp-content/
+Disallow: /xmlrpc.php
+Disallow: /admin/
+Disallow: /login/
+Disallow: /.env
+Disallow: /wordpress
+Disallow: /new
+Disallow: /wp
