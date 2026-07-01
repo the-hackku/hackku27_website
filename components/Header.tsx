@@ -23,22 +23,22 @@ export function Header({ isAdmin, isVolunteer }: Props) {
         style={{ pointerEvents: "none" }}
       >
         <path
-          d="
-            M 0 0
-            L 1440 0
-            L 1440 290
-            C 1100 290 1060 290 960 235
-            C 910 210 850 200 800 200
-            L 640 200
-            C 590 200 530 210 480 235
-            C 380 290 340 290 260 290
-            L 0 290
-            Z
-          "
+        d="
+          M 0 0
+          L 1440 0
+          L 1440 290
+          C 1040 285 980 285 900 232
+          C 860 212 825 202 780 202
+          L 690 202
+          C 645 202 610 212 570 232
+          C 490 285 430 285 320 290
+          L 0 290
+          Z
+        "
           fill="#F3F4F6"
         />
         <path
-          d="M0 290 L260 290 C340 290 380 290 480 235 C530 210 590 200 640 200 L800 200 C850 200 910 210 960 235 C1060 290 1100 290 1440 290"
+          d="M0 290 L320 290 C430 290 490 285 570 232 C610 212 645 202 690 202 L780 202 C825 202 860 212 900 232 C980 285 1040 285 1440 290"
           fill="none"
           stroke="#d7d7d7"
           strokeWidth="5"
@@ -76,7 +76,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
       src="/images/branding/logo_nobackground.png"
       alt="HackKU"
       width={160}
-      height={40}
+      height={105}
       style={{
         width: "clamp(50px, 8vw, 130px)",
         height: "auto",

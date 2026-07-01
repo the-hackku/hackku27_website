@@ -91,7 +91,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="mt-6 flex flex-row justify-center md:justify-start gap-2"
+              className="mt-7 flex flex-row justify-center md:justify-start gap-2"
             >
               {session ? (
                 <Link href="/schedule">

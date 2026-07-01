@@ -17,7 +17,6 @@ export function getDoodleImages(): string[] {
 
     for (const entry of entries) {
       if (entry.isDirectory()) {
-        // Use ALL images from subfolders
         const subDir = path.join(DOODLES_DIR, entry.name);
         const subFiles = fs
           .readdirSync(subDir)

@@ -1,9 +1,9 @@
 "use client"
 
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSession } from "next-auth/react";
 
 const cardStyle = {
   borderWidth: "2px",
@@ -22,12 +22,13 @@ export default function HomePage() {
   const { data: session } = useSession();
   const isRegistered = session?.user?.isRegistered;
 
-  const registerText = isRegistered ? "Registered" : "Register Now";
+  const registerText = isRegistered ? "Sign Out" : "Register Now";
   const registerColor = isRegistered ? "#16a34a" : "#f2a900"; // green or yellow
+  const registerPage = isRegistered ? "/signout" : "/register";
 
   return (
     <div className="relative flex flex-col items-center justify-center px-4"
-      style={{ marginTop: "clamp(-2rem, 5rem, -5rem)" }}>
+      style={{ marginTop: "-2vw" }}>
 
       <div className="relative z-10 flex flex-row items-center justify-center w-full"
         style={{ overflow: "visible" }}>
@@ -40,12 +41,13 @@ export default function HomePage() {
               className="border bg-white flex flex-col items-center justify-start w-full sm:w-auto"
               style={{
                 ...cardStyle,
-                gap: "1.5rem",
+                gap: "2.5rem",
                 minWidth: "min(100%, 340px)",
-                width: "100%",
+                width: "650px",
                 maxWidth: "40%",
-                padding: "2rem",
-                paddingTop: "2.5rem",
+                paddingLeft: "1.5rem",
+                paddingRight: "1.5rem",
+                paddingTop: "3rem",
               }}
               initial={{ x: "60vw", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -63,21 +65,27 @@ export default function HomePage() {
                 Glad to have you.
               </h3>
 
-              <div className="flex flex-col sm:flex-row w-full gap-4 mt-2">
+              <div className="flex flex-col sm:flex-row w-full gap-8 mt-4 mb-3">
 
                 <Link
-                  href="/register"
+                  href={registerPage}
                   className="group relative flex items-center justify-center overflow-hidden shadow-md transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-xl cursor-pointer flex-1"
                   style={{
                     backgroundColor: registerColor,
                     border: "1px solid rgba(0,0,0,0.1)",
-                    borderRadius: "0.5rem 0.5rem 0.5rem 1.5rem",
+                    borderRadius: "1.5rem 1.5rem 1.5rem 1.5rem",
                     height: "clamp(56px, 10vw, 72px)",
                   }}
                 >
-                  <span className="text-black font-semibold text-xl opacity-90 group-hover:opacity-100">
-                    {registerText}
-                  </span>
+                  {isRegistered ? (
+                    <span className="text-white font-semibold text-xl opacity-90 group-hover:opacity-100">
+                      {registerText}
+                    </span>
+                  ) : (
+                    <span className="text-black font-semibold text-xl opacity-90 group-hover:opacity-100">
+                      {registerText}
+                    </span>
+                  )}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity duration-300" />
                 </Link>
 
@@ -87,7 +95,7 @@ export default function HomePage() {
                   style={{
                     backgroundColor: "#0051ba",
                     border: "1px solid rgba(0,0,0,0.1)",
-                    borderRadius: "0.5rem 0.5rem 1.5rem 0.5rem",
+                    borderRadius: "1.5rem 1.5rem 1.5rem 1.5rem",
                     height: "clamp(56px, 10vw, 72px)",
                   }}
                 >
