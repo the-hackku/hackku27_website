@@ -19,7 +19,8 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: "HackKU27",
-  description: "The Official Website for HackKU 2027. Join us for a weekend of innovation, coding, and creativity at the University of Kansas!",
+  description:
+    "The Official Website for HackKU 2027. Join us for a weekend of innovation, coding, and creativity at the University of Kansas!",
   icons: {
     // icon: "/images/branding/logo_white_bg.png",
   },
@@ -35,9 +36,7 @@ export default async function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body
-        className={`antialiased min-h-screen flex flex-col`}
-      >
+      <body className={`antialiased min-h-screen flex flex-col`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

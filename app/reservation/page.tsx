@@ -39,7 +39,7 @@ const reservationSchema = z.object({
         id: z.string(),
         email: z.email(),
         name: z.string(),
-      })
+      }),
     )
     .min(1, { message: "Please add at least one group member." }),
 
@@ -95,7 +95,7 @@ export default function RoomReservationForm() {
           setIsSearching(false);
         }
       }, 300),
-    []
+    [],
   );
 
   // Add a member to the group
@@ -164,7 +164,7 @@ export default function RoomReservationForm() {
           loading: "Submitting your room reservation...",
           success: "Room reservation submitted successfully!",
           error: "Failed to submit. Please try again.",
-        }
+        },
       );
 
       form.reset();
@@ -178,21 +178,25 @@ export default function RoomReservationForm() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white my-6 rounded-lg shadow-sm border">
-      <h1 className="text-2xl font-bold mb-4">{constants.hackathonName} Room Reservation</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {constants.hackathonName} Room Reservation
+      </h1>
 
       {/* Explanatory Text */}
       <div className="space-y-4 mb-6 text-sm leading-6">
         <p>
-          HackKU uses an{" "}
-          <strong>optional room reservation system</strong> to ensure fair and
-          organized space allocation for all participants during the 36-hour
-          hackathon.
+          HackKU uses an <strong>optional room reservation system</strong> to
+          ensure fair and organized space allocation for all participants during
+          the 36-hour hackathon.
         </p>
         <div className="p-2 rounded border-l-4 border-indigo-500 bg-indigo-50">
           <p>
-            If your reservation is confirmed, you will see the room you are assigned{" "} 
-            show up in the 
-            <Link href="/profile" className="border-2 border-gray-400 bg-gray-200 rounded p-[3px] mx-1">
+            If your reservation is confirmed, you will see the room you are
+            assigned show up in the
+            <Link
+              href="/profile"
+              className="border-2 border-gray-400 bg-gray-200 rounded p-[3px] mx-1"
+            >
               <IconUser size={16} className="inline-flex align-middle mr-2" />
               Profile
             </Link>

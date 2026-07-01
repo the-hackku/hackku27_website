@@ -69,7 +69,7 @@ const reservationSchema = z.object({
         id: z.string(),
         email: z.string().email(),
         name: z.string(),
-      })
+      }),
     )
     .min(1, "Please add at least one group member."),
 });
@@ -92,9 +92,8 @@ export default function ThemedRoomReservationForm() {
 
   useEffect(() => {
     const fetchTaken = async () => {
-      const { getTakenThemeTimeCombos } = await import(
-        "../actions/reservationRequest"
-      );
+      const { getTakenThemeTimeCombos } =
+        await import("../actions/reservationRequest");
       const result = await getTakenThemeTimeCombos();
       setTakenSlots(result);
     };
@@ -117,7 +116,7 @@ export default function ThemedRoomReservationForm() {
 
   const availableTimeSlots = ALL_TIMESLOTS.filter((slot) => {
     return !(takenSlots ?? []).some(
-      (r) => r.theme === selectedTheme && r.timeSlot === slot // ✅ updated
+      (r) => r.theme === selectedTheme && r.timeSlot === slot, // ✅ updated
     );
   });
 
@@ -140,7 +139,7 @@ export default function ThemedRoomReservationForm() {
           setIsSearching(false);
         }
       }, 300),
-    []
+    [],
   );
 
   const handleAddMember = (user: {
@@ -178,7 +177,7 @@ export default function ThemedRoomReservationForm() {
           loading: "Submitting...",
           success: "Reservation submitted!",
           error: "That slot was just taken. Try a different one.",
-        }
+        },
       );
 
       form.reset();
@@ -348,11 +347,11 @@ export default function ThemedRoomReservationForm() {
                             day === "FRI"
                               ? "Fri"
                               : day === "SAT"
-                              ? "Sat"
-                              : "Sun";
+                                ? "Sat"
+                                : "Sun";
                           const timeRange = `${start}–${end.replace(
                             /([AP]M)$/,
-                            " $1"
+                            " $1",
                           )}`;
                           return `${dayLabel}: ${timeRange}`;
                         })()}

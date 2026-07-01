@@ -91,7 +91,7 @@ export function RoomReservationsTab() {
       const { requests: data, total } = await getReservationRequests(
         requestsPage,
         PAGE_SIZE,
-        requestsDebouncedSearch
+        requestsDebouncedSearch,
       );
       setRequests(data);
       setRequestsTotal(total);
@@ -143,7 +143,10 @@ export function RoomReservationsTab() {
   }
 
   async function handleDeleteRoom(id: string) {
-    if (!window.confirm("Delete this room? Existing assignments will be cleared.")) return;
+    if (
+      !window.confirm("Delete this room? Existing assignments will be cleared.")
+    )
+      return;
     try {
       await deleteAdminThemedRoom(id);
       toast.success("Room deleted.");
@@ -158,7 +161,10 @@ export function RoomReservationsTab() {
   async function handleAssignRoom(requestId: string, themedRoomId: string) {
     setAssigningId(requestId);
     try {
-      await assignRoomToRequest(requestId, themedRoomId === "none" ? null : themedRoomId);
+      await assignRoomToRequest(
+        requestId,
+        themedRoomId === "none" ? null : themedRoomId,
+      );
       toast.success("Room assigned.");
       fetchRequests();
     } catch {
@@ -169,7 +175,10 @@ export function RoomReservationsTab() {
   }
 
   async function handleCancelRequest(requestId: string) {
-    if (!window.confirm("Delete this reservation request? This cannot be undone.")) return;
+    if (
+      !window.confirm("Delete this reservation request? This cannot be undone.")
+    )
+      return;
     try {
       await deleteReservationRequest(requestId);
       toast.success("Request cancelled.");
@@ -189,7 +198,8 @@ export function RoomReservationsTab() {
           <div>
             <h2 className="text-xl font-semibold">Themed Rooms</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Manage the available rooms that can be assigned to reservation requests.
+              Manage the available rooms that can be assigned to reservation
+              requests.
             </p>
           </div>
           <Button size="sm" onClick={openAddRoom}>
@@ -216,7 +226,10 @@ export function RoomReservationsTab() {
               )}
               {!roomsLoading && rooms.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center text-muted-foreground py-6">
+                  <TableCell
+                    colSpan={3}
+                    className="text-center text-muted-foreground py-6"
+                  >
                     No rooms yet. Add one to get started.
                   </TableCell>
                 </TableRow>
@@ -227,7 +240,11 @@ export function RoomReservationsTab() {
                   <TableCell className="text-sm">{room.location}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => openEditRoom(room)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditRoom(room)}
+                      >
                         Edit
                       </Button>
                       <Button
@@ -250,7 +267,8 @@ export function RoomReservationsTab() {
       <section>
         <h2 className="text-xl font-semibold mb-1">Reservation Requests</h2>
         <p className="text-sm text-muted-foreground mb-3">
-          Assign a room to each request using the dropdown. Unassigned requests have no room yet.
+          Assign a room to each request using the dropdown. Unassigned requests
+          have no room yet.
         </p>
 
         <div className="flex items-center gap-2 mb-3">
@@ -292,7 +310,10 @@ export function RoomReservationsTab() {
             <TableBody>
               {requests.length === 0 && !requestsLoading && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground py-6">
+                  <TableCell
+                    colSpan={7}
+                    className="text-center text-muted-foreground py-6"
+                  >
                     No reservation requests found.
                   </TableCell>
                 </TableRow>
@@ -322,7 +343,9 @@ export function RoomReservationsTab() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="none">
-                            <span className="text-muted-foreground italic">Unassigned</span>
+                            <span className="text-muted-foreground italic">
+                              Unassigned
+                            </span>
                           </SelectItem>
                           {rooms.map((room) => (
                             <SelectItem key={room.id} value={room.id}>
@@ -389,7 +412,9 @@ export function RoomReservationsTab() {
               <label className="text-sm font-medium">Name</label>
               <Input
                 value={roomForm.name}
-                onChange={(e) => setRoomForm((f) => ({ ...f, name: e.target.value }))}
+                onChange={(e) =>
+                  setRoomForm((f) => ({ ...f, name: e.target.value }))
+                }
                 placeholder="e.g. Dungeons & Dragons"
                 className="mt-1"
                 autoFocus
@@ -417,7 +442,9 @@ export function RoomReservationsTab() {
               Cancel
             </Button>
             <Button onClick={handleSaveRoom} disabled={roomSaving}>
-              {roomSaving && <IconLoader size={16} className="animate-spin mr-1" />}
+              {roomSaving && (
+                <IconLoader size={16} className="animate-spin mr-1" />
+              )}
               {editingRoom ? "Save" : "Create"}
             </Button>
           </DialogFooter>

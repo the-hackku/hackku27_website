@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -36,7 +36,6 @@ export default function HomePage() {
         style={{ overflow: "visible" }}>
 
         <AnimatePresence mode="wait" initial={false}>
-
           {view === "welcome" && (
             <motion.div
               key="welcome"
@@ -136,7 +135,9 @@ export default function HomePage() {
               </div>
 
               <p className="text-gray-600 leading-relaxed text-base">
-                HackKU is the University of Kansas's biggest hackathon, a 24-hour event where students come together to build, create, and innovate.
+                HackKU is the University of Kansas's biggest hackathon, a
+                24-hour event where students come together to build, create, and
+                innovate.
               </p>
 
               {/* Stats row */}
@@ -170,7 +171,6 @@ export default function HomePage() {
               </Link>
             </motion.div>
           )}
-
         </AnimatePresence>
       </div>
     </div>

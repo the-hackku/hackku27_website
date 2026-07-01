@@ -80,7 +80,7 @@ export function UserDetailsDialog({
               ? {
                   ...user.travelReimbursement,
                   createdAt: new Date(
-                    user.travelReimbursement.createdAt
+                    user.travelReimbursement.createdAt,
                   ).toISOString(),
                 }
               : null,
@@ -88,10 +88,10 @@ export function UserDetailsDialog({
               ? {
                   ...user.ParticipantInfo,
                   createdAt: new Date(
-                    user.ParticipantInfo.createdAt
+                    user.ParticipantInfo.createdAt,
                   ).toISOString(),
                   updatedAt: new Date(
-                    user.ParticipantInfo.updatedAt
+                    user.ParticipantInfo.updatedAt,
                   ).toISOString(),
                 }
               : null,
@@ -164,7 +164,7 @@ export function UserDetailsDialog({
                         ([key, value]) =>
                           value &&
                           value !== "N/A" &&
-                          !["id", "userId", "updatedAt"].includes(key)
+                          !["id", "userId", "updatedAt"].includes(key),
                       )
                       .map(([key, value]) => (
                         <InfoItem key={key} label={key} value={String(value)} />

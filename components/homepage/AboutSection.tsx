@@ -17,10 +17,7 @@ interface AboutSectionProps {
 
 const AboutSection: React.FC<AboutSectionProps> = ({ previousEvents, id }) => {
   return (
-    <section
-      id={id}
-      className="w-full py-16 flex items-center justify-center"
-    >
+    <section id={id} className="w-full py-16 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

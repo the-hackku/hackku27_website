@@ -74,7 +74,7 @@ export default function InviteListPage() {
    */
   async function handleInviteResponse(
     reimbursementId: string,
-    accept: boolean
+    accept: boolean,
   ) {
     setError(null);
     startTransition(async () => {

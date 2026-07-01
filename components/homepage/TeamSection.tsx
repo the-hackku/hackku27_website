@@ -121,9 +121,9 @@ const TeamSection: React.FC<TeamSectionProps> = ({ teamMembers, id }) => {
           Meet the Team
         </h2>
         <p className="text-lg md:text-2xl text-white">
-          The passionate individuals driving {constants.hackathonName} forward. Our team is
-          dedicated to creating an unforgettable hackathon experience for all
-          participants.
+          The passionate individuals driving {constants.hackathonName} forward.
+          Our team is dedicated to creating an unforgettable hackathon
+          experience for all participants.
         </p>
       </motion.div>
 
@@ -150,7 +150,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ teamMembers, id }) => {
           onScroll={updateScrollState}
         >
           <div className="grid grid-flow-col grid-rows-2 auto-cols-min gap-x-2 gap-y-4 md:gap-x-4 py-5 w-max mx-auto">
-            {teamMembers.map(member => (
+            {teamMembers.map((member) => (
               <div
                 key={member.name}
                 className="relative flex flex-col items-center text-center w-44 md:w-56"
@@ -162,7 +162,9 @@ const TeamSection: React.FC<TeamSectionProps> = ({ teamMembers, id }) => {
                     width={48}
                     height={36}
                     className="absolute top-0 right-0 w-12 h-auto z-10 pointer-events-none"
-                    style={{ transform: `rotate(${getFishAngle(member.name)}deg)` }}
+                    style={{
+                      transform: `rotate(${getFishAngle(member.name)}deg)`,
+                    }}
                   />
                 )}
                 <motion.div

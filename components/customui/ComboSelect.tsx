@@ -69,11 +69,11 @@ export function ComboboxSelect({
           : [];
 
         const filteredOptions = options.filter((option) =>
-          option.label.toLowerCase().includes(inputValue.toLowerCase())
+          option.label.toLowerCase().includes(inputValue.toLowerCase()),
         );
 
         const isExistingOption = options.some(
-          (option) => option.label.toLowerCase() === inputValue.toLowerCase()
+          (option) => option.label.toLowerCase() === inputValue.toLowerCase(),
         );
 
         const toggleValue = (value: string) => {
@@ -102,7 +102,7 @@ export function ComboboxSelect({
                     aria-expanded={open}
                     className={cn(
                       "w-full justify-between truncate",
-                      !field.value && "text-muted-foreground"
+                      !field.value && "text-muted-foreground",
                     )}
                   >
                     {selectedValues.length > 0
@@ -163,7 +163,7 @@ export function ComboboxSelect({
                                   "mr-2 h-4 w-4",
                                   selectedValues.includes(option.value)
                                     ? "opacity-100"
-                                    : "opacity-0"
+                                    : "opacity-0",
                                 )}
                               />
                               {option.label}

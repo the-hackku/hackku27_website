@@ -27,14 +27,12 @@ import { EventType } from "@/prisma/generated/browser";
 import { Input } from "./ui/input";
 import Image, { StaticImageData } from "next/image";
 
-
 import activityBg from "@/assets/images/schedule/activities.png";
 import foodBg from "@/assets/images/schedule/food.png";
 import dawnBg from "@/assets/images/schedule/required dawn.png";
 import duskBg from "@/assets/images/schedule/required dusk.png";
 import sponsorBg from "@/assets/images/schedule/sponsor.png";
 import workshopBg from "@/assets/images/schedule/workshop.png";
-
 
 type ScheduleEvent = {
   id: string;
@@ -80,13 +78,13 @@ const defaultImageBg = (eventTime: string) => {
     return dawnBg;
   }
   return duskBg;
-}
+};
 
 // Helper function to map slot index to a readable time format (e.g., "7:00 AM", "7:30 AM", etc.)
 const formatTime = (
   index: number,
   baseHour: number,
-  timezone: "local" | "central"
+  timezone: "local" | "central",
 ) => {
   const hour = Math.floor(index / 2) + baseHour;
   const minutes = index % 2 === 0 ? 0 : 30;
@@ -117,7 +115,7 @@ const getRowIndex = (dateString: string, baseHour: number) => {
 const formatTimeForSlot = (
   startString: string,
   endString: string,
-  timezone: "local" | "central"
+  timezone: "local" | "central",
 ) => {
   const start = new Date(startString);
   const end = new Date(endString);
@@ -214,7 +212,7 @@ function buildOverlapMap(events: ScheduleEvent[]): Map<string, OverlapInfo> {
   groups.forEach((group, groupIndex) => {
     const sortedGroup = group.sort(
       (a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
     );
 
     const columns: ScheduleEvent[][] = [];
@@ -269,7 +267,7 @@ function buildOverlapMap(events: ScheduleEvent[]): Map<string, OverlapInfo> {
 // Updated getOverlapStyle function
 function getOverlapStyle(
   eventIndex: number,
-  groupSize: number
+  groupSize: number,
 ): React.CSSProperties {
   const widthPercent = 100 / groupSize;
   const leftPercent = widthPercent * eventIndex;
@@ -284,7 +282,7 @@ function getOverlapStyle(
 // Calculate the number of rows to span based on event duration
 const getRowSpan = (
   startString: string,
-  endString: string
+  endString: string,
 ): { span: number; duration: number } => {
   const start = new Date(startString);
   const end = new Date(endString);
@@ -299,7 +297,7 @@ const getRowSpan = (
 const formatEventTimeRange = (
   startString: string,
   endString: string,
-  timezone: "local" | "central"
+  timezone: "local" | "central",
 ) => {
   const start = new Date(startString);
   const end = new Date(endString);
@@ -345,7 +343,8 @@ const MobileEventDrawer = ({
 }) => {
   if (!event) return null;
 
-  const selectedEventBg = eventTypeBackground[event.eventType] ?? defaultImageBg(event.startDate);
+  const selectedEventBg =
+    eventTypeBackground[event.eventType] ?? defaultImageBg(event.startDate);
 
   return (
     <AnimatePresence>
@@ -418,7 +417,7 @@ const MobileEventDrawer = ({
 
 const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(
-    null
+    null,
   );
   const [favorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly] = useState(false);
@@ -433,24 +432,27 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [collapsed, setCollapsed] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [timezoneMode, setTimezoneMode] = useState<"local" | "central">(
-    "central"
+    "central",
   );
 
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
 
   // Group events by date
-  const groupedEvents = schedule.reduce((acc, event) => {
-    // Format the event start date as a local date string
-    const eventDate = new Date(event.startDate).toLocaleDateString("en-US"); // Use local time zone by default
-    if (!acc[eventDate]) acc[eventDate] = [];
-    acc[eventDate].push(event);
-    return acc;
-  }, {} as Record<string, ScheduleEvent[]>);
+  const groupedEvents = schedule.reduce(
+    (acc, event) => {
+      // Format the event start date as a local date string
+      const eventDate = new Date(event.startDate).toLocaleDateString("en-US"); // Use local time zone by default
+      if (!acc[eventDate]) acc[eventDate] = [];
+      acc[eventDate].push(event);
+      return acc;
+    },
+    {} as Record<string, ScheduleEvent[]>,
+  );
 
   const days = Object.keys(groupedEvents).sort();
 
   const [selectedDay, setSelectedDay] = useState<string>(
-    "All" // Default to "All"
+    "All", // Default to "All"
   );
 
   useEffect(() => {
@@ -466,7 +468,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const getNextEvent = (currentEvent: ScheduleEvent | null) => {
     if (!currentEvent) return null;
     const currentIndex = filteredEvents.findIndex(
-      (event) => event.id === currentEvent.id
+      (event) => event.id === currentEvent.id,
     );
     return currentIndex >= 0 && currentIndex < filteredEvents.length - 1
       ? filteredEvents[currentIndex + 1]
@@ -477,7 +479,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const getPreviousEvent = (currentEvent: ScheduleEvent | null) => {
     if (!currentEvent) return null;
     const currentIndex = filteredEvents.findIndex(
-      (event) => event.id === currentEvent.id
+      (event) => event.id === currentEvent.id,
     );
     return currentIndex > 0 ? filteredEvents[currentIndex - 1] : null;
   };
@@ -506,7 +508,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         : allEvents.filter(
             (ev) =>
               ev.eventType &&
-              selectedEventTypes.includes(ev.eventType as EventType)
+              selectedEventTypes.includes(ev.eventType as EventType),
           );
 
     const favoriteFiltered = showFavoritesOnly
@@ -530,12 +532,15 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   ]);
 
   // Regroup after filtering
-  const filteredGroupedEvents = filteredEvents.reduce((acc, event) => {
-    const eventDate = new Date(event.startDate).toLocaleDateString("en-US"); // Use local time
-    if (!acc[eventDate]) acc[eventDate] = [];
-    acc[eventDate].push(event);
-    return acc;
-  }, {} as Record<string, ScheduleEvent[]>);
+  const filteredGroupedEvents = filteredEvents.reduce(
+    (acc, event) => {
+      const eventDate = new Date(event.startDate).toLocaleDateString("en-US"); // Use local time
+      if (!acc[eventDate]) acc[eventDate] = [];
+      acc[eventDate].push(event);
+      return acc;
+    },
+    {} as Record<string, ScheduleEvent[]>,
+  );
 
   // Build an overlapMap for each day after we've filtered
   const overlapMaps = React.useMemo(() => {
@@ -555,7 +560,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   // Determine base hour (earliest event start hour)
   const baseHour = dayEvents.length
     ? Math.min(
-        ...dayEvents.map((event) => new Date(event.startDate).getHours())
+        ...dayEvents.map((event) => new Date(event.startDate).getHours()),
       )
     : 6;
 
@@ -588,7 +593,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   };
 
   const selectedEventBg = selectedEvent
-    ? eventTypeBackground[selectedEvent.eventType] ?? defaultImageBg(selectedEvent.startDate)
+    ? (eventTypeBackground[selectedEvent.eventType] ??
+      defaultImageBg(selectedEvent.startDate))
     : null;
 
   return (
@@ -721,7 +727,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 className="flex items-center gap-2 text-xs border px-2 py-1 rounded-md hover:cursor-pointer"
                 onClick={() =>
                   setTimezoneMode(
-                    timezoneMode === "local" ? "central" : "local"
+                    timezoneMode === "local" ? "central" : "local",
                   )
                 }
               >
@@ -755,8 +761,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 ? { height: "66%" }
                 : {}
               : isMobile
-              ? { height: "100%" }
-              : {}
+                ? { height: "100%" }
+                : {}
           }
           transition={{ duration: 0.2 }}
           className="overflow-y-scroll relative h-full"
@@ -772,106 +778,113 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
           {/* Schedule Grid Table */}
           <TooltipProvider delayDuration={300}>
-          <table className="table-fixed w-full border-collapse h-full">
-            <thead className="sticky top-0 bg-gray-100 z-50 border-b">
-              <tr>
-                <th className="w-16"></th>
-                {selectedDay === "All" ? (
-                  days.map((date) => (
-                    <th key={date} className="p-2 text-center">
-                      {new Date(date).toLocaleDateString(undefined, {
+            <table className="table-fixed w-full border-collapse h-full">
+              <thead className="sticky top-0 bg-gray-100 z-50 border-b">
+                <tr>
+                  <th className="w-16"></th>
+                  {selectedDay === "All" ? (
+                    days.map((date) => (
+                      <th key={date} className="p-2 text-center">
+                        {new Date(date).toLocaleDateString(undefined, {
+                          weekday: "long",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </th>
+                    ))
+                  ) : (
+                    <th className="p-2 text-center">
+                      {new Date(selectedDay).toLocaleDateString(undefined, {
                         weekday: "long",
                         month: "long",
                         day: "numeric",
                       })}
                     </th>
-                  ))
-                ) : (
-                  <th className="p-2 text-center">
-                    {new Date(selectedDay).toLocaleDateString(undefined, {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </th>
-                )}
-              </tr>
-            </thead>
+                  )}
+                </tr>
+              </thead>
 
-            <tbody onClick={() => setSelectedEvent(null)}>
-              {slots.map((slotIndex) => (
-                <tr key={slotIndex} className="h-12">
-                  <td
-                    className={`relative border-r border-gray-300 overflow-visible text-xs ${
-                      slotIndex % 2 === 0 ? "" : "border-b border-solid"
-                    }`}
-                  >
-                    {slotIndex % 2 === 0
-                      ? formatTime(slotIndex, baseHour, timezoneMode)
-                      : ""}
-                  </td>
-                  {(selectedDay === "All" ? days : [selectedDay]).map((day) => {
-                    const dayOverlapMap = overlapMaps[day]; // get the overlap map for this day
+              <tbody onClick={() => setSelectedEvent(null)}>
+                {slots.map((slotIndex) => (
+                  <tr key={slotIndex} className="h-12">
+                    <td
+                      className={`relative border-r border-gray-300 overflow-visible text-xs ${
+                        slotIndex % 2 === 0 ? "" : "border-b border-solid"
+                      }`}
+                    >
+                      {slotIndex % 2 === 0
+                        ? formatTime(slotIndex, baseHour, timezoneMode)
+                        : ""}
+                    </td>
+                    {(selectedDay === "All" ? days : [selectedDay]).map(
+                      (day) => {
+                        const dayOverlapMap = overlapMaps[day]; // get the overlap map for this day
 
-                    return (
-                      <td
-                        key={day}
-                        className={`relative border-r border-gray-300 overflow-visible ${
-                          slotIndex % 2 === 0 ? "" : "border-b border-solid"
-                        }`}
-                        style={{
-                          borderRightStyle: "dashed",
-                        }}
-                      >
-                        {filteredGroupedEvents[day]
-                          ?.filter(
-                            (event) =>
-                              getRowIndex(event.startDate, baseHour) ===
-                              slotIndex
-                          )
-                          .map((event) => {
-                            const { span: rowSpan, duration } = getRowSpan(
-                              event.startDate,
-                              event.endDate
-                            );
-                            const descriptionLineClamp = Math.floor(
-                              duration / 30
-                            ); // 1 line per 10 minutes
+                        return (
+                          <td
+                            key={day}
+                            className={`relative border-r border-gray-300 overflow-visible ${
+                              slotIndex % 2 === 0 ? "" : "border-b border-solid"
+                            }`}
+                            style={{
+                              borderRightStyle: "dashed",
+                            }}
+                          >
+                            {filteredGroupedEvents[day]
+                              ?.filter(
+                                (event) =>
+                                  getRowIndex(event.startDate, baseHour) ===
+                                  slotIndex,
+                              )
+                              .map((event) => {
+                                const { span: rowSpan, duration } = getRowSpan(
+                                  event.startDate,
+                                  event.endDate,
+                                );
+                                const descriptionLineClamp = Math.floor(
+                                  duration / 30,
+                                ); // 1 line per 10 minutes
 
-                            const isSelected = selectedEvent?.id === event.id;
-                            const colorClass = event.eventType
-                              ? eventTypeColors[event.eventType]
-                              : "bg-gray-400";
-                            // Look up this event's overlap info
-                            const overlapInfo = dayOverlapMap?.get(event.id);
-                            let overlapStyle: React.CSSProperties = {};
+                                const isSelected =
+                                  selectedEvent?.id === event.id;
+                                const colorClass = event.eventType
+                                  ? eventTypeColors[event.eventType]
+                                  : "bg-gray-400";
+                                // Look up this event's overlap info
+                                const overlapInfo = dayOverlapMap?.get(
+                                  event.id,
+                                );
+                                let overlapStyle: React.CSSProperties = {};
 
-                            if (overlapInfo) {
-                              overlapStyle = getOverlapStyle(
-                                overlapInfo.eventIndex,
-                                overlapInfo.groupSize
-                              );
-                            } else {
-                              // Default if not found in map
-                              overlapStyle = { left: "0%", width: "100%" };
-                            }
+                                if (overlapInfo) {
+                                  overlapStyle = getOverlapStyle(
+                                    overlapInfo.eventIndex,
+                                    overlapInfo.groupSize,
+                                  );
+                                } else {
+                                  // Default if not found in map
+                                  overlapStyle = { left: "0%", width: "100%" };
+                                }
 
-                            const isCramped = rowSpan <= 1 || (overlapInfo !== undefined && overlapInfo.groupSize > 1);
+                                const isCramped =
+                                  rowSpan <= 1 ||
+                                  (overlapInfo !== undefined &&
+                                    overlapInfo.groupSize > 1);
 
-                            const gridItemContent = (
-                              <div
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSelectedEvent(currEvent => {
-                                    if (currEvent === event) {
-                                      setCollapsed(true);
-                                    } else if (collapsed) {
-                                      setCollapsed(false);
-                                    }
-                                    return isSelected ? null : event
-                                  });
-                                }}
-                                className={`absolute inset-y-0.5 z-10 rounded-md p-1 overflow-hidden cursor-pointer text-white
+                                const gridItemContent = (
+                                  <div
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setSelectedEvent((currEvent) => {
+                                        if (currEvent === event) {
+                                          setCollapsed(true);
+                                        } else if (collapsed) {
+                                          setCollapsed(false);
+                                        }
+                                        return isSelected ? null : event;
+                                      });
+                                    }}
+                                    className={`absolute inset-y-0.5 z-10 rounded-md p-1 overflow-hidden cursor-pointer text-white
                                 ${colorClass}
                                 ${
                                   isSelected
@@ -879,104 +892,122 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                     : ""
                                 }
                                 `}
-                                style={{
-                                  ...overlapStyle,
-                                  left: `calc(${overlapStyle.left} + 2px)`,
-                                  width: `calc(${overlapStyle.width} - 4px)`,
-                                  textShadow: "0 1px 3px #000",
-                                  gridRow: `span ${rowSpan}`,
-                                  height: `calc(${rowSpan * 3}rem - 4px)`,
-                                  position: "absolute",
-                                  opacity: isSelected ? "0.8" : "1",
-                                }}
-                              >
-                                {/* Event content */}
-                                <span
-                                  className={`inline-flex flex-wrap items-start text-left ${
-                                    (isMobile || selectedDay === "All") &&
-                                    overlapInfo &&
-                                    overlapInfo.groupSize > 1
-                                      ? "flex-col"
-                                      : "flex-row items-center"
-                                  }`}
-                                >
-                                  <p className="text-sm font-bold whitespace-normal break-words mr-1">
-                                    {event.eventType === "REQUIRED" && 
-                                      <span className="text-red-500" title="Required Event" >*</span>
-                                    }
-                                    {event.name}
-                                  </p>
-                                  {isCramped && (
-                                    <div className="text-xs text-white/90 whitespace-nowrap">
-                                      {formatTimeForSlot(
-                                        event.startDate,
-                                        event.endDate,
-                                        timezoneMode
-                                      )}
-                                    </div>
-                                  )}
-                                </span>
-
-                                {!isCramped && (
-                                  <div className="text-xs flex items-start">
-                                    <IconMapPin
-                                      size={12}
-                                      className="mr-1 flex-shrink-0 mt-0.5"
-                                    />
-                                    <span className="truncate">
-                                      {event.location || "TBA"}
-                                    </span>
-                                  </div>
-                                )}
-                                {!isCramped && duration > 30 && event.description && (
-                                  <div className="text-xs flex items-start">
-                                    <IconInfoCircle
-                                      size={12}
-                                      className="mr-1 flex-shrink-0 mt-0.5"
-                                    />
+                                    style={{
+                                      ...overlapStyle,
+                                      left: `calc(${overlapStyle.left} + 2px)`,
+                                      width: `calc(${overlapStyle.width} - 4px)`,
+                                      textShadow: "0 1px 3px #000",
+                                      gridRow: `span ${rowSpan}`,
+                                      height: `calc(${rowSpan * 3}rem - 4px)`,
+                                      position: "absolute",
+                                      opacity: isSelected ? "0.8" : "1",
+                                    }}
+                                  >
+                                    {/* Event content */}
                                     <span
-                                      className="overflow-hidden text-ellipsis"
-                                      style={{
-                                        display: "-webkit-box",
-                                        WebkitLineClamp: descriptionLineClamp,
-                                        WebkitBoxOrient: "vertical",
-                                      }}
+                                      className={`inline-flex flex-wrap items-start text-left ${
+                                        (isMobile || selectedDay === "All") &&
+                                        overlapInfo &&
+                                        overlapInfo.groupSize > 1
+                                          ? "flex-col"
+                                          : "flex-row items-center"
+                                      }`}
                                     >
-                                      <em>{event.description}</em>
+                                      <p className="text-sm font-bold whitespace-normal break-words mr-1">
+                                        {event.eventType === "REQUIRED" && (
+                                          <span
+                                            className="text-red-500"
+                                            title="Required Event"
+                                          >
+                                            *
+                                          </span>
+                                        )}
+                                        {event.name}
+                                      </p>
+                                      {isCramped && (
+                                        <div className="text-xs text-white/90 whitespace-nowrap">
+                                          {formatTimeForSlot(
+                                            event.startDate,
+                                            event.endDate,
+                                            timezoneMode,
+                                          )}
+                                        </div>
+                                      )}
                                     </span>
-                                  </div>
-                                )}
-                              </div>
-                            );
 
-                            return isCramped ? (
-                              <Tooltip key={event.id}>
-                                <TooltipTrigger asChild>
-                                  {gridItemContent}
-                                </TooltipTrigger>
-                                <TooltipContent side="right" className="max-w-xs">
-                                  <p className="font-bold">{event.name}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {formatTimeForSlot(event.startDate, event.endDate, timezoneMode)}
-                                  </p>
-                                  {event.location && (
-                                    <p className="text-xs">{event.location}</p>
-                                  )}
-                                </TooltipContent>
-                              </Tooltip>
-                            ) : (
-                              <React.Fragment key={event.id}>
-                                {gridItemContent}
-                              </React.Fragment>
-                            );
-                          })}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                                    {!isCramped && (
+                                      <div className="text-xs flex items-start">
+                                        <IconMapPin
+                                          size={12}
+                                          className="mr-1 flex-shrink-0 mt-0.5"
+                                        />
+                                        <span className="truncate">
+                                          {event.location || "TBA"}
+                                        </span>
+                                      </div>
+                                    )}
+                                    {!isCramped &&
+                                      duration > 30 &&
+                                      event.description && (
+                                        <div className="text-xs flex items-start">
+                                          <IconInfoCircle
+                                            size={12}
+                                            className="mr-1 flex-shrink-0 mt-0.5"
+                                          />
+                                          <span
+                                            className="overflow-hidden text-ellipsis"
+                                            style={{
+                                              display: "-webkit-box",
+                                              WebkitLineClamp:
+                                                descriptionLineClamp,
+                                              WebkitBoxOrient: "vertical",
+                                            }}
+                                          >
+                                            <em>{event.description}</em>
+                                          </span>
+                                        </div>
+                                      )}
+                                  </div>
+                                );
+
+                                return isCramped ? (
+                                  <Tooltip key={event.id}>
+                                    <TooltipTrigger asChild>
+                                      {gridItemContent}
+                                    </TooltipTrigger>
+                                    <TooltipContent
+                                      side="right"
+                                      className="max-w-xs"
+                                    >
+                                      <p className="font-bold">{event.name}</p>
+                                      <p className="text-xs text-muted-foreground">
+                                        {formatTimeForSlot(
+                                          event.startDate,
+                                          event.endDate,
+                                          timezoneMode,
+                                        )}
+                                      </p>
+                                      {event.location && (
+                                        <p className="text-xs">
+                                          {event.location}
+                                        </p>
+                                      )}
+                                    </TooltipContent>
+                                  </Tooltip>
+                                ) : (
+                                  <React.Fragment key={event.id}>
+                                    {gridItemContent}
+                                  </React.Fragment>
+                                );
+                              })}
+                          </td>
+                        );
+                      },
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </TooltipProvider>
         </motion.div>
       </div>
@@ -1003,7 +1034,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               const delta = e.clientX - startX;
               const newLeftWidth = Math.max(
                 parentWidth * 0.4,
-                Math.min(parentWidth * 0.75, startLeftWidth + delta)
+                Math.min(parentWidth * 0.75, startLeftWidth + delta),
               );
 
               if (scheduleGridRef.current) {
@@ -1035,8 +1066,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             isMobile
               ? " overflow-visible  inset-x-0 absolute bottom-0"
               : collapsed
-              ? "hidden"
-              : "block"
+                ? "hidden"
+                : "block"
           }`}
           animate={isMobile ? { height: selectedEvent ? "65vh" : "0vh" } : {}}
           initial={isMobile ? { height: "0%", opacity: 0 } : {}}
@@ -1082,7 +1113,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   {formatEventTimeRange(
                     selectedEvent.startDate,
                     selectedEvent.endDate,
-                    timezoneMode
+                    timezoneMode,
                   )}
                 </p>
 

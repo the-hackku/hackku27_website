@@ -7,7 +7,7 @@ interface UseSearchablePaginatedDataProps<T> {
   fetchFunction: (
     page: number,
     pageSize: number,
-    searchQuery: string
+    searchQuery: string,
   ) => Promise<{ data: T[]; total: number }>;
   pageSize?: number;
   debounceTime?: number;
@@ -45,7 +45,7 @@ export function useSearchablePaginatedData<T>({
       const result = await memoizedFetchFunction(
         page,
         pageSize,
-        debouncedSearch
+        debouncedSearch,
       );
       setData(result.data);
       setTotal(result.total);

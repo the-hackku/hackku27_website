@@ -66,7 +66,7 @@ type ValidateQrCodeResult =
 export async function getUsers(
   page: number = 1,
   pageSize: number = 20,
-  searchQuery: string = ""
+  searchQuery: string = "",
 ) {
   await isAdmin();
 
@@ -121,7 +121,7 @@ export async function getUsers(
 export async function getCheckins(
   page: number = 1,
   pageSize: number = 20,
-  searchQuery: string = ""
+  searchQuery: string = "",
 ) {
   await isAdmin();
 
@@ -181,7 +181,7 @@ export async function getCheckins(
  * Batch update check-ins
  */
 export async function batchUpdateCheckins(
-  changes: Record<string, Partial<Checkin>>
+  changes: Record<string, Partial<Checkin>>,
 ) {
   await isAdmin(); // Ensure only admins can access
 
@@ -189,7 +189,7 @@ export async function batchUpdateCheckins(
     prisma.checkin.update({
       where: { id: checkinId },
       data: fields,
-    })
+    }),
   );
 
   const updatedCheckins = await prisma.$transaction(updatePromises);
@@ -261,7 +261,7 @@ export async function deleteEvent(eventId: string) {
 
 export async function validateQrCode(
   scannedCode: string,
-  eventId: string
+  eventId: string,
 ): Promise<ValidateQrCodeResult> {
   // Ensure the user is an admin or volunteer
   const session = await isAdminOrVolunteer();
@@ -382,7 +382,7 @@ export async function validateQrCode(
  */
 export async function manualCheckIn(
   userId: string,
-  eventId: string
+  eventId: string,
 ): Promise<{
   success: boolean;
   message: string;
@@ -526,7 +526,7 @@ export async function fetchScanHistory() {
 export async function updateUserField(
   userId: string,
   field: string,
-  value: unknown
+  value: unknown,
 ) {
   await isAdmin(); // Ensure only admins can access
   await prisma.user.update({
@@ -539,7 +539,7 @@ export async function updateUserField(
 export async function updateParticipantField(
   participantId: string,
   field: string,
-  value: unknown
+  value: unknown,
 ) {
   await isAdmin(); // Ensure only admins can access
   await prisma.participantInfo.update({
@@ -555,7 +555,7 @@ export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
     prisma.user.update({
       where: { id: userId },
       data: fields,
-    })
+    }),
   );
 
   const updatedUsers = await prisma.$transaction(updatePromises);
@@ -620,7 +620,7 @@ export async function getUserById(userId: string) {
 
 // Batch update participant info
 export async function batchUpdateParticipants(
-  changes: Record<string, Partial<ParticipantInfo>>
+  changes: Record<string, Partial<ParticipantInfo>>,
 ) {
   await isAdmin(); // Ensure only admins can access
 
@@ -629,7 +629,7 @@ export async function batchUpdateParticipants(
       prisma.participantInfo.update({
         where: { id: participantId },
         data: fields,
-      })
+      }),
   );
 
   await prisma.$transaction(updatePromises);
@@ -638,7 +638,7 @@ export async function batchUpdateParticipants(
 export async function getReimbursements(
   page: number = 1,
   pageSize: number = 20,
-  searchQuery: string = ""
+  searchQuery: string = "",
 ) {
   await isAdmin();
 
@@ -707,7 +707,7 @@ export async function getReimbursements(
 }
 
 export async function batchUpdateReimbursements(
-  changes: Record<string, Partial<TravelReimbursement>>
+  changes: Record<string, Partial<TravelReimbursement>>,
 ) {
   await isAdmin();
 
@@ -716,7 +716,7 @@ export async function batchUpdateReimbursements(
       prisma.travelReimbursement.update({
         where: { id: reimbursementId },
         data: fields,
-      })
+      }),
   );
 
   const updatedReimbursements = await prisma.$transaction(updatePromises);
@@ -797,7 +797,7 @@ export async function searchUsers(searchQuery: string) {
 export async function getReservationRequests(
   page: number = 1,
   pageSize: number = 10,
-  searchQuery: string = ""
+  searchQuery: string = "",
 ): Promise<{ requests: AdminReservationRequest[]; total: number }> {
   await isAdmin();
   const skip = (page - 1) * pageSize;
@@ -805,7 +805,12 @@ export async function getReservationRequests(
     ? {
         OR: [
           { teamName: { contains: searchQuery, mode: "insensitive" as const } },
-          { memberEmails: { contains: searchQuery, mode: "insensitive" as const } },
+          {
+            memberEmails: {
+              contains: searchQuery,
+              mode: "insensitive" as const,
+            },
+          },
         ],
       }
     : {};
@@ -844,7 +849,7 @@ export async function getReservationRequests(
 
 export async function assignRoomToRequest(
   requestId: string,
-  themedRoomId: string | null
+  themedRoomId: string | null,
 ): Promise<void> {
   await isAdmin();
   await prisma.reservationRequest.update({
@@ -853,7 +858,9 @@ export async function assignRoomToRequest(
   });
 }
 
-export async function deleteReservationRequest(requestId: string): Promise<void> {
+export async function deleteReservationRequest(
+  requestId: string,
+): Promise<void> {
   await isAdmin();
   await prisma.reservationRequest.delete({ where: { id: requestId } });
 }
@@ -873,7 +880,7 @@ export async function createThemedRoom(data: {
 
 export async function updateAdminThemedRoom(
   id: string,
-  data: { name?: string; location?: string }
+  data: { name?: string; location?: string },
 ): Promise<void> {
   await isAdmin();
   await prisma.themedRoom.update({ where: { id }, data });

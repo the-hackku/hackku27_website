@@ -12,7 +12,7 @@ import {
 export async function getAnalyticsData(
   startDate: Date,
   endDate: Date,
-  aggregation: "hourly" | "daily"
+  aggregation: "hourly" | "daily",
 ) {
   let users, checkins;
 

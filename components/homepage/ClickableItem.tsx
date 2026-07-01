@@ -17,16 +17,16 @@ interface ClickableItemProps {
   id: string;
   disabled?: boolean;
   children?: React.ReactNode;
-};
+}
 
 const ClickableItem: React.FC<ClickableItemProps> = ({
   children,
-  top, 
-  left, 
-  right, 
-  bottom, 
-  size, 
-  img, 
+  top,
+  left,
+  right,
+  bottom,
+  size,
+  img,
   id,
   disabled = false,
 }) => {
@@ -34,7 +34,9 @@ const ClickableItem: React.FC<ClickableItemProps> = ({
   const [showModal, setShowModal] = useState(false || urlId === id);
   const { isMobile, isTablet } = useBreakpoint();
 
-  function handleModalClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function handleModalClick(
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) {
     if (event.target === event.currentTarget) {
       setShowModal(false);
     }
@@ -54,7 +56,7 @@ const ClickableItem: React.FC<ClickableItemProps> = ({
 
   useEffect(() => {
     if (urlId === id) setShowModal(true);
-  }, [urlId, id])
+  }, [urlId, id]);
 
   useEffect(() => {
     if (showModal) {
@@ -77,7 +79,7 @@ const ClickableItem: React.FC<ClickableItemProps> = ({
   return (
     <>
       {showModal && (
-        <div 
+        <div
           className="z-10 fixed top-0 bottom-0 left-0 right-0 bg-opacity-50 bg-black flex flex-col justify-center items-center pt-20 pb-10 px-10"
           onClick={handleModalClick}
         >
@@ -90,14 +92,14 @@ const ClickableItem: React.FC<ClickableItemProps> = ({
           {children}
         </div>
       )}
-      <motion.div 
+      <motion.div
         whileHover={{ scale: disabled ? 1 : 1.1 }}
         whileTap={{ scale: disabled ? 1 : 0.98 }}
-        style={{ 
+        style={{
           top: `${top}%`,
-          left: `${left}%`, 
-          right: `${right}%`, 
-          bottom: `${bottom}%`, 
+          left: `${left}%`,
+          right: `${right}%`,
+          bottom: `${bottom}%`,
           width: `${size}%`,
         }}
         className="absolute h-auto cursor-pointer hidden lg:block"
@@ -110,9 +112,9 @@ const ClickableItem: React.FC<ClickableItemProps> = ({
           className="w-full h-auto"
           onClick={handleImageClick}
         />
-      </motion.div> 
+      </motion.div>
     </>
   );
-}
+};
 
 export default ClickableItem;

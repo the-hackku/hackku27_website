@@ -20,7 +20,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 interface EventCheckinData {
@@ -61,7 +61,7 @@ export default function EventCheckinChart() {
 
   const labels = data.map(
     (event) =>
-      `${event.name} (${format(new Date(event.startTime), "MMM d h:mm a")})`
+      `${event.name} (${format(new Date(event.startTime), "MMM d h:mm a")})`,
   );
   const checkinCounts = data.map((event) => event.checkins);
 

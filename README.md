@@ -43,18 +43,18 @@ cp .env.example .env
 
 Required variables:
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `NEXTAUTH_URL` | Full URL of the app (e.g. `http://localhost:3000`) |
-| `NEXTAUTH_SECRET` | Random secret for NextAuth (generate with `openssl rand -base64 32`) |
-| `MAILGUN_EMAIL_SERVER` | SMTP connection string for Mailgun |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth app credentials |
-| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | GitHub OAuth app credentials |
-| `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` | Discord OAuth app credentials |
-| `GOOGLE_SERVICE_ACCOUNT_KEY` | JSON key for Google Sheets export (base64 or raw) |
-| `NEXT_PUBLIC_GOOGLE_API_KEY` | Google API key (public, used client-side) |
-| `BLOB_READ_WRITE_TOKEN` | Vercel Blob token for resume uploads |
+| Variable                                      | Description                                                          |
+| --------------------------------------------- | -------------------------------------------------------------------- |
+| `DATABASE_URL`                                | PostgreSQL connection string                                         |
+| `NEXTAUTH_URL`                                | Full URL of the app (e.g. `http://localhost:3000`)                   |
+| `NEXTAUTH_SECRET`                             | Random secret for NextAuth (generate with `openssl rand -base64 32`) |
+| `MAILGUN_EMAIL_SERVER`                        | SMTP connection string for Mailgun                                   |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`   | Google OAuth app credentials                                         |
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`   | GitHub OAuth app credentials                                         |
+| `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` | Discord OAuth app credentials                                        |
+| `GOOGLE_SERVICE_ACCOUNT_KEY`                  | JSON key for Google Sheets export (base64 or raw)                    |
+| `NEXT_PUBLIC_GOOGLE_API_KEY`                  | Google API key (public, used client-side)                            |
+| `BLOB_READ_WRITE_TOKEN`                       | Vercel Blob token for resume uploads                                 |
 
 ### 3. Start the database
 
@@ -65,6 +65,7 @@ bun run db:up
 ```
 
 This starts a `postgres:18` container on port `5432` with:
+
 - User: `hackku`, Password: `hackku`, Database: `hackku_dev`
 
 Set `DATABASE_URL` accordingly:
@@ -112,9 +113,9 @@ const constants = {
   discordInvite: "https://discord.gg/...",
   instagramUrl: "https://instagram.com/hackku",
   supportEmail: "hack@ku.edu",
-  cutoffDate: "2026-04-17T00:00:00.000Z",   // registration closes
-  startDate: "2026-04-17T22:00:00.000Z",    // check-in opens (5 PM CDT Friday)
-  endDate: "2026-04-19T20:00:00.000Z",      // closing ceremony ends (3 PM CDT Sunday)
+  cutoffDate: "2026-04-17T00:00:00.000Z", // registration closes
+  startDate: "2026-04-17T22:00:00.000Z", // check-in opens (5 PM CDT Friday)
+  endDate: "2026-04-19T20:00:00.000Z", // closing ceremony ends (3 PM CDT Sunday)
 };
 ```
 
@@ -129,6 +130,7 @@ Database schema. After edits, run `npx prisma migrate dev` to apply changes and 
 ### `app/actions/`
 
 Server actions called directly from client components. Key actions:
+
 - `register.ts` — creates `ParticipantInfo`, exports row to Google Sheets
 - `checkin.ts` — validates QR codes and records `Scan` / `Checkin` entries
 

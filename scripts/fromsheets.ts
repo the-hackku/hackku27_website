@@ -21,8 +21,8 @@ const RANGE = "Form Responses 1!A:AG";
 const auth = new google.auth.GoogleAuth({
   credentials: JSON.parse(
     Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT_KEY!, "base64").toString(
-      "utf-8"
-    )
+      "utf-8",
+    ),
   ),
   scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 });
@@ -85,7 +85,7 @@ function transformData(sheetData: string[][]): TransformedData[] {
 
   return rows.map((row, index) => {
     const entry: SheetEntry = Object.fromEntries(
-      headers.map((header, i) => [header, row[i] || ""])
+      headers.map((header, i) => [header, row[i] || ""]),
     );
 
     console.log(`Row ${index + 1}:`, entry);
@@ -117,7 +117,7 @@ function transformData(sheetData: string[][]): TransformedData[] {
           currentSchool: entry["Current School"],
           levelOfStudy: entry["Current Level of Study"]
             ? entry["Current Level of Study"].match(
-                /^(Secondary|Undergraduate|Graduate)/
+                /^(Secondary|Undergraduate|Graduate)/,
               )?.[0] || "Unknown"
             : "Unknown",
           major: entry["Major(s)"],
@@ -127,15 +127,19 @@ function transformData(sheetData: string[][]): TransformedData[] {
             ],
           previousHackathons:
             parseInt(
-              entry["How many Hackathons have you attended previously?"]
+              entry["How many Hackathons have you attended previously?"],
             ) || 0,
           chaperoneFirstName: entry["Chaperone First Name"],
           chaperoneLastName: entry["Chaperone Last Name"],
           chaperoneEmail: entry["Chaperone Email"],
-          chaperonePhoneNumber: entry["Chaperone Phone Number (EX: 9876543210)"],
+          chaperonePhoneNumber:
+            entry["Chaperone Phone Number (EX: 9876543210)"],
           agreeHackKUCode:
-            entry["I have read and agree to the HackKU Code of Conduct."] === "I Agree" || true,
-          agreeMLHCode: entry["I have read and agree to the MLH Code of Conduct."] === "I Agree",
+            entry["I have read and agree to the HackKU Code of Conduct."] ===
+              "I Agree" || true,
+          agreeMLHCode:
+            entry["I have read and agree to the MLH Code of Conduct."] ===
+            "I Agree",
           shareWithMLH:
             entry[
               "I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the MLH Privacy Policy. I further agree to the terms of both the MLH Contest Terms and Conditions and the MLH Privacy Policy."
@@ -168,12 +172,12 @@ async function migrateData() {
           create: userData,
         });
         console.log(
-          `User with email ${userData.email} processed successfully.`
+          `User with email ${userData.email} processed successfully.`,
         );
       } catch (error) {
         console.error(
           `Error processing user with email ${userData.email}:`,
-          error
+          error,
         );
 
         // Log failed entry details into the log file
@@ -181,7 +185,7 @@ async function migrateData() {
           failedEntriesLogPath,
           `Failed to process user with email ${userData.email}.\nError: ${
             (error as Error).message
-          }\nData: ${JSON.stringify(userData, null, 2)}\n\n`
+          }\nData: ${JSON.stringify(userData, null, 2)}\n\n`,
         );
       }
     }

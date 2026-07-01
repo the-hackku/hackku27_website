@@ -18,7 +18,7 @@ export const formSchema = z
             value.replace(/\D/g, "").length === 11),
         {
           message: "Phone number must be 10 or 11 digits",
-        }
+        },
       )
       .transform((value) => value.replace(/\D/g, "")),
     age: z.coerce

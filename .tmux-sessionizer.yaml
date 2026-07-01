@@ -2,5 +2,5 @@ name: hack
 pre_start: bun run db:up
 windows:
   - server: bun run dev
-  - nvim: 
+  - nvim:
   - claude: jai claude

@@ -4,7 +4,6 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
-
 /**
  * Layout that checks if the current user already has a reservation.
  * If yes, redirect them to their profile. Otherwise, continue.

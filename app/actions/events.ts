@@ -29,7 +29,7 @@ export async function updateEvent(
     eventType: EventType;
     startDate: string; // ISO
     endDate: string; // ISO
-  }
+  },
 ) {
   isAdmin();
   await prisma.event.update({

@@ -31,13 +31,11 @@ export default function HomePage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-
       <div className="w-full min-h-screen overflow-x-hidden text-white font-agency">
         {/* Header Section */}
         <section
           id="header"
           className="relative w-full h-screen flex items-center justify-center text-center md:justify-start md:text-left overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 md:px-40"
-
         >
           <motion.div
             className="z-10 max-w-[80%] text-center md:text-left md:max-w-[60%]"
@@ -131,9 +129,7 @@ export default function HomePage() {
               </Link>
             </motion.div>
           </motion.div>
-
         </section>
-
       </div>
     </motion.div>
   );

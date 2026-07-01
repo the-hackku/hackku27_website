@@ -131,7 +131,7 @@ export default function ScannerPage() {
             setBackgroundColor("yellow");
             errorSound.current?.play();
             setValidationResult(
-              `HS Student: ${result.name} - Chaperone: ${result.chaperoneInfo?.chaperoneName}`
+              `HS Student: ${result.name} - Chaperone: ${result.chaperoneInfo?.chaperoneName}`,
             );
           } else {
             setBackgroundColor("green");
@@ -184,7 +184,7 @@ export default function ScannerPage() {
           setIsSearching(false);
         }
       }, 300),
-    []
+    [],
   );
 
   // Handle changes in the search box
@@ -242,7 +242,7 @@ export default function ScannerPage() {
               // get e.g. "Sat"
               const dayName = new Date(event.startDate).toLocaleDateString(
                 "en-US",
-                { weekday: "short" }
+                { weekday: "short" },
               );
               return (
                 <SelectItem key={event.id} value={event.id}>
