@@ -34,7 +34,11 @@ import {
 
 const LOCAL_STORAGE_KEY = "hackku26_registration_form";
 
-export function RegistrationForm({ prefillData }: { prefillData: PrefillData | null }) {
+export function RegistrationForm({
+  prefillData,
+}: {
+  prefillData: PrefillData | null;
+}) {
   const [showChaperoneFields, setShowChaperoneFields] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [progress, setProgress] = useState(0);
@@ -52,20 +56,20 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
     };
   }
   if (typeof window !== "undefined") {
-      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (savedData) {
-        try {
-          const parsedData = JSON.parse(savedData);
-          delete parsedData.resume; // Ensure 'resume' is not included
-          console.log("Loaded saved form data:", parsedData);
-          defaults = parsedData;
-        } catch (error) {
-          console.error("Failed to parse saved form data:", error);
-          localStorage.removeItem(LOCAL_STORAGE_KEY);
-          defaults = {};
-        }
+    const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        delete parsedData.resume; // Ensure 'resume' is not included
+        console.log("Loaded saved form data:", parsedData);
+        defaults = parsedData;
+      } catch (error) {
+        console.error("Failed to parse saved form data:", error);
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        defaults = {};
       }
     }
+  }
   const form = useForm<RegistrationData>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
@@ -97,7 +101,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
         fieldSchema.safeParse(undefined).success
       );
     },
-    [form]
+    [form],
   );
 
   // Define form fields with configurations
@@ -147,11 +151,12 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
     { label: "Prefer not to Answer", value: "Prefer not to Answer" },
   ];
 
-  const hispanicOrLatinoOptions: { label: string; value: HispanicOrLatino }[] = [
-    { label: "Yes", value: "Yes" },
-    { label: "No", value: "No" },
-    { label: "Prefer not to answer", value: "Prefer not to answer" },
-  ];
+  const hispanicOrLatinoOptions: { label: string; value: HispanicOrLatino }[] =
+    [
+      { label: "Yes", value: "Yes" },
+      { label: "No", value: "No" },
+      { label: "Prefer not to answer", value: "Prefer not to answer" },
+    ];
 
   const tShirtSizeOptions: { label: string; value: TShirtSize }[] = [
     { label: "Small", value: "S" },
@@ -180,7 +185,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
       const { ...valuesWithoutFile } = values; // Exclude 'resume'
       localStorage.setItem(
         LOCAL_STORAGE_KEY,
-        JSON.stringify(valuesWithoutFile)
+        JSON.stringify(valuesWithoutFile),
       );
     });
     return () => subscription.unsubscribe();
@@ -202,7 +207,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
             {
               method: "POST",
               body: formData,
-            }
+            },
           );
 
           if (!response.ok) throw new Error("File upload failed");
@@ -216,9 +221,20 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
       })(),
       {
         loading: "Submitting registration...",
-        success: <div>Registration successful! Please join our discord <a className="text-blue-500 font-bold" href={constants.discordInvite}>here</a>!</div>,
+        success: (
+          <div>
+            Registration successful! Please join our discord{" "}
+            <a
+              className="text-blue-500 font-bold"
+              href={constants.discordInvite}
+            >
+              here
+            </a>
+            !
+          </div>
+        ),
         error: "Registration failed. Please try again.",
-      }
+      },
     );
 
     router.refresh();
@@ -231,11 +247,11 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
       const values = form.getValues();
 
       const requiredFields = Object.keys(
-        formSchema.shape
+        formSchema.shape,
       ) as (keyof RegistrationData)[];
 
       const dynamicRequiredFields = requiredFields.filter((key) =>
-        isFieldRequired(key)
+        isFieldRequired(key),
       );
 
       const filledFields = dynamicRequiredFields.reduce((count, key) => {
@@ -246,14 +262,16 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
         } else if (Array.isArray(value)) {
           return value.length > 0 ? count + 1 : count;
         } else {
-          return value !== undefined && value !== "" && value !== "Select..." ? count + 1 : count;
+          return value !== undefined && value !== "" && value !== "Select..."
+            ? count + 1
+            : count;
         }
       }, 0);
 
       const totalRequiredFields = dynamicRequiredFields.length;
 
       let calculatedProgress = Math.round(
-        (filledFields / totalRequiredFields) * 100
+        (filledFields / totalRequiredFields) * 100,
       );
       console.log(calculatedProgress, filledFields, totalRequiredFields);
 
@@ -289,17 +307,19 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
         <Progress value={progress} className="w-full h-2 my-6" />
 
         <p className="pt-4 text-sm">
-          {constants.hackathonName} will be held at {constants.location} School of
-          Engineering from {constants.dates}, in-person. For more information,
-          reach out to{" "}
+          {constants.hackathonName} will be held at {constants.location} from{" "}
+          {constants.dates}, in-person. For more information, reach out to{" "}
           <Link href={`mailto:${constants.supportEmail}`} className="underline">
             {constants.supportEmail}
-          </Link>{" "}
-          or join our{" "}
+          </Link>
+          .
+          {/*
+            or join our{" "}
           <Link href={constants.discordInvite} className="underline">
             Discord
           </Link>{" "}
           server for questions.
+          */}
         </p>
         <p className="pt-2 text-sm">
           <b>ALL</b> high schoolers under the age of 18 must have an adult
@@ -506,9 +526,9 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
             />
             <div>
               <p className="mb-2 text-sm">
-                When planning HackKU27, inclusivity is our top priority! How can
-                we best accommodate you for the best hackathon experience
-                possible?
+                When planning {constants.hackathonName}, inclusivity is our top
+                priority! How can we best accommodate you for the best hackathon
+                experience possible?
               </p>
               <FormInputField
                 name="specialAccommodations"
@@ -593,10 +613,10 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
                 name="shareWithMLH"
                 label={
                   <>
-                    I authorize you to share my registration information with Major
-                    League Hacking for event administration, ranking, and MLH
-                    administration (including the creation of linked accounts on MLH
-                    and{" "}
+                    I authorize you to share my registration information with
+                    Major League Hacking for event administration, ranking, and
+                    MLH administration (including the creation of linked
+                    accounts on MLH and{" "}
                     <Link
                       href="https://dev.to"
                       target="_blank"

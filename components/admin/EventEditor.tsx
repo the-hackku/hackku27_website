@@ -65,7 +65,7 @@ export default function AdminEventEditor({ events }: Props) {
           loading: "Updating event...",
           success: "Event updated successfully!",
           error: "Failed to update event.",
-        }
+        },
       );
     } catch (err) {
       console.error(err);
@@ -90,7 +90,7 @@ export default function AdminEventEditor({ events }: Props) {
         {[...events]
           .sort(
             (a, b) =>
-              new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+              new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
           )
           .map((ev) => {
             const date = new Date(ev.startDate);

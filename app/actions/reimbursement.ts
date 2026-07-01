@@ -99,7 +99,8 @@ export async function submitTravelReimbursement({
       data: { travelReimbursementId: reimbursement.id },
     });
 
-    const { exportReimbursementToGoogleSheet } = await import("@/scripts/googleSheetsExport");
+    const { exportReimbursementToGoogleSheet } =
+      await import("@/scripts/googleSheetsExport");
     await exportReimbursementToGoogleSheet(reimbursement);
 
     revalidatePath("/profile");
@@ -124,7 +125,7 @@ export async function submitTravelReimbursement({
 
     if (existingMembers.length > 0) {
       throw new Error(
-        `Some users already have a travel reimbursement assigned.`
+        `Some users already have a travel reimbursement assigned.`,
       );
     }
 
@@ -162,7 +163,8 @@ export async function submitTravelReimbursement({
 
       await prisma.reimbursementInvite.createMany({ data: invites });
 
-      const { exportReimbursementToGoogleSheet } = await import("@/scripts/googleSheetsExport");
+      const { exportReimbursementToGoogleSheet } =
+        await import("@/scripts/googleSheetsExport");
       await exportReimbursementToGoogleSheet(reimbursement);
 
       return { success: true, reimbursement };
@@ -175,7 +177,7 @@ export async function submitTravelReimbursement({
  */
 export async function handleGroupInvite(
   reimbursementId: string,
-  accept: boolean
+  accept: boolean,
 ) {
   const session = await auth();
   if (!session?.user?.email) {
@@ -213,7 +215,7 @@ export async function handleGroupInvite(
         user.travelReimbursementId !== reimbursementId
       ) {
         throw new Error(
-          "You are already part of another travel reimbursement. Leave that one first."
+          "You are already part of another travel reimbursement. Leave that one first.",
         );
       }
 
@@ -297,12 +299,12 @@ export async function updateTravelReimbursement({
   if (groupMemberEmails && groupMemberEmails.length > 0) {
     // Get existing invited emails
     const existingInviteEmails = reimbursement.invites.map(
-      (invite) => invite.user.email
+      (invite) => invite.user.email,
     );
 
     // Filter out users who are already invited
     const newMembersToInvite = groupMemberEmails.filter(
-      (email) => !existingInviteEmails.includes(email)
+      (email) => !existingInviteEmails.includes(email),
     );
 
     // Find users to invite (ensuring they're not already in another reimbursement)
@@ -417,7 +419,7 @@ export type UserWithReimbursement = User & {
  * - OR has accepted an invite to a group reimbursement.
  */
 export async function userHasReimbursement(
-  user: UserWithReimbursement | null
+  user: UserWithReimbursement | null,
 ): Promise<boolean> {
   return !!user?.travelReimbursement;
 }
@@ -499,7 +501,7 @@ export async function getUserReimbursementStatus() {
   const reimbursementDate = user.travelReimbursement?.createdAt ?? null;
   const isGroupLeader = user.travelReimbursement?.userId == user.id;
   const pendingInvites = user.reimbursementInvites.filter(
-    (invite) => invite.status === "PENDING"
+    (invite) => invite.status === "PENDING",
   );
 
   return {
@@ -544,7 +546,7 @@ export async function deleteTravelReimbursement(reimbursementId: string) {
 
 export async function inviteUserToReimbursement(
   reimbursementId: string,
-  userId: string
+  userId: string,
 ) {
   const session = await auth();
   if (!session?.user?.email) {
@@ -561,7 +563,7 @@ export async function inviteUserToReimbursement(
     invitingUser.travelReimbursement.id !== reimbursementId
   ) {
     throw new Error(
-      "You do not have permission to invite members to this reimbursement."
+      "You do not have permission to invite members to this reimbursement.",
     );
   }
 
@@ -576,7 +578,7 @@ export async function inviteUserToReimbursement(
 
   // Check if the user is already invited
   const alreadyInvited = reimbursement.invites.some(
-    (invite) => invite.userId === userId
+    (invite) => invite.userId === userId,
   );
   if (alreadyInvited) {
     throw new Error("User has already been invited.");

@@ -24,7 +24,7 @@ export function getDoodleImages(): string[] {
           .filter((f) => IMAGE_EXT.test(f));
         for (const file of subFiles) {
           candidates.push(
-            `/images/doodles/${encodeURIComponent(entry.name)}/${encodeURIComponent(file)}`
+            `/images/doodles/${encodeURIComponent(entry.name)}/${encodeURIComponent(file)}`,
           );
         }
       } else if (IMAGE_EXT.test(entry.name)) {

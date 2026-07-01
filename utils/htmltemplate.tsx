@@ -2,7 +2,7 @@ export const htmlTemplate = (
   url: string,
   host: string,
   message: string,
-  timestamp: string
+  timestamp: string,
 ): string => `
 <!DOCTYPE html>
 <html lang="en">

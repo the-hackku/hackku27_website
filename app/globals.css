@@ -11,10 +11,9 @@ body {
 @media (min-width: 768px) {
   body {
     background-image: radial-gradient(circle, #c8c8c8 1px, transparent 1px);
-    background-size: .75vw .75vw;
+    background-size: 0.75vw 0.75vw;
   }
 }
-
 
 @layer base {
   :root {
@@ -73,13 +72,14 @@ body {
   }
 }
 
-html, body {
+html,
+body {
   -webkit-text-size-adjust: 100%;
   font-family: "Roboto Mono", monospace !important;
 }
 
-
-*:not(svg):not(svg *), *:not(svg):not(svg *)::before, *:not(svg):not(svg *)::after {
+*:not(svg):not(svg *),
+*:not(svg):not(svg *)::before,
+*:not(svg):not(svg *)::after {
   font-family: inherit;
 }
-

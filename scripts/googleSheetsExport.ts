@@ -26,21 +26,21 @@ export type UserWithParticipantInfo = PrismaUser & {
 
 const auth = new google.auth.GoogleAuth({
   credentials: JSON.parse(
-    Buffer.from(serviceAccountKey, "base64").toString("utf-8")
+    Buffer.from(serviceAccountKey, "base64").toString("utf-8"),
   ),
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
 async function ensureSheetExists(
   sheetsApi: ReturnType<typeof google.sheets>,
-  sheetTitle: string
+  sheetTitle: string,
 ) {
   const sheetMetadata = await sheetsApi.spreadsheets.get({
     spreadsheetId: SHEET_ID,
   });
 
   const existingSheets = sheetMetadata.data.sheets?.map(
-    (sheet) => sheet.properties?.title
+    (sheet) => sheet.properties?.title,
   );
 
   if (!existingSheets?.includes(sheetTitle)) {
@@ -89,7 +89,7 @@ function transformUserData(user: UserWithParticipantInfo): string[] {
 }
 
 export async function exportRegistrationToGoogleSheet(
-  user: UserWithParticipantInfo
+  user: UserWithParticipantInfo,
 ) {
   try {
     const sheetsApi = google.sheets({ version: "v4", auth });
@@ -187,7 +187,7 @@ export async function batchBackupRegistration() {
 
     // Type guard to ensure TypeScript knows ParticipantInfo is not null
     const hasParticipantInfo = (
-      user: PrismaUser & { ParticipantInfo: PrismaParticipantInfo | null }
+      user: PrismaUser & { ParticipantInfo: PrismaParticipantInfo | null },
     ): user is UserWithParticipantInfo => user.ParticipantInfo !== null;
 
     // Filter and map
@@ -214,7 +214,7 @@ export async function batchBackupRegistration() {
     });
 
     console.log(
-      `Batch backup of registrations completed successfully in ${newSheetTitle}!`
+      `Batch backup of registrations completed successfully in ${newSheetTitle}!`,
     );
     const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit#gid=0`;
     console.log(`Sheet URL: ${sheetUrl}`);
@@ -227,7 +227,7 @@ export async function batchBackupRegistration() {
 
 // NEW: Export a single reservation request to the "ReservationRequests" page in your spreadsheet
 export async function exportReservationRequestToGoogleSheet(
-  reservation: ReservationRequest
+  reservation: ReservationRequest,
 ) {
   const sheetsApi = google.sheets({ version: "v4", auth });
   try {
@@ -267,7 +267,7 @@ export async function exportReservationRequestToGoogleSheet(
 }
 
 export async function exportThemedRoomReservationToGoogleSheet(
-  reservation: ThemedRoomReservation
+  reservation: ThemedRoomReservation,
 ) {
   const sheetsApi = google.sheets({ version: "v4", auth });
 

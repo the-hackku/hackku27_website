@@ -10,9 +10,12 @@ export async function isAdmin() {
   return session;
 }
 
-export async function isAdminOrVolunteer(){
+export async function isAdminOrVolunteer() {
   const session = await auth();
-  if(!session || !(session.user.role == "ADMIN" || session.user.role == "VOLUNTEER")) {
+  if (
+    !session ||
+    !(session.user.role == "ADMIN" || session.user.role == "VOLUNTEER")
+  ) {
     throw new Error("You are not authorized to perform this action.");
   }
   return session;

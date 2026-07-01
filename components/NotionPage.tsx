@@ -5,10 +5,14 @@ import { NotionRenderer } from "react-notion-x";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function NotionPage({ recordMap }: { recordMap: ExtendedRecordMap }) {
+export default function NotionPage({
+  recordMap,
+}: {
+  recordMap: ExtendedRecordMap;
+}) {
   return (
-    <NotionRenderer 
-      recordMap={recordMap} 
+    <NotionRenderer
+      recordMap={recordMap}
       fullPage={true}
       darkMode={false}
       components={{
@@ -17,5 +21,5 @@ export default function NotionPage({ recordMap }: { recordMap: ExtendedRecordMap
       }}
       disableHeader={true}
     />
-  )
+  );
 }

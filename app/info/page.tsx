@@ -10,5 +10,5 @@ export default async function TestPage() {
     <div className="py-8">
       <NotionPage recordMap={recordMap} />
     </div>
-  )
+  );
 }

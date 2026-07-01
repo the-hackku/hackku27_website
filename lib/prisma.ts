@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== "production") {
     return host.includes("localtest.me")
       ? `http://${host}:4444/sql`
       : `https://${host}/sql`;
-  }
+  };
 }
 
 const adapter = new PrismaNeonHttp(process.env.DATABASE_URL!, {});

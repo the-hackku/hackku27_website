@@ -64,28 +64,31 @@ export function Header({ isAdmin, isVolunteer }: Props) {
               alt="MLH Badge"
               width={0}
               height={0}
-              style={{ width: "clamp(28px, 5vw, 80px)", height: "clamp(46px, 8vw, 140px)" }}
+              style={{
+                width: "clamp(28px, 5vw, 80px)",
+                height: "clamp(46px, 8vw, 140px)",
+              }}
               priority={true}
             />
           </motion.div>
         </Link>
       </div>
-<div className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 z-50">
-  <Link href="/">
-    <Image
-      src="/images/branding/logo_nobackground.png"
-      alt="HackKU"
-      width={160}
-      height={40}
-      style={{
-        width: "clamp(50px, 8vw, 130px)",
-        height: "auto",
-        objectFit: "contain",
-      }}
-      priority
-    />
-  </Link>
-</div>
+      <div className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 z-50">
+        <Link href="/">
+          <Image
+            src="/images/branding/logo_nobackground.png"
+            alt="HackKU"
+            width={160}
+            height={40}
+            style={{
+              width: "clamp(50px, 8vw, 130px)",
+              height: "auto",
+              objectFit: "contain",
+            }}
+            priority
+          />
+        </Link>
+      </div>
     </header>
   );
 }

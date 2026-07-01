@@ -72,7 +72,7 @@ export default function DietaryChart() {
 
       const { category, confidence } = fuzzyMatchWithConfidence(
         cleanedEntry,
-        dietaryCategories
+        dietaryCategories,
       );
 
       if (confidence >= CONFIDENCE_THRESHOLD) {

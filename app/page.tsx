@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
@@ -27,14 +27,15 @@ export default function HomePage() {
   const registerPage = isRegistered ? "/signout" : "/register";
 
   return (
-    <div className="relative flex flex-col items-center justify-center px-4"
-      style={{ marginTop: "clamp(-2rem, 5rem, -5rem)" }}>
-
-      <div className="relative z-10 flex flex-row items-center justify-center w-full"
-        style={{ overflow: "visible" }}>
-
+    <div
+      className="relative flex flex-col items-center justify-center px-4"
+      style={{ marginTop: "clamp(-2rem, 5rem, -5rem)" }}
+    >
+      <div
+        className="relative z-10 flex flex-row items-center justify-center w-full"
+        style={{ overflow: "visible" }}
+      >
         <AnimatePresence mode="wait" initial={false}>
-
           {view === "welcome" && (
             <motion.div
               key="welcome"
@@ -60,12 +61,9 @@ export default function HomePage() {
                 <span className="text-yellow-500">{">"}</span>
               </h1>
 
-              <h3 className="text-[#666666] text-xl">
-                Glad to have you.
-              </h3>
+              <h3 className="text-[#666666] text-xl">Glad to have you.</h3>
 
               <div className="flex flex-col sm:flex-row w-full gap-4 mt-2">
-
                 <Link
                   href={registerPage}
                   className="group relative flex items-center justify-center overflow-hidden shadow-md transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-xl cursor-pointer flex-1"
@@ -135,7 +133,9 @@ export default function HomePage() {
               </div>
 
               <p className="text-gray-600 leading-relaxed text-base">
-                HackKU is the University of Kansas's biggest hackathon, a 24-hour event where students come together to build, create, and innovate.
+                HackKU is the University of Kansas's biggest hackathon, a
+                24-hour event where students come together to build, create, and
+                innovate.
               </p>
 
               <Link
@@ -146,7 +146,7 @@ export default function HomePage() {
                   border: "1px solid rgba(0,0,0,0.1)",
                   borderRadius: "0.5rem 0.5rem 0.5rem 1.5rem",
                   width: "50%",
-                  height: "50px"
+                  height: "50px",
                 }}
               >
                 <span className="text-black font-semibold text-xl">
@@ -155,7 +155,6 @@ export default function HomePage() {
               </Link>
             </motion.div>
           )}
-
         </AnimatePresence>
       </div>
     </div>

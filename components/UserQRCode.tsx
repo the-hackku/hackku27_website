@@ -25,9 +25,9 @@ const QrCodeComponent = ({ qrCodeData, error, size }: QrCodeComponentProps) => {
       )}
     </>
     */
-   <>
-    <p>QR Code generation is currently disabled.</p>
-   </>
+    <>
+      <p>QR Code generation is currently disabled.</p>
+    </>
   );
 };
 

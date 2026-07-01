@@ -18,9 +18,9 @@ declare module "next-auth" {
       age?: number;
     };
     education?: {
-        current: boolean;
-        school_name: string;
-        major?: string;
+      current: boolean;
+      school_name: string;
+      major?: string;
     }[];
   }
   interface Session {

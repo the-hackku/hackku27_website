@@ -24,7 +24,7 @@ export async function getAccessibilityData() {
     .map((p) =>
       cleanText(p.specialAccommodations || "")
         .trim()
-        .toLowerCase()
+        .toLowerCase(),
     )
     .filter((entry) => entry && !IGNORE_PHRASES.includes(entry)); // ✅ Removes irrelevant data
 }

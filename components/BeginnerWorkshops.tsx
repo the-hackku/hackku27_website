@@ -73,7 +73,7 @@ function getGradientStyle(index: number, total: number) {
 const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
   // Sort events chronologically
   const sortedEvents = [...schedule].sort(
-    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
   );
 
   if (schedule.length === 0) {

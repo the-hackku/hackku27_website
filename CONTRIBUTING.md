@@ -10,7 +10,7 @@ You can mostly follow the [setup instructions](/the-hackku/hackku26_website?tab=
 > Please make sure to create your own branch before commiting any code. You will not be able to make changes in the `main` branch directly and need to make changes through a pull request from a different branch.
 
 1. Create your own git branch once you have a local working copy. You can name it whatever you want, but its best practice to include your name and feature(s) that you are working on.
-   
+
    This can be done with the following git command:
 
    ```bash
@@ -38,4 +38,3 @@ You can mostly follow the [setup instructions](/the-hackku/hackku26_website?tab=
 5. Go to the [pull request tab](https://github.com/the-hackku/hackku26_website/pulls) in the GitHub repo and create a new pull request with the **base** as `main` and the **compare** as `my-username/my-feature`.
 
 6. Someone will review and merge your changes if everything looks good!
-

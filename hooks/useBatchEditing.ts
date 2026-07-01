@@ -47,7 +47,7 @@ export function useBatchEditing<T extends { id: string }>(originalData: T[]) {
 
     // Update the local items array
     setItems((prevItems) =>
-      prevItems.map((i) => (i.id === itemId ? { ...i, [field]: newValue } : i))
+      prevItems.map((i) => (i.id === itemId ? { ...i, [field]: newValue } : i)),
     );
   };
 
@@ -60,7 +60,7 @@ export function useBatchEditing<T extends { id: string }>(originalData: T[]) {
   // Utility function: count total changes
   const totalChanges = Object.values(edited).reduce(
     (sum, curr) => sum + Object.keys(curr).length,
-    0
+    0,
   );
 
   return {

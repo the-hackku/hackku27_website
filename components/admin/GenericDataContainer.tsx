@@ -16,12 +16,12 @@ interface GenericDataContainerProps<T extends { id: string }> {
   fetchFunction: (
     page: number,
     pageSize: number,
-    searchQuery: string
+    searchQuery: string,
   ) => Promise<{ data: T[]; total: number }>;
 
   /** A function to handle batch updates on the backend */
   updateFunction: (
-    editedData: Record<string, Partial<T>>
+    editedData: Record<string, Partial<T>>,
   ) => Promise<T[] | void>;
 
   /** Column definitions for rendering the table */

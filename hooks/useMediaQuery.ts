@@ -6,8 +6,8 @@ const useBreakpoint = () => {
   useEffect(() => {
     const check = () => setWidth(window.innerWidth);
     check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
   return {

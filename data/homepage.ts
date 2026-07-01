@@ -4,27 +4,27 @@ export const faqs = [
   {
     question: "What's a hackathon?",
     answer:
-    "A hackathon is an event where individuals or teams come together to brainstorm, design, and build projects. It provides an environment to learn new skills, tackle real-world challenges, and create impactful solutions, with opportunities to network and compete for prizes!",
+      "A hackathon is an event where individuals or teams come together to brainstorm, design, and build projects. It provides an environment to learn new skills, tackle real-world challenges, and create impactful solutions, with opportunities to network and compete for prizes!",
   },
   {
     question: "What should I bring?",
     answer:
-    "Bring a laptop, charger, and any hardware you plan to use. We also recommend bringing a change of clothes and toiletries.",
+      "Bring a laptop, charger, and any hardware you plan to use. We also recommend bringing a change of clothes and toiletries.",
   },
   {
     question: "Who can participate?",
     answer:
-    "Current students are welcome to participate. No prior experience is necessary! All High school students will require a chaperone.",
+      "Current students are welcome to participate. No prior experience is necessary! All High school students will require a chaperone.",
   },
   {
     question: "Is there a cost to attend?",
     answer:
-    "No, HackKU is free to attend! We provide meals, swag, and resources for all participants.",
+      "No, HackKU is free to attend! We provide meals, swag, and resources for all participants.",
   },
   {
     question: "Can I participate remotely?",
     answer:
-    "No, HackKU is an in-person event. We believe that the best experience comes from being on-site, collaborating with others, and engaging in the full hackathon experience.",
+      "No, HackKU is an in-person event. We believe that the best experience comes from being on-site, collaborating with others, and engaging in the full hackathon experience.",
   },
   // {
   //   question: "Do you offer travel reimbursements?",
@@ -37,13 +37,11 @@ export const faqs = [
   // },
   {
     question: "When do you send out acceptance letters?",
-    answer:
-    "We don't send out any, If you register for HackKU you can attend!",
+    answer: "We don't send out any, If you register for HackKU you can attend!",
   },
   {
     question: "Will food be provided?",
-    answer:
-    "Yes! We make sure our hackers don't go hungry 😋",
+    answer: "Yes! We make sure our hackers don't go hungry 😋",
   },
 ];
 
@@ -122,7 +120,7 @@ export const teamMembers: TeamMember[] = [
     role: "Outreach Co-Lead",
     linkedin: "https://www.linkedin.com/in/lucia-ulate-centeno",
     image: "",
-    fish: "lucia.svg"
+    fish: "lucia.svg",
   },
   {
     name: "Muhammad Ibrahim",
@@ -149,14 +147,14 @@ export const teamMembers: TeamMember[] = [
     name: "Richard",
     role: "Finance Lead",
     image: "",
-    fish: "richard.svg"
+    fish: "richard.svg",
   },
   {
     name: "Kevinh Nguyen",
     role: "Food Lead",
     linkedin: "http://linkedin.com/in/kevinh-nguyen/",
     image: "/images/team/kevinh.png",
-    fish: "kevinh.svg"
+    fish: "kevinh.svg",
   },
   {
     name: "Mark Horvath",
@@ -176,7 +174,7 @@ export const teamMembers: TeamMember[] = [
     role: "Tech Co-Lead",
     linkedin: "https://www.linkedin.com/in/forest-denton-9076b2251/",
     image: "/images/team/forest.png",
-    fish: "forest.svg"
+    fish: "forest.svg",
   },
   {
     name: "Aniketh Aatipamula",
@@ -184,7 +182,7 @@ export const teamMembers: TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/aaatipamula/",
     website: "https://aniketh.dev",
     image: "/images/team/aniketh.png",
-    fish: "aniketh.svg"
+    fish: "aniketh.svg",
   },
 ];
 

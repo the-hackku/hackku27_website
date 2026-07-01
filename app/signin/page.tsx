@@ -15,6 +15,7 @@ import {
   IconLoader,
 } from "@tabler/icons-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface SignInForm {
   email: string;
@@ -56,7 +57,7 @@ const SignInPage = () => {
   const handleMyMLHSignIn = () => {
     setActiveLoadingButton("mymlh");
     signIn("mymlh", { callbackUrl: "/register" });
-  }
+  };
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -92,10 +93,10 @@ const SignInPage = () => {
       });
       if (result?.error) {
         setError(
-          "An error occurred while sending the email. Please try again."
+          "An error occurred while sending the email. Please try again.",
         );
         toast.error(
-          "An error occurred while sending the email. Please try again."
+          "An error occurred while sending the email. Please try again.",
         );
       } else {
         setEmailSent(true);
@@ -136,8 +137,9 @@ const SignInPage = () => {
   return (
     <div className="container mx-auto py-8 px-4 sm:px-6">
       {!emailSent ? (
-        <Card className="border rounded-lg p-4 shadow-sm bg-[#ffffff] fixed top-[7vw] justify-self-center w-[30vw] mb-[2vw]"
-        style={{
+        <Card
+          className="border rounded-lg p-4 shadow-sm bg-[#ffffff] fixed top-[7vw] justify-self-center w-[30vw] mb-[2vw]"
+          style={{
             borderRadius: "0 0 4vw 4vw",
             borderTopLeftRadius: "50% 1vw",
             borderTopRightRadius: "50% 1vw",
@@ -153,12 +155,21 @@ const SignInPage = () => {
           </CardHeader>
           <CardContent>
             <p className="text-center text-muted-foreground text-sm mb-6">
-              Sign in with the your email or use an OAuth provider below to link your account.
+              Sign in with an OAuth provider or your email to continue to
+              registration or the dashboard! If you're new, signing up means you
+              agree to our{" "}
+              <Link
+                href="/legal/privacy-policy"
+                className="text-blue-600 hover:underline"
+              >
+                Privacy Policy
+              </Link>
+              .
             </p>
 
             {/* Google, Discord, GitHub Sign-In Buttons */}
             <div className="flex flex-col gap-3 mb-6">
-{/*               
+              {/*               
               <Button
                 onClick={handleMyMLHSignIn}
                 className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base bg-[#f5f5f5] text-black rounded-md transition hover:brightness-90"
@@ -285,12 +296,12 @@ const SignInPage = () => {
               We have sent a magic link to <strong>{email}</strong>.
             </p>
             <p className="text-center text-gray-600 mt-2 text-sm sm:text-base">
-              Please check your inbox and click the link to sign in. 
+              Please check your inbox and click the link to sign in.
             </p>
             <p className="text-center text-gray-600 mt-2 text-sm sm:text-base p-2 bg-indigo-50 rounded">
-              Emails sent to <b>@ku.edu</b> or any other <b>institutional email</b>{" "} 
-              may be marked as spam — please add <b>signin@auth.hackku.org</b>{" "}
-              to your safe senders list, or{" "}
+              Emails sent to <b>@ku.edu</b> or any other{" "}
+              <b>institutional email</b> may be marked as spam — please add{" "}
+              <b>signin@auth.hackku.org</b> to your safe senders list, or{" "}
               <b>sign in with an OAuth provider below instead</b>.
             </p>
 

@@ -31,8 +31,10 @@ function generateDoodles(images: string[]): Doodle[] {
   const cols = Math.min(4, count);
   const rows = Math.ceil(count / cols);
 
-  const topStart = 16, topEnd = 90;
-  const leftStart = 2, leftEnd = 95;
+  const topStart = 16,
+    topEnd = 90;
+  const leftStart = 2,
+    leftEnd = 95;
   const cellH = (topEnd - topStart) / rows;
   const cellW = (leftEnd - leftStart) / cols;
 
@@ -42,11 +44,11 @@ function generateDoodles(images: string[]): Doodle[] {
     const pad = 0.15;
     return {
       src,
-      top:     topStart + cellH * (r + pad + Math.random() * (1 - pad * 2)),
-      left:    leftStart + cellW * (c + pad + Math.random() * (1 - pad * 2)),
-      size:    4 + Math.random() * 5,       // 4–9 vw
-      rotate:  (Math.random() - 0.5) * 40,  // ±20 deg
-      opacity: 0.40 + Math.random() * 0.12, // 0.10–0.22
+      top: topStart + cellH * (r + pad + Math.random() * (1 - pad * 2)),
+      left: leftStart + cellW * (c + pad + Math.random() * (1 - pad * 2)),
+      size: 4 + Math.random() * 5, // 4–9 vw
+      rotate: (Math.random() - 0.5) * 40, // ±20 deg
+      opacity: 0.4 + Math.random() * 0.12, // 0.10–0.22
     };
   });
 }
@@ -76,9 +78,9 @@ export default function DoodleBackground({ images }: { images: string[] }) {
           key={i}
           style={{
             position: "absolute",
-            top:     `${d.top}vh`,
-            left:    `${d.left}vw`,
-            width:   `clamp(60px, ${d.size}vw, 160px)`,
+            top: `${d.top}vh`,
+            left: `${d.left}vw`,
+            width: `clamp(60px, ${d.size}vw, 160px)`,
             opacity: d.opacity,
             transform: `rotate(${d.rotate}deg)`,
           }}

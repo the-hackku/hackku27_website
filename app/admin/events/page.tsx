@@ -46,7 +46,7 @@ export default async function SchedulePage() {
 
   // Filter out the rest (main schedule)
   const mainScheduleEvents = formattedEvents.filter(
-    (ev) => new Date(ev.startDate) >= cutoffDate
+    (ev) => new Date(ev.startDate) >= cutoffDate,
   );
 
   return (

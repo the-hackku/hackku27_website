@@ -26,7 +26,11 @@ import { Button } from "@/components/ui/button";
 import AnalyticsChart from "@/components/admin/charts/AnalyticsChart";
 import CombinedDashboard from "@/components/admin/charts/combinedDashboard";
 import { RoomReservationsTab } from "@/components/admin/RoomReservationsTab";
-import { exportEmails, exportParticipantEmails, exportUnregisteredEmails } from "@/scripts/emailExporter";
+import {
+  exportEmails,
+  exportParticipantEmails,
+  exportUnregisteredEmails,
+} from "@/scripts/emailExporter";
 import { toast } from "sonner";
 
 // Extend the User type to include relations or additional fields
@@ -82,7 +86,7 @@ const handleBackup = async () => {
     toast.error("Failed to backup registration");
     return;
   }
-  toast.success("Backed up to Google Sheet")
+  toast.success("Backed up to Google Sheet");
 };
 
 const downloadFile = (fileName: string, content: string) => {
@@ -116,7 +120,7 @@ export default function AdminTabsPage() {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null); // Track event selection
   const [totalRegistrations, setTotalRegistrations] = useState<number | null>(
-    null
+    null,
   );
   const [hackathonCheckinCount, setHackathonCheckinCount] = useState<
     number | null
@@ -126,7 +130,7 @@ export default function AdminTabsPage() {
     const fetchCheckinCount = async () => {
       try {
         const count = await getHackathonCheckinCount(
-          "cm6vgqdwr0000l703iuxogwcy"
+          "cm6vgqdwr0000l703iuxogwcy",
         );
         setHackathonCheckinCount(count);
       } catch (error) {
@@ -353,7 +357,7 @@ export default function AdminTabsPage() {
               const { users, totalUsers } = await getUsers(
                 page,
                 pageSize,
-                searchQuery
+                searchQuery,
               );
               return { data: users, total: totalUsers };
             }}
@@ -372,7 +376,7 @@ export default function AdminTabsPage() {
               const { checkins, totalCheckins } = await getCheckins(
                 page,
                 pageSize,
-                searchQuery
+                searchQuery,
               );
               return { data: checkins, total: totalCheckins };
             }}
