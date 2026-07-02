@@ -32,7 +32,7 @@ import {
   raceOptions,
 } from "./predefinedOptions";
 
-const LOCAL_STORAGE_KEY = "hackku26_registration_form";
+const LOCAL_STORAGE_KEY = "hackku27_registration_form";
 
 export function RegistrationForm({
   prefillData,

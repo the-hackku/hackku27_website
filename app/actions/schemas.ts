@@ -64,28 +64,28 @@ export const formSchema = z
     if (data.levelOfStudy === "High School") {
       if (!data.chaperoneFirstName) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: ["chaperoneFirstName"],
           message: "Chaperone first name is required for high school students.",
         });
       }
       if (!data.chaperoneLastName) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: ["chaperoneLastName"],
           message: "Chaperone last name is required for high school students.",
         });
       }
       if (!data.chaperoneEmail) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: ["chaperoneEmail"],
           message: "Chaperone email is required for high school students.",
         });
       }
       if (!data.chaperonePhoneNumber) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: ["chaperonePhoneNumber"],
           message:
             "Chaperone phone number is required for high school students.",
