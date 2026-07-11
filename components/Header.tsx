@@ -15,36 +15,94 @@ export function Header({ isAdmin, isVolunteer }: Props) {
       className="fixed top-0 left-0 right-0 z-40 overflow-hidden bg-transparent"
       style={{ height: "clamp(160px, 10vw, 230px)" }}
     >
-      {/* SVG wave cutout */}
-      <svg
-        viewBox="0 0 1440 380"
-        preserveAspectRatio="none"
-        className="absolute inset-x-0 top-0 h-full w-full"
-        style={{ pointerEvents: "none" }}
-      >
-        <path
-        d="
-          M 0 0
-          L 1440 0
-          L 1440 290
-          C 1040 285 980 285 900 232
-          C 860 212 825 202 780 202
-          L 690 202
-          C 645 202 610 212 570 232
-          C 490 285 430 285 320 290
-          L 0 290
-          Z
-        "
-          fill="#F3F4F6"
-        />
-        <path
-          d="M0 290 L320 290 C430 290 490 285 570 232 C610 212 645 202 690 202 L780 202 C825 202 860 212 900 232 C980 285 1040 285 1440 290"
-          fill="none"
-          stroke="#d7d7d7"
-          strokeWidth="5"
-          strokeLinecap="round"
-        />
-      </svg>
+      {/* SVG wave cutout and background */}
+      <div className="absolute inset-x-0 top-0 h-full pointer-events-none">
+        {/* Left wing SVG (fills remaining space on screens wider than 1280px, clamps to 0px on smaller screens) */}
+        <svg
+          viewBox="0 0 100 380"
+          preserveAspectRatio="none"
+          className="absolute top-0 left-0 h-full"
+          style={{
+            width: "calc(50% - 639px)",
+            pointerEvents: "none",
+          }}
+        >
+          <path
+            d="M 0 0 L 100 0 L 100 290 L 0 290 Z"
+            fill="#F3F4F6"
+          />
+          <path
+            d="M 0 290 L 100 290"
+            fill="none"
+            stroke="#d7d7d7"
+            strokeWidth="3"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        {/* Center SVG with dip (exactly 1280px wide on all screens, centering perfectly and crop-overflowing on mobile to keep exact pixel size) */}
+        <svg
+          viewBox="0 0 1280 380"
+          preserveAspectRatio="none"
+          className="absolute top-0 h-full w-[1280px] left-1/2 -translate-x-1/2"
+          style={{ pointerEvents: "none" }}
+        >
+          <path
+            d="
+              M 0 0
+              L 1280 0
+              L 1280 290
+              C 1110 290 1018 285 894 232
+              C 833 212 779 202 709 202
+              L 571 202
+              C 501 202 447 212 386 232
+              C 262 285 170 290 0 290
+              Z
+            "
+            fill="#F3F4F6"
+          />
+          <path
+            d="
+              M 0 290
+              C 170 290 262 285 386 232
+              C 447 212 501 202 571 202
+              L 709 202
+              C 779 202 833 212 894 232
+              C 1018 285 1110 290 1280 290
+            "
+            fill="none"
+            stroke="#d7d7d7"
+            strokeWidth="3"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        {/* Right wing SVG (fills remaining space on screens wider than 1280px, clamps to 0px on smaller screens) */}
+        <svg
+          viewBox="0 0 100 380"
+          preserveAspectRatio="none"
+          className="absolute top-0 right-0 h-full"
+          style={{
+            width: "calc(50% - 639px)",
+            pointerEvents: "none",
+          }}
+        >
+          <path
+            d="M 0 0 L 100 0 L 100 290 L 0 290 Z"
+            fill="#F3F4F6"
+          />
+          <path
+            d="M 0 290 L 100 290"
+            fill="none"
+            stroke="#d7d7d7"
+            strokeWidth="3"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+      </div>
       <div className="absolute top-0 right-[10vw] z-50">
         <Link
           href="https://mlh.io/seasons/2027/events"
@@ -76,7 +134,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
       src="/images/branding/logo_nobackground.png"
       alt="HackKU"
       width={160}
-      height={105}
+      height={40}
       style={{
         width: "clamp(50px, 8vw, 130px)",
         height: "auto",
