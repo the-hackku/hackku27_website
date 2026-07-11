@@ -43,13 +43,13 @@ const reimbursementSchema = z
       (val) => (val === "" ? undefined : Number(val)),
       z
         .number({ message: "Distance is required." })
-        .positive({ message: "Distance must be positive." })
+        .positive({ message: "Distance must be positive." }),
     ),
     estimatedCost: z.preprocess(
       (val) => (val === "" ? undefined : Number(val)),
       z
         .number({ message: "Estimated cost is required." })
-        .nonnegative({ message: "Estimated cost must be non-negative." })
+        .nonnegative({ message: "Estimated cost must be non-negative." }),
     ),
     reason: z.string().min(10, {
       message: "Reason must be at least 10 characters.",
@@ -60,7 +60,7 @@ const reimbursementSchema = z
           id: z.string(),
           email: z.string().email(),
           name: z.string(),
-        })
+        }),
       )
       .default([]),
   })
@@ -75,7 +75,7 @@ const reimbursementSchema = z
     {
       message:
         "If applying as a group, you must add at least one group member.",
-    }
+    },
   );
 
 declare global {
@@ -144,7 +144,7 @@ export default function ReimbursementForm() {
           setIsSearching(false);
         }
       }, 300),
-    []
+    [],
   );
 
   // Add group member
@@ -174,7 +174,7 @@ export default function ReimbursementForm() {
         {
           types: ["address"],
           componentRestrictions: { country: "us" },
-        }
+        },
       );
 
       autocomplete.addListener("place_changed", () => {
@@ -205,7 +205,7 @@ export default function ReimbursementForm() {
           loading: "Submitting reimbursement request...",
           success: "Reimbursement request submitted successfully!",
           error: "Failed to submit reimbursement request.",
-        }
+        },
       );
     } catch (error) {
       console.error("Submission failed:", error);
@@ -328,7 +328,7 @@ export default function ReimbursementForm() {
                           size="sm"
                           onClick={() =>
                             setGroupMembers(
-                              groupMembers.filter((m) => m.id !== member.id)
+                              groupMembers.filter((m) => m.id !== member.id),
                             )
                           }
                         >
@@ -415,7 +415,7 @@ export default function ReimbursementForm() {
                     onChange={(e) => {
                       const formattedValue = e.target.value.replace(
                         /^0+(?=\d)/,
-                        ""
+                        "",
                       );
                       field.onChange(formattedValue);
                     }}

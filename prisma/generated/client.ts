@@ -57,15 +57,20 @@ export type Account = Prisma.AccountModel
  */
 export type Session = Prisma.SessionModel
 /**
- * Model VerificationToken
+ * Model Verification
  * 
  */
-export type VerificationToken = Prisma.VerificationTokenModel
+export type Verification = Prisma.VerificationModel
 /**
- * Model Authenticator
+ * Model TwoFactor
  * 
  */
-export type Authenticator = Prisma.AuthenticatorModel
+export type TwoFactor = Prisma.TwoFactorModel
+/**
+ * Model Passkey
+ * 
+ */
+export type Passkey = Prisma.PasskeyModel
 /**
  * Model Event
  * 
@@ -86,11 +91,6 @@ export type Checkin = Prisma.CheckinModel
  * 
  */
 export type ParticipantInfo = Prisma.ParticipantInfoModel
-/**
- * Model PrefillData
- * 
- */
-export type PrefillData = Prisma.PrefillDataModel
 /**
  * Model Team
  * 

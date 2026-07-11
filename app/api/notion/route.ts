@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     console.error("Failed to fetch Notion page:", error);
     return NextResponse.json(
       { error: "Failed to fetch Notion page" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

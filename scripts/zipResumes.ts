@@ -1,24 +1,43 @@
-// scripts/zipResumes.ts
-
-// import { prisma } from "../lib/prisma.ts"; //swap with this when running node scripts/zipResumes.ts
 import { prisma } from "../lib/prisma";
-import AdmZip from "adm-zip";
+import { createArchive, CompressionLevel } from "zip-bun";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Helper: Fetch file from a resume URL
-async function fetchResumeBuffer(url: string): Promise<Buffer> {
+// Helper: Fetch file directly as Uint8Array
+async function fetchResumeBuffer(url: string): Promise<Uint8Array> {
   const response = await fetch(url);
-  if (!response.ok) throw new Error(`Failed to fetch ${url}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
   const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+  return new Uint8Array(arrayBuffer);
+}
+
+// Concurrency helper to limit active network requests
+async function mapConcurrent<T>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T) => Promise<void>
+): Promise<void> {
+  const executing: Promise<void>[] = [];
+
+  for (const item of items) {
+    const p = Promise.resolve().then(() => fn(item));
+    const e: Promise<void> = p.finally(() => {
+      executing.splice(executing.indexOf(e), 1);
+    });
+    executing.push(e);
+
+    if (executing.length >= concurrency) {
+      await Promise.race(executing);
+    }
+  }
+
+  await Promise.all(executing);
 }
 
 async function main() {
-  // 1. Fetch all users with resumeUrl
   const participants = await prisma.participantInfo.findMany({
     where: { resumeUrl: { not: null } },
     select: {
@@ -29,28 +48,34 @@ async function main() {
 
   console.log(`Found ${participants.length} resumes.`);
 
-  const zip = new AdmZip();
+  const outputPath = resolve(__dirname, "all-resumes.zip");
 
-  // 2. Download and add each resume to the ZIP
-  for (const { resumeUrl, user } of participants) {
+  // Initialize native C-based archive writer
+  const archive = createArchive(outputPath);
+
+  // Download up to 10 resumes concurrently
+  const CONCURRENCY_LIMIT = 10;
+
+  await mapConcurrent(participants, CONCURRENCY_LIMIT, async ({ resumeUrl, user }) => {
     if (!resumeUrl || !resumeUrl.trim()) {
       console.warn(`⚠️ Skipping ${user.email}: No valid resume URL`);
-      continue;
+      return;
     }
 
     try {
       const fileName = `${user.email.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`;
-      const fileBuffer = await fetchResumeBuffer(resumeUrl);
-      zip.addFile(fileName, fileBuffer);
+      const fileData = await fetchResumeBuffer(resumeUrl);
+
+      // Native compression step
+      archive.addFile(fileName, fileData, CompressionLevel.BEST_COMPRESSION);
       console.log(`✅ Added ${fileName}`);
     } catch (error) {
       console.error(`❌ Failed to add ${user.email}:`, error);
     }
-  }
+  });
 
-  // 3. Save ZIP file locally
-  const outputPath = resolve(__dirname, "all-resumes.zip");
-  zip.writeZip(outputPath);
+  // Finalize ZIP and write directly to disk
+  archive.finalize();
   console.log(`📦 Created ZIP: ${outputPath}`);
 
   await prisma.$disconnect();

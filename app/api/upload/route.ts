@@ -9,7 +9,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   if (!filename) {
     return NextResponse.json(
       { error: "Filename is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -17,7 +17,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   if (!request.body) {
     return NextResponse.json(
       { error: "File data is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -28,7 +28,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       request.body as ReadableStream<Uint8Array>,
       {
         access: "public",
-      }
+      },
     );
 
     return NextResponse.json(blob);

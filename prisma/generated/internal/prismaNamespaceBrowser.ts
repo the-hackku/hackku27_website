@@ -54,13 +54,13 @@ export const ModelName = {
   User: 'User',
   Account: 'Account',
   Session: 'Session',
-  VerificationToken: 'VerificationToken',
-  Authenticator: 'Authenticator',
+  Verification: 'Verification',
+  TwoFactor: 'TwoFactor',
+  Passkey: 'Passkey',
   Event: 'Event',
   Scan: 'Scan',
   Checkin: 'Checkin',
   ParticipantInfo: 'ParticipantInfo',
-  PrefillData: 'PrefillData',
   Team: 'Team',
   Project: 'Project',
   TravelReimbursement: 'TravelReimbursement',
@@ -97,10 +97,12 @@ export const UserScalarFieldEnum = {
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  multiFactorEnabled: 'multiFactorEnabled',
+  twoFactorEnabled: 'twoFactorEnabled',
   totpSecret: 'totpSecret',
   totpBackupCodes: 'totpBackupCodes',
   travelReimbursementId: 'travelReimbursementId',
+  prefillData: 'prefillData',
+  isRegistered: 'isRegistered',
   teamId: 'teamId'
 } as const
 
@@ -108,17 +110,17 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 
 export const AccountScalarFieldEnum = {
+  id: 'id',
   userId: 'userId',
-  type: 'type',
-  provider: 'provider',
-  providerAccountId: 'providerAccountId',
-  refresh_token: 'refresh_token',
-  access_token: 'access_token',
-  expires_at: 'expires_at',
-  token_type: 'token_type',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  refreshTokenExpiresAt: 'refreshTokenExpiresAt',
   scope: 'scope',
-  id_token: 'id_token',
-  session_state: 'session_state',
+  idToken: 'idToken',
+  password: 'password',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -127,10 +129,12 @@ export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeo
 
 
 export const SessionScalarFieldEnum = {
-  sessionToken: 'sessionToken',
+  id: 'id',
   userId: 'userId',
-  expires: 'expires',
-  mfaVerified: 'mfaVerified',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -138,27 +142,46 @@ export const SessionScalarFieldEnum = {
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
-export const VerificationTokenScalarFieldEnum = {
+export const VerificationScalarFieldEnum = {
+  id: 'id',
   identifier: 'identifier',
-  token: 'token',
-  expires: 'expires'
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
+export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
-export const AuthenticatorScalarFieldEnum = {
-  credentialID: 'credentialID',
+export const TwoFactorScalarFieldEnum = {
+  id: 'id',
   userId: 'userId',
-  providerAccountId: 'providerAccountId',
-  credentialPublicKey: 'credentialPublicKey',
-  counter: 'counter',
-  credentialDeviceType: 'credentialDeviceType',
-  credentialBackedUp: 'credentialBackedUp',
-  transports: 'transports'
+  secret: 'secret',
+  backupCodes: 'backupCodes',
+  verified: 'verified',
+  failedVerificationCount: 'failedVerificationCount',
+  lockedUntil: 'lockedUntil'
 } as const
 
-export type AuthenticatorScalarFieldEnum = (typeof AuthenticatorScalarFieldEnum)[keyof typeof AuthenticatorScalarFieldEnum]
+export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
+
+
+export const PasskeyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  publicKey: 'publicKey',
+  userId: 'userId',
+  credentialID: 'credentialID',
+  counter: 'counter',
+  deviceType: 'deviceType',
+  backedUp: 'backedUp',
+  transports: 'transports',
+  createdAt: 'createdAt',
+  aaguid: 'aaguid'
+} as const
+
+export type PasskeyScalarFieldEnum = (typeof PasskeyScalarFieldEnum)[keyof typeof PasskeyScalarFieldEnum]
 
 
 export const EventScalarFieldEnum = {
@@ -236,24 +259,6 @@ export const ParticipantInfoScalarFieldEnum = {
 } as const
 
 export type ParticipantInfoScalarFieldEnum = (typeof ParticipantInfoScalarFieldEnum)[keyof typeof ParticipantInfoScalarFieldEnum]
-
-
-export const PrefillDataScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  countryOfResidence: 'countryOfResidence',
-  currentSchool: 'currentSchool',
-  levelOfStudy: 'levelOfStudy',
-  major: 'major',
-  race: 'race',
-  genderIdentity: 'genderIdentity',
-  age: 'age',
-  phoneNumber: 'phoneNumber'
-} as const
-
-export type PrefillDataScalarFieldEnum = (typeof PrefillDataScalarFieldEnum)[keyof typeof PrefillDataScalarFieldEnum]
 
 
 export const TeamScalarFieldEnum = {
@@ -382,12 +387,29 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 export const NullsOrder = {

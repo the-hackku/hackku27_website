@@ -4,11 +4,33 @@ import React, { useEffect, useState } from "react";
 import { getDietaryData } from "@/app/actions/analytics/getData";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { fuzzyMatchWithConfidence } from "@/utils/fuzzyMatching";
+import levenshtein from "fast-levenshtein";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CONFIDENCE_THRESHOLD = 0.3;
+
+function getSimilarityScore(input: string, target: string): number {
+  const distance = levenshtein.get(input, target);
+  return 1 - distance / Math.max(input.length, target.length);
+}
+
+// Fuzzy match with confidence scoring (for frontend processing)
+export function fuzzyMatchWithConfidence(input: string, categories: string[]) {
+  let bestMatch = "Other";
+  let highestConfidence = 0;
+
+  for (const category of categories) {
+    const confidence = getSimilarityScore(input, category);
+    if (confidence > highestConfidence) {
+      highestConfidence = confidence;
+      bestMatch = category;
+    }
+  }
+
+  return { category: bestMatch, confidence: highestConfidence };
+}
+
 
 export default function DietaryChart() {
   const [categorizedData, setCategorizedData] = useState<
@@ -72,7 +94,7 @@ export default function DietaryChart() {
 
       const { category, confidence } = fuzzyMatchWithConfidence(
         cleanedEntry,
-        dietaryCategories
+        dietaryCategories,
       );
 
       if (confidence >= CONFIDENCE_THRESHOLD) {

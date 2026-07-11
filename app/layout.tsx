@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
-import NextAuthProvider from "@/providers/NextAuthProvider";
 import HeaderWrapper from "@/components/HeaderWrapper";
 import DoodleBackground from "@/components/DoodleBackground";
 import { getDoodleImages } from "@/lib/getDoodles";
 import Footer from "@/components/Footer";
-import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers/ProgressBarProvider";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -19,7 +18,8 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: "HackKU27",
-  description: "The Official Website for HackKU 2027. Join us for a weekend of innovation, coding, and creativity at the University of Kansas!",
+  description:
+    "The Official Website for HackKU 2027. Join us for a weekend of innovation, coding, and creativity at the University of Kansas!",
   icons: {
     // icon: "/images/branding/logo_white_bg.png",
   },
@@ -35,27 +35,23 @@ export default async function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body
-        className={`antialiased min-h-screen flex flex-col`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          disableTransitionOnChange
-        >
-          <NextAuthProvider>
-            <Providers>
-              <div className="flex flex-col min-h-screen">
-                <DoodleBackground images={doodleImages} />
-                <HeaderWrapper />
-                <main className="flex-grow relative z-10" style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}>{children}</main>
-                <Footer />
-                <Toaster />
-                <Analytics />
-              </div>
-            </Providers>
-          </NextAuthProvider>
-        </ThemeProvider>
+      <body className={`antialiased min-h-screen flex flex-col`}>
+        <Providers>
+          <div className="flex flex-col min-h-screen">
+            <DoodleBackground images={doodleImages} />
+            <HeaderWrapper />
+            <main
+              className="flex-grow relative z-10"
+              style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}
+            >
+              {children}
+            </main>
+            <Footer />
+            <Toaster />
+            <Analytics />
+            <SpeedInsights />
+          </div>
+        </Providers>
       </body>
     </html>
   );

@@ -13,6 +13,13 @@ export default function LegalPage() {
       >
         Code of Conduct
       </Link>
+      <span className="mx-4">|</span>
+      <Link
+        href="/legal/privacy-policy"
+        className="text-blue-500 hover:underline"
+      >
+        Privacy Policy
+      </Link>
     </div>
   );
 }
