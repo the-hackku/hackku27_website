@@ -364,7 +364,7 @@ export function RegistrationForm({
                 label="Country of Residence"
                 required={isFieldRequired("countryOfResidence")}
                 placeholder="Country"
-                options={predefinedCountries}
+                options={predefinedCountries} // TODO: Change these to use ISO 3166 country codes for values (retain labels for display)
                 allowCustomInput
                 closeOnSelect
               />

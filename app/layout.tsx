@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers/ProgressBarProvider";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -51,6 +52,7 @@ export default async function RootLayout({
                 <Footer />
                 <Toaster />
                 <Analytics />
+                <SpeedInsights />
               </div>
             </Providers>
           </NextAuthProvider>

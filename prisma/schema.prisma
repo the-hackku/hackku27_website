@@ -24,6 +24,7 @@ model User {
   accounts             Account[]
   sessions             Session[]
   twoFactors           TwoFactor[]
+  passkeys             Passkey[]
 
   travelReimbursementId String?
   travelReimbursement  TravelReimbursement? @relation(fields: [travelReimbursementId], references: [id], onDelete: SetNull, name: "travelReimbursement")
@@ -95,7 +96,25 @@ model TwoFactor {
 	secret String
 	backupCodes String
 	verified Boolean
+	failedVerificationCount Int
+	lockedUntil DateTime? @db.Timestamptz(3)
 	@@map("twoFactor")
+}
+
+model Passkey {
+	id String @id
+	name String?
+	publicKey String
+	user User @relation(fields: [userId], references: [id])
+	userId String
+	credentialID String
+	counter Int
+	deviceType String
+	backedUp Boolean
+	transports String?
+	createdAt DateTime? @db.Timestamptz(3)
+	aaguid String?
+	@@map("passkey")
 }
 
 model Event {
@@ -321,10 +340,11 @@ enum EventType {
 
 enum ROLE {
   HACKER
-  ADMIN
-  VOLUNTEER
   MENTOR
   JUDGE
+  SPONSOR
+  VOLUNTEER
+  ADMIN
 }
 
 enum TicketType {

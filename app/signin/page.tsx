@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import { authClient, useSession } from "@/lib/auth/auth-client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -46,7 +46,7 @@ const SignInPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [resendTimer, setResendTimer] = useState(60);
   const [activeLoadingButton, setActiveLoadingButton] = useState<
-    "google" | "discord" | "github" | "mymlh" | "email" | "resend" | null
+    "google" | "discord" | "github" | "mymlh" | "email" | null
   >(null);
   const router = useRouter();
   const {
@@ -56,30 +56,21 @@ const SignInPage = () => {
     watch,
   } = useForm<SignInForm>();
   const email = watch("email");
-  const { status } = useSession();
+  const { data: session, isPending, error: sessionError, refetch } = useSession();
 
-  const handleGoogleSignIn = () => {
-    setActiveLoadingButton("google");
-    signIn("google", { callbackUrl: "/register" });
-  };
-  const handleGitHubSignIn = () => {
-    setActiveLoadingButton("github");
-    signIn("github", { callbackUrl: "/register" });
-  };
-  const handleDiscordSignIn = () => {
-    setActiveLoadingButton("discord");
-    signIn("discord", { callbackUrl: "/register" });
-  };
-  const handleMyMLHSignIn = () => {
-    setActiveLoadingButton("mymlh");
-    signIn("mymlh", { callbackUrl: "/register" });
+  const handleSocialSignIn = async (provider: "google" | "discord" | "github" | "mymlh") => {
+    setActiveLoadingButton(provider);
+    await authClient.signIn.social({
+      provider: provider,
+      callbackURL: "/register"
+    });
   };
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (session) {
       router.push("/register");
     }
-  }, [status, router]);
+  }, [session, router]);
 
   useEffect(() => {
     if (!emailSent) return;
@@ -98,22 +89,25 @@ const SignInPage = () => {
   const sendMagicLink = async (email: string) => {
     setError(null);
     try {
-      const result = await signIn("resend", {
-        email,
-        redirect: false,
-        callbackUrl: "/register",
+      const { data, error } = await authClient.signIn.magicLink({
+        email: email,
+        callbackURL: "/register"
       });
-      if (result?.error) {
-        setError("An error occurred while sending the email. Please try again.");
-        toast.error("An error occurred while sending the email. Please try again.");
+      if (error) {
+        setError(
+          "An error occurred while sending the email. Please try again.",
+        );
+        toast.error(
+          "An error occurred while sending the email. Please try again.",
+        );
       } else {
         setEmailSent(true);
-        setResendTimer(60);
-        toast.success("Magic link has been sent! Check your email.");
+        setResendTimer(60); // Reset the timer
+        toast.success("Magic link has been sent! Please check your email.");
       }
-    } catch {
-      setError("An unexpected error occurred.");
-      toast.error("An unexpected error occurred.");
+    } catch (error) {
+      setError("An unexpected error occurred. Please try again later.");
+      toast.error("An unexpected error occurred. Please try again later.");
     } finally {
       setActiveLoadingButton(null);
     }
@@ -126,7 +120,7 @@ const SignInPage = () => {
 
   const handleResend = async () => {
     if (email && resendTimer === 0) {
-      setActiveLoadingButton("resend");
+      setActiveLoadingButton("email");
       await sendMagicLink(email);
     } else {
       setError("Please wait before resending the magic link.");
@@ -136,9 +130,10 @@ const SignInPage = () => {
   const handleChangeEmail = () => {
     setEmailSent(false);
     setError(null);
+    setActiveLoadingButton(null);
   };
 
-  if (status === "loading") {
+  if (isPending) {
     return <div className="text-center mt-8">Loading...</div>;
   }
 
@@ -159,14 +154,14 @@ const SignInPage = () => {
           {/* OAuth buttons repeated */}
           <div className="flex flex-col gap-3 w-full">
             <Button
-              onClick={handleGoogleSignIn}
+              onClick={() => handleSocialSignIn("google")}
               className="w-full flex items-center justify-center gap-2 h-11 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 shadow-sm font-medium cursor-pointer"
             >
               {activeLoadingButton === "google" ? <IconLoader className="animate-spin h-5 w-5 text-gray-500" /> : <GoogleIcon />}
               {activeLoadingButton === "google" ? "Loading..." : "Continue with Google"}
             </Button>
             <Button
-              onClick={handleDiscordSignIn}
+              onClick={() => handleSocialSignIn("discord")}
               className="w-full flex items-center justify-center gap-2 h-11 text-white font-medium border-none cursor-pointer"
               style={{ backgroundColor: "#5865F2" }}
             >
@@ -174,7 +169,7 @@ const SignInPage = () => {
               {activeLoadingButton === "discord" ? "Loading..." : "Continue with Discord"}
             </Button>
             <Button
-              onClick={handleGitHubSignIn}
+              onClick={() => handleSocialSignIn("github")}
               className="w-full flex items-center justify-center gap-2 h-11 text-white font-medium border-none cursor-pointer"
               style={{ backgroundColor: "#24292E" }}
             >
@@ -189,7 +184,7 @@ const SignInPage = () => {
               disabled={activeLoadingButton !== null || resendTimer > 0}
               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-11 cursor-pointer"
             >
-              {activeLoadingButton === "resend" ? (
+              {activeLoadingButton === "email" ? (
                 <><IconLoader className="animate-spin h-5 w-5 mr-2" />Resending...</>
               ) : resendTimer > 0 ? `Resend in ${resendTimer}s` : "Resend Link"}
             </Button>
@@ -216,7 +211,7 @@ const SignInPage = () => {
 
         {/* MLH — full width */}
         <Button
-          onClick={handleMyMLHSignIn}
+          onClick={() => handleSocialSignIn("mymlh")}
           className="w-full flex items-center justify-center gap-3 h-11 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 shadow-sm cursor-pointer"
         >
           {activeLoadingButton === "mymlh" ? (
@@ -232,7 +227,7 @@ const SignInPage = () => {
         {/* Google + Discord — side by side */}
         <div className="flex gap-3 w-full">
           <Button
-            onClick={handleGoogleSignIn}
+            onClick={() => handleSocialSignIn("google")}
             className="flex-1 flex items-center justify-center gap-2 h-11 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 shadow-sm font-medium cursor-pointer"
           >
             {activeLoadingButton === "google" ? (
@@ -245,7 +240,7 @@ const SignInPage = () => {
 
           {/* Discord: brand purple */}
           <Button
-            onClick={handleDiscordSignIn}
+            onClick={() => handleSocialSignIn("discord")}
             className="flex-1 flex items-center justify-center gap-2 h-11 text-white font-medium border-none cursor-pointer"
             style={{ backgroundColor: "#5865F2" }}
           >
@@ -260,7 +255,7 @@ const SignInPage = () => {
 
         {/* GitHub — full width, dark */}
         <Button
-          onClick={handleGitHubSignIn}
+          onClick={() => handleSocialSignIn("github")}
           className="w-full flex items-center justify-center gap-2 h-11 text-white font-medium border-none cursor-pointer"
           style={{ backgroundColor: "#24292E" }}
         >

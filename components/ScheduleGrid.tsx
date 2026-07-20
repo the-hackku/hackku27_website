@@ -22,7 +22,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Checkbox } from "./ui/checkbox";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { EventType } from "@/prisma/generated/browser";
 import { Input } from "./ui/input";
 import Image, { StaticImageData } from "next/image";

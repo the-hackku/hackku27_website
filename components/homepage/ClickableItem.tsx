@@ -4,7 +4,7 @@ import Image, { StaticImageData } from "next/image";
 import React, { useState, useEffect } from "react";
 import { useBreakpoint } from "@/hooks/useMediaQuery";
 import { IconX } from "@tabler/icons-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useHash } from "@/hooks/useURLHash";
 
 interface ClickableItemProps {

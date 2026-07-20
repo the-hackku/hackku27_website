@@ -1,7 +1,7 @@
 "use client";
 
 import constants from "@/constants";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import MemberImage from "./MemberImage";
 import Image, { StaticImageData } from "next/image";
 import {

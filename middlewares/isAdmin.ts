@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth/auth";
 
 export async function isAdmin() {
   const session = await auth();
