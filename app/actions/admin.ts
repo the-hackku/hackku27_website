@@ -268,7 +268,7 @@ export async function validateQrCode(
 
   // Fetch the admin user
   const admin = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
     select: { id: true },
   });
 
@@ -399,7 +399,7 @@ export async function manualCheckIn(
 
   // Find the admin user (the staff or volunteer performing the check)
   const admin = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
     select: { id: true },
   });
 
@@ -554,7 +554,7 @@ export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
   const updatePromises = Object.entries(changes).map(([userId, fields]) =>
     prisma.user.update({
       where: { id: userId },
-      data: fields,
+      data: fields as Prisma.UserUpdateInput,
     }),
   );
 

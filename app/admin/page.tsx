@@ -362,7 +362,9 @@ export default function AdminTabsPage() {
               return { data: users, total: totalUsers };
             }}
             updateFunction={async (editedData) => {
-              await batchUpdateUsers(editedData);
+              await batchUpdateUsers(
+                editedData as Parameters<typeof batchUpdateUsers>[0],
+              );
             }}
             columns={userColumns}
             pageSize={20}

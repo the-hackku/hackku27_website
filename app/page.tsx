@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { authClient } from "@/lib/auth/auth-client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import { pageCardStyle } from "@/components/PageCard";
 export default function HomePage() {
   const [view, setView] = useState<"welcome" | "learn">("welcome");
 
-  const { data: session } = useSession();
+  const { data: session } = authClient.useSession();
   const isRegistered = session?.user?.isRegistered;
 
   const searchParams = useSearchParams();

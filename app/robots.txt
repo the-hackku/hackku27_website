@@ -1,6 +1,7 @@
 User-agent: *
 Disallow: /api/
 Disallow: /register
+Disallow: /profile
 Disallow: /wp-admin/
 Disallow: /wp-login.php
 Disallow: /wp-content/

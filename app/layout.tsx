@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
-import NextAuthProvider from "@/providers/NextAuthProvider";
 import HeaderWrapper from "@/components/HeaderWrapper";
 import DoodleBackground from "@/components/DoodleBackground";
 import { getDoodleImages } from "@/lib/getDoodles";
@@ -43,19 +42,22 @@ export default async function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          <NextAuthProvider>
-            <Providers>
-              <div className="flex flex-col min-h-screen">
-                <DoodleBackground images={doodleImages} />
-                <HeaderWrapper />
-                <main className="flex-grow relative z-10" style={{ paddingTop: "clamp(100px, 10vw, 230px)" }}>{children}</main>
-                <Footer />
-                <Toaster />
-                <Analytics />
-                <SpeedInsights />
-              </div>
-            </Providers>
-          </NextAuthProvider>
+          <Providers>
+            <div className="flex flex-col min-h-screen">
+              <DoodleBackground images={doodleImages} />
+              <HeaderWrapper />
+              <main
+                className="flex-grow relative z-10"
+                style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}
+              >
+                {children}
+              </main>
+              <Footer />
+              <Toaster />
+              <Analytics />
+              <SpeedInsights />
+            </div>
+          </Providers>
         </ThemeProvider>
       </body>
     </html>
