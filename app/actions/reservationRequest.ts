@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth/auth";
 
 import { TimeSlot, RoomTheme } from "@/prisma/generated/client";
 

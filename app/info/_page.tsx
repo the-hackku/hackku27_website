@@ -1,6 +1,6 @@
 import { getInfoPage } from "@/app/actions/infoPage";
 import InfoPageView from "@/components/info/InfoPageView";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth/auth";
 
 export default async function EditableInfoPage() {
   const [data, session] = await Promise.all([getInfoPage(), auth()]);
