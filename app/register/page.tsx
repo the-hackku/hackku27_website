@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
 import { headers } from "next/headers";
 import constants from "@/constants";
+import { RegistrationData } from "../actions/schemas";
 
 export default async function RegisterPage() {
   if (new Date() > new Date(constants.endDate)) {
@@ -25,18 +26,17 @@ export default async function RegisterPage() {
 
   // Fetch user details from the database to check if they are already registered
   const user = await prisma.user.findUnique({
-    where: { email: session.user?.email ?? undefined },
-    include: { ParticipantInfo: true },
+    where: { id: session.session.userId }
   });
 
-  const participant = user?.ParticipantInfo;
+  const participant = user?.isRegistered;
 
   if (participant) {
     redirect("/");
   }
 
   // If not registered, show the registration form and fetch prefill data if available
-  const prefillData = user?.prefillData || null;
+  const prefillData = user?.prefillData as RegistrationData || null;
   return (
     <div className="mb-10">
       <RegistrationForm prefillData={prefillData} />

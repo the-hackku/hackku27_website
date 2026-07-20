@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { authClient } from "@/lib/auth/auth-client";
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
@@ -19,7 +19,7 @@ const cardStyle = {
 export default function HomePage() {
   const [view, setView] = useState<"welcome" | "learn">("welcome");
 
-  const { data: session } = useSession();
+  const { data: session } = authClient.useSession();
   const isRegistered = session?.user?.isRegistered;
 
   const registerText = isRegistered ? "Sign Out" : "Register Now";

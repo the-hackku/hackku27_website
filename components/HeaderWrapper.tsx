@@ -17,7 +17,7 @@ export default async function HeaderWrapper() {
 
   // 3. If user is logged in, find them in the DB
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
     include: { ParticipantInfo: true },
   });
 

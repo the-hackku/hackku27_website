@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { genericOAuth, magicLink, twoFactor, admin } from "better-auth/plugins";
+import { genericOAuth, magicLink, twoFactor, customSession } from "better-auth/plugins";
 import { passkey } from "@better-auth/passkey"
 import { prisma } from "@/lib/prisma";
 import { jsx } from 'react/jsx-runtime'
@@ -20,12 +21,26 @@ export const auth = betterAuth({
         required: false,
         defaultValue: null,
         input: true
+      },
+      isRegistered: {
+        type: "boolean",
+        required: true,
+        input: false,
+        defaultValue: false
+      },
+      role: {
+        type: "string",
+        required: true,
+        input: false,
+        defaultValue: "HACKER"
       }
     }
   },
   account: {
     accountLinking: {
-      disableImplicitLinking: true
+      // This is hooked to allow orphaned User records to be linked to a new account, but still blocks normal implicit linking.
+      // This should be re-evaluated in the future when all users have a linked account.
+      disableImplicitLinking: false
     }
   },
   socialProviders: {
@@ -139,11 +154,44 @@ export const auth = betterAuth({
       rpID: "hackku.org",
       rpName: "HackKU"
     }),
-    admin({
-      defaultRole: "participant"
+    customSession(async ({ user, session }) => {
+      const typedUser = user as typeof user & { isRegistered: boolean, role: "HACKER" | "MENTOR" | "JUDGE" | "SPONSOR" | "VOLUNTEER" | "ADMIN" };
+      return {
+        session: {
+          ...session,
+          isRegistered: typedUser.isRegistered,
+          role: typedUser.role
+        }
+      }
     })
   ],
   onAPIError: {
     errorURL: "/auth-error"
+  },
+  databaseHooks: {
+    account:{
+      create: {
+        before: async (account, ctx) => { // This is a temporary hook to allow orphaned User records to be linked to a new account, but still block normal implicit linking.
+          if (ctx?.context.session) {
+            return {
+              data: {
+                ...account
+              }
+            }
+          }
+          const existingAccounts = await prisma.account.count({
+            where: { userId: account.userId }
+          });
+          if (existingAccounts === 0) {
+            return {
+              data: {
+                ...account
+              }
+            }
+          }
+          throw new APIError("BAD_REQUEST", { message: "Please sign in with an account already that is already linked to your profile." })
+        }
+      }
+    }
   }
 });

@@ -56,6 +56,7 @@ export const ModelName = {
   Session: 'Session',
   Verification: 'Verification',
   TwoFactor: 'TwoFactor',
+  Passkey: 'Passkey',
   Event: 'Event',
   Scan: 'Scan',
   Checkin: 'Checkin',
@@ -101,6 +102,7 @@ export const UserScalarFieldEnum = {
   totpBackupCodes: 'totpBackupCodes',
   travelReimbursementId: 'travelReimbursementId',
   prefillData: 'prefillData',
+  isRegistered: 'isRegistered',
   teamId: 'teamId'
 } as const
 
@@ -157,10 +159,29 @@ export const TwoFactorScalarFieldEnum = {
   userId: 'userId',
   secret: 'secret',
   backupCodes: 'backupCodes',
-  verified: 'verified'
+  verified: 'verified',
+  failedVerificationCount: 'failedVerificationCount',
+  lockedUntil: 'lockedUntil'
 } as const
 
 export type TwoFactorScalarFieldEnum = (typeof TwoFactorScalarFieldEnum)[keyof typeof TwoFactorScalarFieldEnum]
+
+
+export const PasskeyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  publicKey: 'publicKey',
+  userId: 'userId',
+  credentialID: 'credentialID',
+  counter: 'counter',
+  deviceType: 'deviceType',
+  backedUp: 'backedUp',
+  transports: 'transports',
+  createdAt: 'createdAt',
+  aaguid: 'aaguid'
+} as const
+
+export type PasskeyScalarFieldEnum = (typeof PasskeyScalarFieldEnum)[keyof typeof PasskeyScalarFieldEnum]
 
 
 export const EventScalarFieldEnum = {

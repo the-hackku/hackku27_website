@@ -26,7 +26,18 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-
+  async rewrites() {
+    return [
+      {
+        source: "/apple-touch-icon.png",
+        destination: "/images/branding/apple-touch-icon.png",
+      },
+      {
+        source: "/apple-touch-icon-precomposed.png",
+        destination: "/images/branding/apple-touch-icon.png",
+      }
+    ]
+  },
   images: {
     remotePatterns: [
       {

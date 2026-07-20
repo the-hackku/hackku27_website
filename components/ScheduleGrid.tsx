@@ -27,12 +27,12 @@ import { EventType } from "@/prisma/generated/browser";
 import { Input } from "./ui/input";
 import Image, { StaticImageData } from "next/image";
 
-import activityBg from "@/assets/images/schedule/activities.png";
-import foodBg from "@/assets/images/schedule/food.png";
-import dawnBg from "@/assets/images/schedule/required dawn.png";
-import duskBg from "@/assets/images/schedule/required dusk.png";
-import sponsorBg from "@/assets/images/schedule/sponsor.png";
-import workshopBg from "@/assets/images/schedule/workshop.png";
+import activityBg from "@/public/images/schedule/activities.png";
+import foodBg from "@/public/images/schedule/food.png";
+import dawnBg from "@/public/images/schedule/required dawn.png";
+import duskBg from "@/public/images/schedule/required dusk.png";
+import sponsorBg from "@/public/images/schedule/sponsor.png";
+import workshopBg from "@/public/images/schedule/workshop.png";
 
 type ScheduleEvent = {
   id: string;

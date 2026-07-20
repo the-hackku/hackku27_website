@@ -1,21 +1,23 @@
 import { auth } from "@/lib/auth/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-
 import { prisma } from "@/lib/prisma";
 
 export default async function ReimbursementLayout({}: // children,
 {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   // 🚀 If the user is not authenticated, redirect to the signin page
-  if (!session?.user?.email) {
+  if (!session?.session.userId) {
     redirect("/signin");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
     include: { travelReimbursement: true, ParticipantInfo: true },
   });
 

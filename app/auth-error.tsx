@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import PageProps from "next";
 import { motion } from "motion/react";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";

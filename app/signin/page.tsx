@@ -135,18 +135,6 @@ const SignInPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-center text-muted-foreground text-sm mb-6">
-              Sign in with an OAuth provider or your email to continue to
-              registration or the dashboard! If you're new, signing up means you
-              agree to our{" "}
-              <Link
-                href="/legal/privacy-policy"
-                className="text-blue-600 hover:underline"
-              >
-                Privacy Policy
-              </Link>
-              .
-            </p>
             {emailSent ? (
               <>
               <p className="text-center text-gray-600 text-sm sm:text-base">
@@ -156,8 +144,8 @@ const SignInPage = () => {
                 Please check your inbox and click the link to sign in.
               </p>
               <p className="text-center text-gray-600 mt-2 text-sm sm:text-base p-2 bg-indigo-50 rounded">
-                Emails sent to <b>@ku.edu</b> or any other{" "}
-                <b>institutional email</b> may be marked as spam — please add{" "}
+                Emails sent to <b>@ku.edu</b> or other{" "}
+                <b>institutional emails</b> may be marked as spam — please add{" "}
                 <b>signin@auth.hackku.org</b> to your safe senders list, or{" "}
                 <b>sign in with an OAuth provider below instead</b>.
                 If you're new, signing up means you agree to our{" "}

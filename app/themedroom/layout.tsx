@@ -1,6 +1,7 @@
 // app/reservation/layout.tsx
 import { ReactNode } from "react";
 import { auth } from "@/lib/auth/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
@@ -14,15 +15,17 @@ export default async function ReservationLayout({
   children: ReactNode;
 }) {
   // 1) Ensure the user is logged in
-  const session = await auth();
-  if (!session?.user?.id) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     // If not logged in, redirect to sign-in (or wherever you want).
     redirect("/signin");
   }
 
   // 2) Check if a reservation already exists for this user
   const existingReservation = await prisma.themedRoomReservation.findFirst({
-    where: { userId: session.user.id },
+    where: { userId: session.session.userId },
   });
 
   // 3) If found, redirect to their profile (or any other route).

@@ -21,7 +21,6 @@ import { ComboboxSelect } from "@/components/customui/ComboSelect";
 import { RegistrationData, formSchema } from "@/app/actions/schemas";
 import { registerUser } from "@/app/actions/register";
 import constants from "@/constants";
-import { PrefillData } from "@/prisma/generated/browser";
 
 // import { predefinedSchools } from "./schools"
 import {
@@ -37,7 +36,7 @@ const LOCAL_STORAGE_KEY = "hackku27_registration_form";
 export function RegistrationForm({
   prefillData,
 }: {
-  prefillData: PrefillData | null;
+  prefillData: RegistrationData | null;
 }) {
   const [showChaperoneFields, setShowChaperoneFields] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);

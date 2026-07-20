@@ -35,6 +35,7 @@ model User {
   checkinsAsUser       Checkin[]            @relation("UserCheckedIn")
   prefillData          Json?
   ParticipantInfo      ParticipantInfo?
+  isRegistered         Boolean              @default(false)
   scansAsAdmin         Scan[]               @relation("AdminScanner")
   scansAsUser          Scan[]               @relation("UserScanned")
 
@@ -63,6 +64,8 @@ model Account {
 	password String?
 	createdAt DateTime @db.Timestamptz(3)
 	updatedAt DateTime @db.Timestamptz(3)
+  @@unique([providerId, accountId])
+  @@index([userId])
 	@@map("account")
 }
 
@@ -76,6 +79,7 @@ model Session {
 	userAgent String?
 	createdAt DateTime @db.Timestamptz(3)
 	updatedAt DateTime @db.Timestamptz(3)
+  @@index([userId])
 	@@map("session")
 }
 

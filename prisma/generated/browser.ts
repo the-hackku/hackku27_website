@@ -43,6 +43,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type TwoFactor = Prisma.TwoFactorModel
 /**
+ * Model Passkey
+ * 
+ */
+export type Passkey = Prisma.PasskeyModel
+/**
  * Model Event
  * 
  */

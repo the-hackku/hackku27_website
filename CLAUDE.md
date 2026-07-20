@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+> This is outdated and has not been updated for HackKU 2027
 
 ## Commands
 
@@ -16,9 +17,9 @@ After adding/modifying Prisma schema: `npx prisma migrate dev` to apply migratio
 
 ## Architecture
 
-This is a **Next.js 14 App Router** hackathon management system for HackKU 2026, using TypeScript, Tailwind CSS, and shadcn/ui components. The database is PostgreSQL via **Prisma ORM**, auth is handled by **NextAuth v4** (email magic links + Google/GitHub/Discord OAuth), and files are stored in **Vercel Blob**.
+This is a **Next.js 16 App Router** hackathon management system for HackKU 2027, using TypeScript, Tailwind CSS, and shadcn/ui components. The database is PostgreSQL via **Prisma ORM**, auth is handled by **Better Auth** (email magic links + Google/GitHub/Discord OAuth), and files are stored in **Vercel Blob**.
 
-NOTE: This project works best on Node 18/20. Most issues with webpack and libraries breaking can be solved by checking the current node version.
+NOTE: This project works best on Bun 1.3. Most issues with webpack and libraries breaking can be solved by checking the current node version.
 
 ### Directory layout
 
