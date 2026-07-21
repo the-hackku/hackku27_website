@@ -1,9 +1,9 @@
-import fs from "fs";
+import { Glob } from "bun";
 import path from "path";
 
 const MAX_DOODLES = 10;
 const DOODLES_DIR = path.join(process.cwd(), "public/images/doodles");
-const IMAGE_EXT = /\.(png|jpg|jpeg|svg|webp)$/i;
+const doodleGlob = new Glob("**/*.{png,jpg,jpeg,svg,webp}");
 
 function randomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -13,23 +13,14 @@ export function getDoodleImages(): string[] {
   const candidates: string[] = [];
 
   try {
-    const entries = fs.readdirSync(DOODLES_DIR, { withFileTypes: true });
+    for (const file of doodleGlob.scanSync({ cwd: DOODLES_DIR })) {
+      // Split path segments to URL-encode directory names and filenames safely
+      const encodedPath = file
+        .split(/[/\\]/)
+        .map(encodeURIComponent)
+        .join("/");
 
-    for (const entry of entries) {
-      if (entry.isDirectory()) {
-        // Use ALL images from subfolders
-        const subDir = path.join(DOODLES_DIR, entry.name);
-        const subFiles = fs
-          .readdirSync(subDir)
-          .filter((f) => IMAGE_EXT.test(f));
-        for (const file of subFiles) {
-          candidates.push(
-            `/images/doodles/${encodeURIComponent(entry.name)}/${encodeURIComponent(file)}`,
-          );
-        }
-      } else if (IMAGE_EXT.test(entry.name)) {
-        candidates.push(`/images/doodles/${encodeURIComponent(entry.name)}`);
-      }
+      candidates.push(`/images/doodles/${encodedPath}`);
     }
   } catch {
     return [];
