@@ -4,7 +4,7 @@ import NotionPage from "@/components/NotionPage";
 const PAGE_ID = "HackerDoc-HackKU-26-2be9e50fddb580418f10d4c9ba1b14e1";
 const notion = new NotionAPI();
 
-export default async function TestPage() {
+export default async function InfoPage() {
   const recordMap = await notion.getPage(PAGE_ID);
   return (
     <div className="py-8">

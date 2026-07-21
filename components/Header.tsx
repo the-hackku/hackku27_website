@@ -68,7 +68,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
                 width: "clamp(28px, 5vw, 80px)",
                 height: "clamp(46px, 8vw, 140px)",
               }}
-              priority={true}
+              preload={true}
             />
           </motion.div>
         </Link>
@@ -76,7 +76,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
       <div className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 z-50">
         <Link href="/">
           <Image
-            src="/images/branding/logo_nobackground.png"
+            src="/images/branding/logo_nobackground.webp"
             alt="HackKU"
             width={160}
             height={40}
@@ -85,7 +85,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
               height: "auto",
               objectFit: "contain",
             }}
-            priority
+            preload={true}
           />
         </Link>
       </div>

@@ -5,7 +5,6 @@ import HeaderWrapper from "@/components/HeaderWrapper";
 import DoodleBackground from "@/components/DoodleBackground";
 import { getDoodleImages } from "@/lib/getDoodles";
 import Footer from "@/components/Footer";
-import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers/ProgressBarProvider";
 import { Analytics } from "@vercel/analytics/react";
@@ -37,28 +36,22 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={`antialiased min-h-screen flex flex-col`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          disableTransitionOnChange
-        >
-          <Providers>
-            <div className="flex flex-col min-h-screen">
-              <DoodleBackground images={doodleImages} />
-              <HeaderWrapper />
-              <main
-                className="flex-grow relative z-10"
-                style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}
-              >
-                {children}
-              </main>
-              <Footer />
-              <Toaster />
-              <Analytics />
-              <SpeedInsights />
-            </div>
-          </Providers>
-        </ThemeProvider>
+        <Providers>
+          <div className="flex flex-col min-h-screen">
+            <DoodleBackground images={doodleImages} />
+            <HeaderWrapper />
+            <main
+              className="flex-grow relative z-10"
+              style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}
+            >
+              {children}
+            </main>
+            <Footer />
+            <Toaster />
+            <Analytics />
+            <SpeedInsights />
+          </div>
+        </Providers>
       </body>
     </html>
   );
