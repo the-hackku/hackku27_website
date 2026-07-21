@@ -91,6 +91,8 @@ export default function DoodleBackground({ images }: { images: string[] }) {
             width={200}
             height={200}
             style={{ width: "100%", height: "auto" }}
+            unoptimized
+            preload={true}
           />
         </div>
       ))}

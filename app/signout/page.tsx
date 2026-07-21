@@ -10,9 +10,18 @@ export default function SignOutPage() {
 
   useEffect(() => {
     const performSignOut = async () => {
-      // await signOut({ redirect: false }); // Sign out without immediate redirect
-      await authClient.signOut();
-      router.refresh();
+      try {
+        await authClient.signOut({
+          fetchOptions: {
+            onSuccess: () => {
+              router.replace("/");
+            },
+          }
+        });
+      } catch (error) {
+        console.error("Error signing out:", error);
+        router.replace("/");
+      }
     };
 
     performSignOut();

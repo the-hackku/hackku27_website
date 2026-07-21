@@ -1,35 +1,25 @@
+"use client"
+
 import RegisterAlert from "./RegisterAlert";
 import Header from "./Header";
-import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth/auth";
-import { headers } from "next/headers";
+import { useSession } from "@/lib/auth/auth-client";
 
-export default async function HeaderWrapper() {
-  // 1. Try to get the session; null if not logged in
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
+export default function HeaderWrapper() {
+  const { data: session, isPending, error: sessionError, refetch } = useSession();
 
   if (!session) {
     // 2. If user is NOT logged in, no alert, just the basic Header
     return <Header isAdmin={false} isVolunteer={false} />;
   }
 
-  // 3. If user is logged in, find them in the DB
-  const user = await prisma.user.findUnique({
-    where: { id: session.session.userId },
-    include: { ParticipantInfo: true },
-  });
-
   // 4. Determine if they’re an admin & if they’re registered
-  const isAdminUser = user?.role === "ADMIN";
-  const isVolunteerUser = user?.role === "VOLUNTEER";
-  const isRegistered = Boolean(user?.ParticipantInfo);
+  const isAdminUser = session.session.role === "ADMIN";
+  const isVolunteerUser = session.session.role === "VOLUNTEER";
 
   // 5. Show alert if they’re logged in but not registered
   return (
     <>
-      {!isRegistered && !isAdminUser && !isVolunteerUser && <RegisterAlert />}
+      {!session.session.isRegistered && !isAdminUser && !isVolunteerUser && <RegisterAlert />}
       <Header isAdmin={isAdminUser} isVolunteer={isVolunteerUser} />
     </>
   );

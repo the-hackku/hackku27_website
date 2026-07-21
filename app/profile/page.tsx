@@ -1,6 +1,6 @@
 /* app/profile/page.tsx */
 import { redirect } from "next/navigation";
-// import LocalDateTime from "@/components/localDateTime";
+// import LocalDateTime from "@/components/LocalDateTime";
 import QrCodeComponent from "@/components/UserQRCode";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

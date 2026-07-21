@@ -32,13 +32,13 @@ export default async function NotFound({ searchParams }: {searchParams: Promise<
   } else if (error === "unable_to_link_account") {
     message = "We couldn't link your account, please try with a different provider or account.";
   } else if (error === "account_not_linked") {
-    message = "Please sign in with the provider you used to sign up to link this provider, or contact us for assistance.";
+    message = "Please sign in with the provider you used to sign up to link this provider.";
   } else if (error === "account_already_linked_to_different_user") {
     message = "This account is already linked to a different user, please try with a different provider or account.";
   } else if (error === "signup_disabled") {
     message = "The provider you are trying to sign in with is disabled, please try with a different provider or account.";
   } else {
-    message = "An unknown error occurred, please try again later or contact us if the problem persists.";
+    message = "An unknown error occurred, please try again later.";
   }
   return (
     <div className="flex flex-col items-center justify-center p-6 space-y-6 ">
@@ -52,10 +52,11 @@ export default async function NotFound({ searchParams }: {searchParams: Promise<
         whileTap={{ scale: 0.9, rotate: -10 }} // Shrink and rotate back on click
       >
         <Image
-          src="/images/duck2.png"
+          src="/images/duck.webp"
           width={200}
           height={200}
-          alt="500 Internal Server Error"
+          alt="Doodle Duck"
+          unoptimized
         />
       </motion.div>
 
@@ -63,8 +64,8 @@ export default async function NotFound({ searchParams }: {searchParams: Promise<
         <AlertCircle className="h-5 w-5 text-red-600" />
         <AlertTitle>Error while authenticating!</AlertTitle>
         <AlertDescription>
-
-          Oops! An error occurred while trying to authenticate you. Please try again later, or contact us at
+          {message + " "}
+          If that doesn't help, contact us at
           <a href={`mailto:${constants.supportEmail}`} style={{ color: "#1a73e8", textDecoration: "none" }}>
             {constants.supportEmail}
           </a>

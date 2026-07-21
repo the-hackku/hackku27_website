@@ -123,7 +123,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
               width={0}
               height={0}
               style={{ width: "clamp(30px, 4vw, 100px)", height: "clamp(50px, 6.5vw, 150px)" }}
-              priority={true}
+              preload={true}
             />
           </motion.div>
         </Link>
@@ -131,7 +131,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
 <div className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 z-50">
   <Link href="/?reset">
     <Image
-      src="/images/branding/logo_nobackground.png"
+      src="/images/branding/logo_nobackground.webp"
       alt="HackKU"
       width={160}
       height={40}

@@ -22,15 +22,16 @@ export default function NotFound() {
         whileTap={{ scale: 0.9, rotate: -10 }} // Shrink and rotate back on click
       >
         <Image
-          src="/images/duck2.png"
+          src="/images/duck.webp"
           width={200}
           height={200}
-          alt="404 Not Found"
+          alt="Doodle Duck"
+          unoptimized
         />
       </motion.div>
 
       {/* Alert with playful message */}
-      <Alert variant="destructive" className="w-full max-w-md">
+      <Alert variant="destructive" className="w-full max-w-md bg-white/75">
         <AlertCircle className="h-5 w-5 text-red-600" />
         <AlertTitle>Not the duck you&apos;re looking for!</AlertTitle>
         <AlertDescription>
@@ -39,7 +40,7 @@ export default function NotFound() {
       </Alert>
 
       {/* Button to go back to home */}
-      <Button variant="outline" size="lg" onClick={() => router.push("/")}>
+      <Button variant="outline" size="lg" className="bg-white/75 hover:bg-gray-300/75" onClick={() => router.push("/")}>
         Go Back to Home
       </Button>
     </div>

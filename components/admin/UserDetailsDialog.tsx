@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserById } from "@/app/actions/admin";
 import { IconLoader } from "@tabler/icons-react";
-import LocalDateTime from "@/components/localDateTime";
+import LocalDateTime from "@/components/LocalDateTime";
 
 interface UserDetailsDialogProps {
   userId: string | null;
