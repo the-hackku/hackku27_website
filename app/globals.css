@@ -83,3 +83,45 @@ html, body {
   font-family: inherit;
 }
 
+.register-btn {
+  border-radius: 0.5rem;
+}
+
+.learn-btn {
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .register-btn {
+    border-radius: 0.5rem 0.5rem 0.5rem 1.5rem;
+  }
+
+  .learn-btn {
+    border-radius: 0.5rem 0.5rem 1.5rem 0.5rem;
+  }
+}
+
+/* On mobile, top corners match the bottom radius. On sm+, use the elliptical curve. */
+.footer-desktop-height {
+  min-height: auto;
+}
+
+@media (min-width: 640px) {
+  .footer-desktop-height {
+    min-height: 58px;
+    max-height: 58px;
+  }
+}
+
+.page-card {
+  border-top-left-radius: clamp(0.75rem, 4vw, 1.5rem);
+  border-top-right-radius: clamp(0.75rem, 4vw, 1.5rem);
+}
+
+@media (min-width: 640px) {
+  .page-card {
+    border-top-left-radius: 50% clamp(0.5rem, 2.7vw, 2rem);
+    border-top-right-radius: 50% clamp(0.5rem, 2.7vw, 2rem);
+  }
+}
+

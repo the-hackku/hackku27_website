@@ -13,11 +13,11 @@ export function Header({ isAdmin, isVolunteer }: Props) {
   return (
     <header
       className="fixed top-0 left-0 right-0 z-40 overflow-hidden bg-transparent"
-      style={{ height: "clamp(160px, 10vw, 230px)" }}
+      style={{ height: "clamp(100px, 10vw, 230px)" }}
     >
-      {/* SVG wave cutout and background */}
+      {/* SVG Container class */}
       <div className="absolute inset-x-0 top-0 h-full pointer-events-none">
-        {/* Left wing SVG (fills remaining space on screens wider than 1280px, clamps to 0px on smaller screens) */}
+        {/* Left header SVG */}
         <svg
           viewBox="0 0 100 380"
           preserveAspectRatio="none"
@@ -35,13 +35,13 @@ export function Header({ isAdmin, isVolunteer }: Props) {
             d="M 0 290 L 100 290"
             fill="none"
             stroke="#d7d7d7"
-            strokeWidth="3"
+            strokeWidth="2"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
           />
         </svg>
 
-        {/* Center SVG with dip (exactly 1280px wide on all screens, centering perfectly and crop-overflowing on mobile to keep exact pixel size) */}
+        {/* Header Dip SVG */}
         <svg
           viewBox="0 0 1280 380"
           preserveAspectRatio="none"
@@ -73,13 +73,13 @@ export function Header({ isAdmin, isVolunteer }: Props) {
             "
             fill="none"
             stroke="#d7d7d7"
-            strokeWidth="3"
+            strokeWidth="2"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
           />
         </svg>
 
-        {/* Right wing SVG (fills remaining space on screens wider than 1280px, clamps to 0px on smaller screens) */}
+        {/* Right header SVG */}
         <svg
           viewBox="0 0 100 380"
           preserveAspectRatio="none"
@@ -97,7 +97,7 @@ export function Header({ isAdmin, isVolunteer }: Props) {
             d="M 0 290 L 100 290"
             fill="none"
             stroke="#d7d7d7"
-            strokeWidth="3"
+            strokeWidth="2"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
           />
@@ -122,21 +122,21 @@ export function Header({ isAdmin, isVolunteer }: Props) {
               alt="MLH Badge"
               width={0}
               height={0}
-              style={{ width: "clamp(28px, 5vw, 80px)", height: "clamp(46px, 8vw, 140px)" }}
+              style={{ width: "clamp(30px, 4vw, 100px)", height: "clamp(50px, 6.5vw, 150px)" }}
               priority={true}
             />
           </motion.div>
         </Link>
       </div>
 <div className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 z-50">
-  <Link href="/">
+  <Link href="/?reset">
     <Image
       src="/images/branding/logo_nobackground.png"
       alt="HackKU"
       width={160}
       height={40}
       style={{
-        width: "clamp(50px, 8vw, 130px)",
+        width: "clamp(100px, 8vw, 130px)",
         height: "auto",
         objectFit: "contain",
       }}

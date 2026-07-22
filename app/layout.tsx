@@ -48,7 +48,7 @@ export default async function RootLayout({
               <div className="flex flex-col min-h-screen">
                 <DoodleBackground images={doodleImages} />
                 <HeaderWrapper />
-                <main className="flex-grow relative z-10" style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}>{children}</main>
+                <main className="flex-grow relative z-10" style={{ paddingTop: "clamp(100px, 10vw, 230px)" }}>{children}</main>
                 <Footer />
                 <Toaster />
                 <Analytics />

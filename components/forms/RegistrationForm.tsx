@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 
@@ -275,12 +274,12 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
   }, [form, isFieldRequired]);
 
   return (
-    <Card className="max-w-3xl mx-auto mt-2 border-none shadow-none">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-center text-xl py-4">
+    <div className="w-full">
+      <div>
+        <div className="flex flex-wrap justify-between items-center gap-2">
+          <h2 className="text-xl font-bold py-4">
             {constants.hackathonName} Registration
-          </CardTitle>
+          </h2>
 
           <span className="text-sm font-medium">
             {progress}% Complete (Saved)
@@ -318,8 +317,8 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
           We are excited to create with you in April! ❤️😁
         </p>
         <hr />
-      </CardHeader>
-      <CardContent>
+      </div>
+      <div>
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
@@ -327,19 +326,19 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
           >
             {/* Personal Information Section */}
             <h2 className="text-lg font-semibold">Personal Information</h2>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               {personalInfoFields.slice(0, 2).map((field) => (
                 <FormInputField key={field.name} {...field} />
               ))}
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               {personalInfoFields.slice(2).map((field) => (
                 <FormInputField key={field.name} {...field} />
               ))}
             </div>
 
             {/* Select Fields */}
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <ComboboxSelect
                 name="countryOfResidence"
                 label="Country of Residence"
@@ -356,7 +355,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
                 required={isFieldRequired("genderIdentity")}
               />
             </div>
-            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <ComboboxSelect
                 name="race"
                 label="Race"
@@ -379,7 +378,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
             {/* Education Information Section */}
             <hr className="my-4" />
             <h2 className="text-lg font-semibold">Education Information</h2>
-            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <ComboboxSelect
                 name="currentSchool"
                 label="Current School"
@@ -400,7 +399,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
                 }}
               />
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               {!showChaperoneFields && (
                 <>
                   <ComboboxSelect
@@ -447,7 +446,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
                     A Chaperone is <u>required</u> for all high school students.
                   </p>
                 </div>
-                <div className="flex space-x-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <FormInputField
                     name="chaperoneFirstName"
                     label="Chaperone First Name"
@@ -461,7 +460,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
                     required={isFieldRequired("chaperoneLastName")}
                   />
                 </div>
-                <div className="flex space-x-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <FormInputField
                     name="chaperoneEmail"
                     label="Chaperone Email"
@@ -482,7 +481,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
             <hr className="my-4" />
             <h2 className="text-lg font-semibold">Additional Information</h2>
 
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <FormSelectField<TShirtSize>
                 name="tShirtSize"
                 label="T-Shirt Size"
@@ -656,7 +655,7 @@ export function RegistrationForm({ prefillData }: { prefillData: PrefillData | n
           </Link>
           .
         </p>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
