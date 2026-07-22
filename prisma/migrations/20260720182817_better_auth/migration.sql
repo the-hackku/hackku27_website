@@ -80,6 +80,7 @@ DROP TABLE "Session";
 ALTER TABLE "User" RENAME TO "user";
 ALTER TABLE "user" RENAME COLUMN "multiFactorEnabled" TO "twoFactorEnabled";
 ALTER TABLE "user" ADD COLUMN "prefillData" JSONB;
+ALTER TABLE "user" ADD COLUMN "isRegistered" BOOLEAN NOT NULL DEFAULT false;
 
 -- DropTable
 DROP TABLE "VerificationToken";

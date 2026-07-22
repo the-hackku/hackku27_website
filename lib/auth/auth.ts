@@ -38,6 +38,8 @@ export const auth = betterAuth({
   },
   account: {
     accountLinking: {
+      enabled: true,
+      trustedProviders: ["google", "github", "discord", "mymlh"],
       // This is hooked to allow orphaned User records to be linked to a new account, but still blocks normal implicit linking.
       // This should be re-evaluated in the future when all users have a linked account.
       disableImplicitLinking: false
@@ -61,6 +63,7 @@ export const auth = betterAuth({
     github: {
       clientId: process.env.AUTH_GITHUB_ID!,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
+      scope: ["user", "user:email"],
       mapProfileToUser: async (profile) => {
         let firstName = "";
         let lastName = "";
