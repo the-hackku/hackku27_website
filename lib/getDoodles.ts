@@ -1,9 +1,8 @@
-import { Glob } from "bun";
 import path from "path";
 
 const MAX_DOODLES = 10;
 const DOODLES_DIR = path.join(process.cwd(), "public/images/doodles");
-const doodleGlob = new Glob("**/*.{png,jpg,jpeg,svg,webp}");
+const doodleGlob = new Bun.Glob("**/*.{png,jpg,jpeg,svg,webp}");
 
 function randomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
