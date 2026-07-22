@@ -11,7 +11,7 @@ export default function HomePage() {
   const [view, setView] = useState<"welcome" | "learn">("welcome");
 
   const { data: session } = authClient.useSession();
-  const isRegistered = session?.user?.isRegistered;
+  const isRegistered = session?.session.isRegistered;
 
   const searchParams = useSearchParams();
   const router = useRouter();
