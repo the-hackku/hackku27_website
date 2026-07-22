@@ -27,7 +27,7 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
   const [minutes, setMinutes] = useState(() => initialMinute || "00");
   const [amPm, setAmPm] = useState(() => initialAmPm);
   const [displayTime, setDisplayTime] = useState(() =>
-    value ? convert24to12(value) : "12:00 AM"
+    value ? convert24to12(value) : "12:00 AM",
   );
 
   // Utility: convert a 24-hour formatted string to a 12-hour formatted string
@@ -38,7 +38,7 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
     const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
     return `${hour12.toString().padStart(2, "0")}:${m.padStart(
       2,
-      "0"
+      "0",
     )} ${period}`;
   }
 

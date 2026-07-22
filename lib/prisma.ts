@@ -4,10 +4,8 @@ import { neonConfig } from "@neondatabase/serverless";
 
 if (process.env.NODE_ENV !== "production") {
   neonConfig.fetchEndpoint = (host) => {
-    return host.includes("localtest.me")
-      ? `http://${host}:4444/sql`
-      : `https://${host}/sql`;
-  }
+    return `http://${host}:4444/sql`;
+  };
 }
 
 const adapter = new PrismaNeonHttp(process.env.DATABASE_URL!, {});

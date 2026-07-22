@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { signOut } from "next-auth/react";
+import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import { IconLoader } from "@tabler/icons-react";
 
@@ -10,8 +10,18 @@ export default function SignOutPage() {
 
   useEffect(() => {
     const performSignOut = async () => {
-      await signOut({ redirect: false }); // Sign out without immediate redirect
-      router.refresh();
+      try {
+        await authClient.signOut({
+          fetchOptions: {
+            onSuccess: () => {
+              router.replace("/");
+            },
+          }
+        });
+      } catch (error) {
+        console.error("Error signing out:", error);
+        router.replace("/");
+      }
     };
 
     performSignOut();

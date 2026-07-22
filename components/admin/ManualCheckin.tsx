@@ -31,7 +31,7 @@ export default function ManualCheckin() {
           eventsList.map((event) => ({
             ...event,
             startDate: event.startDate.toISOString(),
-          }))
+          })),
         );
       } catch (error) {
         console.error("Failed to fetch events:", error);
@@ -67,7 +67,7 @@ export default function ManualCheckin() {
           setIsSearching(false);
         }
       }, 300),
-    []
+    [],
   );
 
   // ---- 3. Handle typing in the search box ----

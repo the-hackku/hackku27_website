@@ -1,6 +1,7 @@
 "use server";
 
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth/auth";
+import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
 /**
@@ -13,8 +14,17 @@ import { prisma } from "@/lib/prisma";
 export async function searchUsersByEmail(emailQuery: string) {
   if (!emailQuery) return [];
 
-  const session = await auth();
-  const userEmail = session?.user?.email; // Current user's email
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const user = await prisma.user.findUnique({
+    where: { id: session?.session.userId },
+    select: { email: true },
+  }); // Current user's email
+
+  if (!user) {
+    throw new Error("Current user not found");
+  }
 
   try {
     const users = await prisma.user.findMany({
@@ -22,7 +32,7 @@ export async function searchUsersByEmail(emailQuery: string) {
         email: {
           contains: emailQuery,
           mode: "insensitive",
-          not: userEmail ?? undefined, // Exclude the current user from search results
+          not: user.email ?? undefined, // Exclude the current user from search results
         },
         ParticipantInfo: {
           isNot: null, // Ensure the user has completed registration
@@ -68,13 +78,15 @@ export async function submitTravelReimbursement({
   groupMemberEmails?: string[];
   isGroup: boolean;
 }) {
-  const session = await auth();
-  if (!session?.user?.email) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("User not authenticated");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
   });
 
   if (!user) {
@@ -99,7 +111,8 @@ export async function submitTravelReimbursement({
       data: { travelReimbursementId: reimbursement.id },
     });
 
-    const { exportReimbursementToGoogleSheet } = await import("@/scripts/googleSheetsExport");
+    const { exportReimbursementToGoogleSheet } =
+      await import("@/scripts/googleSheetsExport");
     await exportReimbursementToGoogleSheet(reimbursement);
 
     revalidatePath("/profile");
@@ -124,7 +137,7 @@ export async function submitTravelReimbursement({
 
     if (existingMembers.length > 0) {
       throw new Error(
-        `Some users already have a travel reimbursement assigned.`
+        `Some users already have a travel reimbursement assigned.`,
       );
     }
 
@@ -162,7 +175,8 @@ export async function submitTravelReimbursement({
 
       await prisma.reimbursementInvite.createMany({ data: invites });
 
-      const { exportReimbursementToGoogleSheet } = await import("@/scripts/googleSheetsExport");
+      const { exportReimbursementToGoogleSheet } =
+        await import("@/scripts/googleSheetsExport");
       await exportReimbursementToGoogleSheet(reimbursement);
 
       return { success: true, reimbursement };
@@ -175,17 +189,19 @@ export async function submitTravelReimbursement({
  */
 export async function handleGroupInvite(
   reimbursementId: string,
-  accept: boolean
+  accept: boolean,
 ) {
-  const session = await auth();
-  if (!session?.user?.email) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("User not authenticated");
   }
 
   return await prisma.$transaction(async (prisma) => {
     // Fetch user inside the transaction to prevent stale reads
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: session.session.userId },
       select: { id: true, travelReimbursementId: true },
     });
 
@@ -213,7 +229,7 @@ export async function handleGroupInvite(
         user.travelReimbursementId !== reimbursementId
       ) {
         throw new Error(
-          "You are already part of another travel reimbursement. Leave that one first."
+          "You are already part of another travel reimbursement. Leave that one first.",
         );
       }
 
@@ -253,13 +269,15 @@ export async function updateTravelReimbursement({
   reason: string;
   groupMemberEmails?: string[]; // Allow passing new members
 }) {
-  const session = await auth();
-  if (!session?.user?.email) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("Not authenticated");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
   });
   if (!user) {
     throw new Error("User not found");
@@ -297,12 +315,12 @@ export async function updateTravelReimbursement({
   if (groupMemberEmails && groupMemberEmails.length > 0) {
     // Get existing invited emails
     const existingInviteEmails = reimbursement.invites.map(
-      (invite) => invite.user.email
+      (invite) => invite.user.email,
     );
 
     // Filter out users who are already invited
     const newMembersToInvite = groupMemberEmails.filter(
-      (email) => !existingInviteEmails.includes(email)
+      (email) => !existingInviteEmails.includes(email),
     );
 
     // Find users to invite (ensuring they're not already in another reimbursement)
@@ -329,13 +347,15 @@ export async function updateTravelReimbursement({
 }
 
 export async function getReimbursementDetails() {
-  const session = await auth();
-  if (!session?.user?.email) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("User not authenticated");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
     select: {
       travelReimbursement: {
         include: {
@@ -417,7 +437,7 @@ export type UserWithReimbursement = User & {
  * - OR has accepted an invite to a group reimbursement.
  */
 export async function userHasReimbursement(
-  user: UserWithReimbursement | null
+  user: UserWithReimbursement | null,
 ): Promise<boolean> {
   return !!user?.travelReimbursement;
 }
@@ -426,13 +446,15 @@ export async function userHasReimbursement(
  * Fetches the user and includes reimbursement details.
  */
 export async function getUserWithReimbursement(): Promise<UserWithReimbursement | null> {
-  const session = await auth();
-  if (!session?.user?.email) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("User not authenticated");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
     include: {
       ParticipantInfo: true,
       travelReimbursement: {
@@ -499,7 +521,7 @@ export async function getUserReimbursementStatus() {
   const reimbursementDate = user.travelReimbursement?.createdAt ?? null;
   const isGroupLeader = user.travelReimbursement?.userId == user.id;
   const pendingInvites = user.reimbursementInvites.filter(
-    (invite) => invite.status === "PENDING"
+    (invite) => invite.status === "PENDING",
   );
 
   return {
@@ -512,13 +534,15 @@ export async function getUserReimbursementStatus() {
 }
 
 export async function deleteTravelReimbursement(reimbursementId: string) {
-  const session = await auth();
-  if (!session?.user?.email) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("User not authenticated");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
   });
 
   if (!user) {
@@ -544,15 +568,17 @@ export async function deleteTravelReimbursement(reimbursementId: string) {
 
 export async function inviteUserToReimbursement(
   reimbursementId: string,
-  userId: string
+  userId: string,
 ) {
-  const session = await auth();
-  if (!session?.user?.email) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("User not authenticated");
   }
 
   const invitingUser = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
     include: { travelReimbursement: true },
   });
 
@@ -561,7 +587,7 @@ export async function inviteUserToReimbursement(
     invitingUser.travelReimbursement.id !== reimbursementId
   ) {
     throw new Error(
-      "You do not have permission to invite members to this reimbursement."
+      "You do not have permission to invite members to this reimbursement.",
     );
   }
 
@@ -576,7 +602,7 @@ export async function inviteUserToReimbursement(
 
   // Check if the user is already invited
   const alreadyInvited = reimbursement.invites.some(
-    (invite) => invite.userId === userId
+    (invite) => invite.userId === userId,
   );
   if (alreadyInvited) {
     throw new Error("User has already been invited.");
@@ -607,13 +633,15 @@ export async function inviteUserToReimbursement(
  * Fetch users who have been invited to a reimbursement request.
  */
 export async function getInvitedUsers(reimbursementId: string) {
-  const session = await auth();
-  if (!session?.user?.email) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("User not authenticated");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { id: session.session.userId },
     include: { travelReimbursement: true },
   });
 

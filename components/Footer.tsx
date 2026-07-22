@@ -18,74 +18,76 @@ export default function Footer() {
   if (pathname === "/info") return null;
 
   return (
-  <footer className="bg-gray-100 text-gray-600 w-full relative z-10 border-t border-t-[#d7d7d7]"
-    style={{ minHeight: "clamp(48px, 8vh, 80px)" }}>
-    <div className="container mx-auto px-4 h-full flex flex-wrap items-center justify-between gap-3 py-3"
-      style={{ minHeight: "clamp(48px, 8vh, 80px)" }}>
+    <footer
+      className="bg-gray-100 text-gray-600 w-full relative z-10 border-t border-t-[#d7d7d7]"
+      style={{ minHeight: "clamp(48px, 8vh, 80px)" }}
+    >
+      <div
+        className="container mx-auto px-4 h-full flex flex-wrap items-center justify-between gap-3 py-3"
+        style={{ minHeight: "clamp(48px, 8vh, 80px)" }}
+      >
+        {/* Left - Social Links */}
+        <div className="flex items-center gap-3 text-gray-500">
+          <Link
+            href="https://www.instagram.com/thehackku/"
+            target="_blank"
+            className="hover:text-pink-600 transition-colors"
+          >
+            <IconBrandInstagram className="w-5 h-5" />
+          </Link>
 
-      {/* Left - Social Links */}
-      <div className="flex items-center gap-3 text-gray-500">
-        <Link
-          href="https://www.instagram.com/thehackku/"
-          target="_blank"
-          className="hover:text-pink-600 transition-colors"
-        >
-          <IconBrandInstagram className="w-5 h-5" />
-        </Link>
+          <Link
+            href="https://www.linkedin.com/company/hackku/about/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-blue-700 transition-colors"
+          >
+            <IconBrandLinkedin className="w-5 h-5" />
+          </Link>
 
-        <Link
-          href="https://www.linkedin.com/company/hackku/about/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-blue-700 transition-colors"
-        >
-          <IconBrandLinkedin className="w-5 h-5" />
-        </Link>
+          <Link
+            href="https://github.com/the-hackku"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-gray-900 transition-colors"
+          >
+            <IconBrandGithub className="w-5 h-5" />
+          </Link>
+        </div>
 
-        <Link
-          href="https://github.com/the-hackku"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-gray-900 transition-colors"
-        >
-          <IconBrandGithub className="w-5 h-5" />
-        </Link>
+        {/* Center text */}
+        <div>
+          <Link
+            href="/legal/code-of-conduct"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
+          >
+            Code of Conduct
+          </Link>
+          <Link
+            href="/legal/privacy-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            href="/legal/waiver"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
+          >
+            Photo Release & Waiver
+          </Link>
+        </div>
+
+        {/* Right text */}
+        <div className="text-right text-xs sm:text-sm text-gray-500">
+          ©2027 HackKU Team
+        </div>
       </div>
-
-      {/* Center text */}
-      <div>
-        <Link
-          href="/legal/code-of-conduct"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
-        >
-          Code of Conduct
-        </Link>
-        <Link
-          href="/legal/privacy-policy"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
-        >
-          Privacy Policy
-        </Link>
-        <Link
-          href="/legal/waiver"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gray-400 underline underline-offset-2 text-xs sm:text-sm hover:text-gray-300 transition-colors mx-3"
-        >
-          Photo Release & Waiver
-        </Link>
-      </div>
-
-      {/* Right text */}
-      <div className="text-right text-xs sm:text-sm text-gray-500">
-        ©2027 HackKU Team
-      </div>
-
-    </div>
-  </footer>
+    </footer>
   );
 }

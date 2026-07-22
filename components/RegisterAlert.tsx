@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation"; // Import usePathname
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { IconAlertCircle } from "@tabler/icons-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function RegisterAlert() {
   const pathname = usePathname(); // Get the current route

@@ -1,8 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
-
+import { auth } from "@/lib/auth/auth";
+import { headers } from "next/headers";
 import { TimeSlot, RoomTheme } from "@/prisma/generated/client";
 
 // 1) Import your Google Sheets export function
@@ -19,17 +19,26 @@ export async function createReservationRequest(input: {
 }) {
   try {
     // 1) Get the current user from session
-    const session = await auth();
-    if (!session?.user?.id) {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.session.userId) {
       throw new Error("Not authenticated! Please sign in first.");
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: session.session.userId }
+    });
+
+    if (!user) {
+      throw new Error("User not found.");
     }
 
     // 2) Create the reservation request record
 
-    const aggEmails = `${session.user.email}, ${input.memberEmails}`;
+    const aggEmails = `${user.email}, ${input.memberEmails}`;
     const reservation = await prisma.reservationRequest.create({
       data: {
-        userId: session.user.id,
+        userId: session.session.userId,
         teamName: input.teamName,
         memberEmails: aggEmails,
         outOfState: input.outOfState,
@@ -55,8 +64,10 @@ export async function createThemedRoomReservation(data: {
   timeSlot: TimeSlot;
   theme: RoomTheme;
 }) {
-  const session = await auth();
-  if (!session?.user?.id) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session?.session.userId) {
     throw new Error("Not authenticated. Please sign in.");
   }
 
@@ -72,14 +83,20 @@ export async function createThemedRoomReservation(data: {
   if (existing) {
     throw new Error("That theme and time slot is already taken.");
   }
-  const aggEmails = `${session.user.email}, ${data.memberEmails}`;
+  const user = await prisma.user.findUnique({
+    where: { id: session.session.userId },
+  });
+  if (!user) {
+    throw new Error("User not found.");
+  }
+  const aggEmails = `${user.email}, ${data.memberEmails}`;
   const reservation = await prisma.themedRoomReservation.create({
     data: {
       teamName: data.teamName,
       memberEmails: aggEmails,
       timeSlot: data.timeSlot,
       theme: data.theme,
-      userId: session.user.id,
+      userId: session.session.userId,
     },
   });
   await exportThemedRoomReservationToGoogleSheet(reservation);

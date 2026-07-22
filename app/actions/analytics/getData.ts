@@ -1,7 +1,13 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { cleanText } from "@/utils/textCleaning";
+
+function cleanText(text: string) {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "");
+}
 
 // Fetch raw dietary restrictions (NO PROCESSING)
 export async function getDietaryData() {
@@ -24,7 +30,7 @@ export async function getAccessibilityData() {
     .map((p) =>
       cleanText(p.specialAccommodations || "")
         .trim()
-        .toLowerCase()
+        .toLowerCase(),
     )
     .filter((entry) => entry && !IGNORE_PHRASES.includes(entry)); // ✅ Removes irrelevant data
 }

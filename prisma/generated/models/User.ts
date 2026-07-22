@@ -29,13 +29,14 @@ export type UserMinAggregateOutputType = {
   name: string | null
   email: string | null
   role: $Enums.ROLE | null
-  emailVerified: Date | null
+  emailVerified: boolean | null
   image: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  multiFactorEnabled: boolean | null
+  twoFactorEnabled: boolean | null
   totpSecret: string | null
   travelReimbursementId: string | null
+  isRegistered: boolean | null
   teamId: string | null
 }
 
@@ -44,13 +45,14 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   email: string | null
   role: $Enums.ROLE | null
-  emailVerified: Date | null
+  emailVerified: boolean | null
   image: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  multiFactorEnabled: boolean | null
+  twoFactorEnabled: boolean | null
   totpSecret: string | null
   travelReimbursementId: string | null
+  isRegistered: boolean | null
   teamId: string | null
 }
 
@@ -63,10 +65,12 @@ export type UserCountAggregateOutputType = {
   image: number
   createdAt: number
   updatedAt: number
-  multiFactorEnabled: number
+  twoFactorEnabled: number
   totpSecret: number
   totpBackupCodes: number
   travelReimbursementId: number
+  prefillData: number
+  isRegistered: number
   teamId: number
   _all: number
 }
@@ -81,9 +85,10 @@ export type UserMinAggregateInputType = {
   image?: true
   createdAt?: true
   updatedAt?: true
-  multiFactorEnabled?: true
+  twoFactorEnabled?: true
   totpSecret?: true
   travelReimbursementId?: true
+  isRegistered?: true
   teamId?: true
 }
 
@@ -96,9 +101,10 @@ export type UserMaxAggregateInputType = {
   image?: true
   createdAt?: true
   updatedAt?: true
-  multiFactorEnabled?: true
+  twoFactorEnabled?: true
   totpSecret?: true
   travelReimbursementId?: true
+  isRegistered?: true
   teamId?: true
 }
 
@@ -111,10 +117,12 @@ export type UserCountAggregateInputType = {
   image?: true
   createdAt?: true
   updatedAt?: true
-  multiFactorEnabled?: true
+  twoFactorEnabled?: true
   totpSecret?: true
   totpBackupCodes?: true
   travelReimbursementId?: true
+  prefillData?: true
+  isRegistered?: true
   teamId?: true
   _all?: true
 }
@@ -193,17 +201,19 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
-  name: string | null
+  name: string
   email: string
   role: $Enums.ROLE
-  emailVerified: Date | null
+  emailVerified: boolean
   image: string | null
   createdAt: Date
   updatedAt: Date
-  multiFactorEnabled: boolean
+  twoFactorEnabled: boolean | null
   totpSecret: string | null
   totpBackupCodes: string[]
   travelReimbursementId: string | null
+  prefillData: runtime.JsonValue | null
+  isRegistered: boolean
   teamId: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
@@ -230,27 +240,29 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
-  name?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
-  emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  multiFactorEnabled?: Prisma.BoolFilter<"User"> | boolean
+  twoFactorEnabled?: Prisma.BoolNullableFilter<"User"> | boolean | null
   totpSecret?: Prisma.StringNullableFilter<"User"> | string | null
   totpBackupCodes?: Prisma.StringNullableListFilter<"User">
   travelReimbursementId?: Prisma.StringNullableFilter<"User"> | string | null
+  prefillData?: Prisma.JsonNullableFilter<"User">
+  isRegistered?: Prisma.BoolFilter<"User"> | boolean
   teamId?: Prisma.StringNullableFilter<"User"> | string | null
   accounts?: Prisma.AccountListRelationFilter
-  authenticators?: Prisma.AuthenticatorListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
+  twoFactors?: Prisma.TwoFactorListRelationFilter
+  passkeys?: Prisma.PasskeyListRelationFilter
   travelReimbursement?: Prisma.XOR<Prisma.TravelReimbursementNullableScalarRelationFilter, Prisma.TravelReimbursementWhereInput> | null
   reimbursementInvites?: Prisma.ReimbursementInviteListRelationFilter
   createdReimbursement?: Prisma.XOR<Prisma.TravelReimbursementNullableScalarRelationFilter, Prisma.TravelReimbursementWhereInput> | null
   checkinsAsAdmin?: Prisma.CheckinListRelationFilter
   checkinsAsUser?: Prisma.CheckinListRelationFilter
-  prefillData?: Prisma.XOR<Prisma.PrefillDataNullableScalarRelationFilter, Prisma.PrefillDataWhereInput> | null
   ParticipantInfo?: Prisma.XOR<Prisma.ParticipantInfoNullableScalarRelationFilter, Prisma.ParticipantInfoWhereInput> | null
   scansAsAdmin?: Prisma.ScanListRelationFilter
   scansAsUser?: Prisma.ScanListRelationFilter
@@ -263,27 +275,29 @@ export type UserWhereInput = {
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  multiFactorEnabled?: Prisma.SortOrder
+  twoFactorEnabled?: Prisma.SortOrderInput | Prisma.SortOrder
   totpSecret?: Prisma.SortOrderInput | Prisma.SortOrder
   totpBackupCodes?: Prisma.SortOrder
   travelReimbursementId?: Prisma.SortOrderInput | Prisma.SortOrder
+  prefillData?: Prisma.SortOrderInput | Prisma.SortOrder
+  isRegistered?: Prisma.SortOrder
   teamId?: Prisma.SortOrderInput | Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
-  authenticators?: Prisma.AuthenticatorOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
+  twoFactors?: Prisma.TwoFactorOrderByRelationAggregateInput
+  passkeys?: Prisma.PasskeyOrderByRelationAggregateInput
   travelReimbursement?: Prisma.TravelReimbursementOrderByWithRelationInput
   reimbursementInvites?: Prisma.ReimbursementInviteOrderByRelationAggregateInput
   createdReimbursement?: Prisma.TravelReimbursementOrderByWithRelationInput
   checkinsAsAdmin?: Prisma.CheckinOrderByRelationAggregateInput
   checkinsAsUser?: Prisma.CheckinOrderByRelationAggregateInput
-  prefillData?: Prisma.PrefillDataOrderByWithRelationInput
   ParticipantInfo?: Prisma.ParticipantInfoOrderByWithRelationInput
   scansAsAdmin?: Prisma.ScanOrderByRelationAggregateInput
   scansAsUser?: Prisma.ScanOrderByRelationAggregateInput
@@ -300,26 +314,28 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  name?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
-  emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  multiFactorEnabled?: Prisma.BoolFilter<"User"> | boolean
+  twoFactorEnabled?: Prisma.BoolNullableFilter<"User"> | boolean | null
   totpSecret?: Prisma.StringNullableFilter<"User"> | string | null
   totpBackupCodes?: Prisma.StringNullableListFilter<"User">
   travelReimbursementId?: Prisma.StringNullableFilter<"User"> | string | null
+  prefillData?: Prisma.JsonNullableFilter<"User">
+  isRegistered?: Prisma.BoolFilter<"User"> | boolean
   teamId?: Prisma.StringNullableFilter<"User"> | string | null
   accounts?: Prisma.AccountListRelationFilter
-  authenticators?: Prisma.AuthenticatorListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
+  twoFactors?: Prisma.TwoFactorListRelationFilter
+  passkeys?: Prisma.PasskeyListRelationFilter
   travelReimbursement?: Prisma.XOR<Prisma.TravelReimbursementNullableScalarRelationFilter, Prisma.TravelReimbursementWhereInput> | null
   reimbursementInvites?: Prisma.ReimbursementInviteListRelationFilter
   createdReimbursement?: Prisma.XOR<Prisma.TravelReimbursementNullableScalarRelationFilter, Prisma.TravelReimbursementWhereInput> | null
   checkinsAsAdmin?: Prisma.CheckinListRelationFilter
   checkinsAsUser?: Prisma.CheckinListRelationFilter
-  prefillData?: Prisma.XOR<Prisma.PrefillDataNullableScalarRelationFilter, Prisma.PrefillDataWhereInput> | null
   ParticipantInfo?: Prisma.XOR<Prisma.ParticipantInfoNullableScalarRelationFilter, Prisma.ParticipantInfoWhereInput> | null
   scansAsAdmin?: Prisma.ScanListRelationFilter
   scansAsUser?: Prisma.ScanListRelationFilter
@@ -332,17 +348,19 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  multiFactorEnabled?: Prisma.SortOrder
+  twoFactorEnabled?: Prisma.SortOrderInput | Prisma.SortOrder
   totpSecret?: Prisma.SortOrderInput | Prisma.SortOrder
   totpBackupCodes?: Prisma.SortOrder
   travelReimbursementId?: Prisma.SortOrderInput | Prisma.SortOrder
+  prefillData?: Prisma.SortOrderInput | Prisma.SortOrder
+  isRegistered?: Prisma.SortOrder
   teamId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -354,41 +372,45 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
-  name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumROLEWithAggregatesFilter<"User"> | $Enums.ROLE
-  emailVerified?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
-  multiFactorEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  twoFactorEnabled?: Prisma.BoolNullableWithAggregatesFilter<"User"> | boolean | null
   totpSecret?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   totpBackupCodes?: Prisma.StringNullableListFilter<"User">
   travelReimbursementId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  prefillData?: Prisma.JsonNullableWithAggregatesFilter<"User">
+  isRegistered?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   teamId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -401,26 +423,28 @@ export type UserCreateInput = {
 
 export type UserUncheckedCreateInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -432,25 +456,27 @@ export type UserUncheckedCreateInput = {
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -463,26 +489,28 @@ export type UserUpdateInput = {
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -494,47 +522,53 @@ export type UserUncheckedUpdateInput = {
 
 export type UserCreateManyInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -555,10 +589,12 @@ export type UserCountOrderByAggregateInput = {
   image?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  multiFactorEnabled?: Prisma.SortOrder
+  twoFactorEnabled?: Prisma.SortOrder
   totpSecret?: Prisma.SortOrder
   totpBackupCodes?: Prisma.SortOrder
   travelReimbursementId?: Prisma.SortOrder
+  prefillData?: Prisma.SortOrder
+  isRegistered?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
 }
 
@@ -571,9 +607,10 @@ export type UserMaxOrderByAggregateInput = {
   image?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  multiFactorEnabled?: Prisma.SortOrder
+  twoFactorEnabled?: Prisma.SortOrder
   totpSecret?: Prisma.SortOrder
   travelReimbursementId?: Prisma.SortOrder
+  isRegistered?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
 }
 
@@ -586,9 +623,10 @@ export type UserMinOrderByAggregateInput = {
   image?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  multiFactorEnabled?: Prisma.SortOrder
+  twoFactorEnabled?: Prisma.SortOrder
   totpSecret?: Prisma.SortOrder
   travelReimbursementId?: Prisma.SortOrder
+  isRegistered?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
 }
 
@@ -620,24 +658,24 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type EnumROLEFieldUpdateOperationsInput = {
   set?: $Enums.ROLE
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
 }
 
 export type UserUpdatetotpBackupCodesInput = {
@@ -673,18 +711,32 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
-export type UserCreateNestedOneWithoutAuthenticatorsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthenticatorsInput, Prisma.UserUncheckedCreateWithoutAuthenticatorsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthenticatorsInput
+export type UserCreateNestedOneWithoutTwoFactorsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTwoFactorsInput, Prisma.UserUncheckedCreateWithoutTwoFactorsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTwoFactorsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutAuthenticatorsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthenticatorsInput, Prisma.UserUncheckedCreateWithoutAuthenticatorsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthenticatorsInput
-  upsert?: Prisma.UserUpsertWithoutAuthenticatorsInput
+export type UserUpdateOneRequiredWithoutTwoFactorsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTwoFactorsInput, Prisma.UserUncheckedCreateWithoutTwoFactorsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTwoFactorsInput
+  upsert?: Prisma.UserUpsertWithoutTwoFactorsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthenticatorsInput, Prisma.UserUpdateWithoutAuthenticatorsInput>, Prisma.UserUncheckedUpdateWithoutAuthenticatorsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTwoFactorsInput, Prisma.UserUpdateWithoutTwoFactorsInput>, Prisma.UserUncheckedUpdateWithoutTwoFactorsInput>
+}
+
+export type UserCreateNestedOneWithoutPasskeysInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasskeysInput, Prisma.UserUncheckedCreateWithoutPasskeysInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasskeysInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPasskeysNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasskeysInput, Prisma.UserUncheckedCreateWithoutPasskeysInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasskeysInput
+  upsert?: Prisma.UserUpsertWithoutPasskeysInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasskeysInput, Prisma.UserUpdateWithoutPasskeysInput>, Prisma.UserUncheckedUpdateWithoutPasskeysInput>
 }
 
 export type UserCreateNestedOneWithoutScansAsAdminInput = {
@@ -759,20 +811,6 @@ export type UserUpdateOneRequiredWithoutParticipantInfoNestedInput = {
   upsert?: Prisma.UserUpsertWithoutParticipantInfoInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutParticipantInfoInput, Prisma.UserUpdateWithoutParticipantInfoInput>, Prisma.UserUncheckedUpdateWithoutParticipantInfoInput>
-}
-
-export type UserCreateNestedOneWithoutPrefillDataInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPrefillDataInput, Prisma.UserUncheckedCreateWithoutPrefillDataInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPrefillDataInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutPrefillDataNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPrefillDataInput, Prisma.UserUncheckedCreateWithoutPrefillDataInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPrefillDataInput
-  upsert?: Prisma.UserUpsertWithoutPrefillDataInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPrefillDataInput, Prisma.UserUpdateWithoutPrefillDataInput>, Prisma.UserUncheckedUpdateWithoutPrefillDataInput>
 }
 
 export type UserCreateNestedOneWithoutCreatedTeamInput = {
@@ -951,24 +989,26 @@ export type UserUpdateOneWithoutClaimedTicketsNestedInput = {
 
 export type UserCreateWithoutAccountsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -981,25 +1021,27 @@ export type UserCreateWithoutAccountsInput = {
 
 export type UserUncheckedCreateWithoutAccountsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -1027,24 +1069,26 @@ export type UserUpdateToOneWithWhereWithoutAccountsInput = {
 
 export type UserUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -1057,25 +1101,27 @@ export type UserUpdateWithoutAccountsInput = {
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -1087,24 +1133,26 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
 
 export type UserCreateWithoutSessionsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -1117,25 +1165,27 @@ export type UserCreateWithoutSessionsInput = {
 
 export type UserUncheckedCreateWithoutSessionsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -1163,24 +1213,26 @@ export type UserUpdateToOneWithWhereWithoutSessionsInput = {
 
 export type UserUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -1193,25 +1245,27 @@ export type UserUpdateWithoutSessionsInput = {
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -1221,26 +1275,28 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   project?: Prisma.ProjectUncheckedUpdateOneWithoutCreatorNestedInput
 }
 
-export type UserCreateWithoutAuthenticatorsInput = {
+export type UserCreateWithoutTwoFactorsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -1251,27 +1307,29 @@ export type UserCreateWithoutAuthenticatorsInput = {
   project?: Prisma.ProjectCreateNestedOneWithoutCreatorInput
 }
 
-export type UserUncheckedCreateWithoutAuthenticatorsInput = {
+export type UserUncheckedCreateWithoutTwoFactorsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -1281,42 +1339,44 @@ export type UserUncheckedCreateWithoutAuthenticatorsInput = {
   project?: Prisma.ProjectUncheckedCreateNestedOneWithoutCreatorInput
 }
 
-export type UserCreateOrConnectWithoutAuthenticatorsInput = {
+export type UserCreateOrConnectWithoutTwoFactorsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuthenticatorsInput, Prisma.UserUncheckedCreateWithoutAuthenticatorsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTwoFactorsInput, Prisma.UserUncheckedCreateWithoutTwoFactorsInput>
 }
 
-export type UserUpsertWithoutAuthenticatorsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthenticatorsInput, Prisma.UserUncheckedUpdateWithoutAuthenticatorsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuthenticatorsInput, Prisma.UserUncheckedCreateWithoutAuthenticatorsInput>
+export type UserUpsertWithoutTwoFactorsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTwoFactorsInput, Prisma.UserUncheckedUpdateWithoutTwoFactorsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTwoFactorsInput, Prisma.UserUncheckedCreateWithoutTwoFactorsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAuthenticatorsInput = {
+export type UserUpdateToOneWithWhereWithoutTwoFactorsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthenticatorsInput, Prisma.UserUncheckedUpdateWithoutAuthenticatorsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTwoFactorsInput, Prisma.UserUncheckedUpdateWithoutTwoFactorsInput>
 }
 
-export type UserUpdateWithoutAuthenticatorsInput = {
+export type UserUpdateWithoutTwoFactorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -1327,27 +1387,173 @@ export type UserUpdateWithoutAuthenticatorsInput = {
   project?: Prisma.ProjectUpdateOneWithoutCreatorNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAuthenticatorsInput = {
+export type UserUncheckedUpdateWithoutTwoFactorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
+  ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
+  scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
+  scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
+  createdTickets?: Prisma.TicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  claimedTickets?: Prisma.TicketUncheckedUpdateManyWithoutClaimedByNestedInput
+  createdTeam?: Prisma.TeamUncheckedUpdateOneWithoutCreatorNestedInput
+  project?: Prisma.ProjectUncheckedUpdateOneWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutPasskeysInput = {
+  id?: string
+  name: string
+  email: string
+  role?: $Enums.ROLE
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  twoFactorEnabled?: boolean | null
+  totpSecret?: string | null
+  totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
+  reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
+  createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
+  checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
+  checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
+  ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
+  scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
+  scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
+  createdTickets?: Prisma.TicketCreateNestedManyWithoutCreatedByInput
+  claimedTickets?: Prisma.TicketCreateNestedManyWithoutClaimedByInput
+  team?: Prisma.TeamCreateNestedOneWithoutMembersInput
+  createdTeam?: Prisma.TeamCreateNestedOneWithoutCreatorInput
+  project?: Prisma.ProjectCreateNestedOneWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutPasskeysInput = {
+  id?: string
+  name: string
+  email: string
+  role?: $Enums.ROLE
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  twoFactorEnabled?: boolean | null
+  totpSecret?: string | null
+  totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
+  teamId?: string | null
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
+  createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
+  checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
+  checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
+  ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
+  scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
+  scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
+  createdTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCreatedByInput
+  claimedTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutClaimedByInput
+  createdTeam?: Prisma.TeamUncheckedCreateNestedOneWithoutCreatorInput
+  project?: Prisma.ProjectUncheckedCreateNestedOneWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutPasskeysInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasskeysInput, Prisma.UserUncheckedCreateWithoutPasskeysInput>
+}
+
+export type UserUpsertWithoutPasskeysInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPasskeysInput, Prisma.UserUncheckedUpdateWithoutPasskeysInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasskeysInput, Prisma.UserUncheckedCreateWithoutPasskeysInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPasskeysInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPasskeysInput, Prisma.UserUncheckedUpdateWithoutPasskeysInput>
+}
+
+export type UserUpdateWithoutPasskeysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
+  reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
+  createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
+  checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
+  checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
+  ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
+  scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
+  scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
+  createdTickets?: Prisma.TicketUpdateManyWithoutCreatedByNestedInput
+  claimedTickets?: Prisma.TicketUpdateManyWithoutClaimedByNestedInput
+  team?: Prisma.TeamUpdateOneWithoutMembersNestedInput
+  createdTeam?: Prisma.TeamUpdateOneWithoutCreatorNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPasskeysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
+  createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
+  checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
+  checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -1359,25 +1565,27 @@ export type UserUncheckedUpdateWithoutAuthenticatorsInput = {
 
 export type UserCreateWithoutScansAsAdminInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
   createdTickets?: Prisma.TicketCreateNestedManyWithoutCreatedByInput
@@ -1389,26 +1597,28 @@ export type UserCreateWithoutScansAsAdminInput = {
 
 export type UserUncheckedCreateWithoutScansAsAdminInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
   createdTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1424,25 +1634,27 @@ export type UserCreateOrConnectWithoutScansAsAdminInput = {
 
 export type UserCreateWithoutScansAsUserInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   createdTickets?: Prisma.TicketCreateNestedManyWithoutCreatedByInput
@@ -1454,26 +1666,28 @@ export type UserCreateWithoutScansAsUserInput = {
 
 export type UserUncheckedCreateWithoutScansAsUserInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   createdTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1500,25 +1714,27 @@ export type UserUpdateToOneWithWhereWithoutScansAsAdminInput = {
 
 export type UserUpdateWithoutScansAsAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
   createdTickets?: Prisma.TicketUpdateManyWithoutCreatedByNestedInput
@@ -1530,26 +1746,28 @@ export type UserUpdateWithoutScansAsAdminInput = {
 
 export type UserUncheckedUpdateWithoutScansAsAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
   createdTickets?: Prisma.TicketUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1571,25 +1789,27 @@ export type UserUpdateToOneWithWhereWithoutScansAsUserInput = {
 
 export type UserUpdateWithoutScansAsUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   createdTickets?: Prisma.TicketUpdateManyWithoutCreatedByNestedInput
@@ -1601,26 +1821,28 @@ export type UserUpdateWithoutScansAsUserInput = {
 
 export type UserUncheckedUpdateWithoutScansAsUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   createdTickets?: Prisma.TicketUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1631,24 +1853,26 @@ export type UserUncheckedUpdateWithoutScansAsUserInput = {
 
 export type UserCreateWithoutCheckinsAsAdminInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -1661,25 +1885,27 @@ export type UserCreateWithoutCheckinsAsAdminInput = {
 
 export type UserUncheckedCreateWithoutCheckinsAsAdminInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -1696,24 +1922,26 @@ export type UserCreateOrConnectWithoutCheckinsAsAdminInput = {
 
 export type UserCreateWithoutCheckinsAsUserInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -1726,25 +1954,27 @@ export type UserCreateWithoutCheckinsAsUserInput = {
 
 export type UserUncheckedCreateWithoutCheckinsAsUserInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -1772,24 +2002,26 @@ export type UserUpdateToOneWithWhereWithoutCheckinsAsAdminInput = {
 
 export type UserUpdateWithoutCheckinsAsAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -1802,25 +2034,27 @@ export type UserUpdateWithoutCheckinsAsAdminInput = {
 
 export type UserUncheckedUpdateWithoutCheckinsAsAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -1843,24 +2077,26 @@ export type UserUpdateToOneWithWhereWithoutCheckinsAsUserInput = {
 
 export type UserUpdateWithoutCheckinsAsUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -1873,25 +2109,27 @@ export type UserUpdateWithoutCheckinsAsUserInput = {
 
 export type UserUncheckedUpdateWithoutCheckinsAsUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -1903,25 +2141,27 @@ export type UserUncheckedUpdateWithoutCheckinsAsUserInput = {
 
 export type UserCreateWithoutParticipantInfoInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
   createdTickets?: Prisma.TicketCreateNestedManyWithoutCreatedByInput
@@ -1933,26 +2173,28 @@ export type UserCreateWithoutParticipantInfoInput = {
 
 export type UserUncheckedCreateWithoutParticipantInfoInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
   createdTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1979,25 +2221,27 @@ export type UserUpdateToOneWithWhereWithoutParticipantInfoInput = {
 
 export type UserUpdateWithoutParticipantInfoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
   createdTickets?: Prisma.TicketUpdateManyWithoutCreatedByNestedInput
@@ -2009,162 +2253,28 @@ export type UserUpdateWithoutParticipantInfoInput = {
 
 export type UserUncheckedUpdateWithoutParticipantInfoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
-  scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
-  scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
-  createdTickets?: Prisma.TicketUncheckedUpdateManyWithoutCreatedByNestedInput
-  claimedTickets?: Prisma.TicketUncheckedUpdateManyWithoutClaimedByNestedInput
-  createdTeam?: Prisma.TeamUncheckedUpdateOneWithoutCreatorNestedInput
-  project?: Prisma.ProjectUncheckedUpdateOneWithoutCreatorNestedInput
-}
-
-export type UserCreateWithoutPrefillDataInput = {
-  id?: string
-  name?: string | null
-  email: string
-  role?: $Enums.ROLE
-  emailVerified?: Date | string | null
-  image?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  multiFactorEnabled?: boolean
-  totpSecret?: string | null
-  totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
-  reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
-  createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
-  checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
-  checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
-  scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
-  scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
-  createdTickets?: Prisma.TicketCreateNestedManyWithoutCreatedByInput
-  claimedTickets?: Prisma.TicketCreateNestedManyWithoutClaimedByInput
-  team?: Prisma.TeamCreateNestedOneWithoutMembersInput
-  createdTeam?: Prisma.TeamCreateNestedOneWithoutCreatorInput
-  project?: Prisma.ProjectCreateNestedOneWithoutCreatorInput
-}
-
-export type UserUncheckedCreateWithoutPrefillDataInput = {
-  id?: string
-  name?: string | null
-  email: string
-  role?: $Enums.ROLE
-  emailVerified?: Date | string | null
-  image?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  multiFactorEnabled?: boolean
-  totpSecret?: string | null
-  totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
-  travelReimbursementId?: string | null
-  teamId?: string | null
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
-  createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
-  checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
-  checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
-  scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
-  scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
-  createdTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutCreatedByInput
-  claimedTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutClaimedByInput
-  createdTeam?: Prisma.TeamUncheckedCreateNestedOneWithoutCreatorInput
-  project?: Prisma.ProjectUncheckedCreateNestedOneWithoutCreatorInput
-}
-
-export type UserCreateOrConnectWithoutPrefillDataInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPrefillDataInput, Prisma.UserUncheckedCreateWithoutPrefillDataInput>
-}
-
-export type UserUpsertWithoutPrefillDataInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPrefillDataInput, Prisma.UserUncheckedUpdateWithoutPrefillDataInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPrefillDataInput, Prisma.UserUncheckedCreateWithoutPrefillDataInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutPrefillDataInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPrefillDataInput, Prisma.UserUncheckedUpdateWithoutPrefillDataInput>
-}
-
-export type UserUpdateWithoutPrefillDataInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
-  reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
-  createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
-  checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
-  checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
-  scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
-  scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
-  createdTickets?: Prisma.TicketUpdateManyWithoutCreatedByNestedInput
-  claimedTickets?: Prisma.TicketUpdateManyWithoutClaimedByNestedInput
-  team?: Prisma.TeamUpdateOneWithoutMembersNestedInput
-  createdTeam?: Prisma.TeamUpdateOneWithoutCreatorNestedInput
-  project?: Prisma.ProjectUpdateOneWithoutCreatorNestedInput
-}
-
-export type UserUncheckedUpdateWithoutPrefillDataInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
-  travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
-  createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
-  checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
-  checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
   createdTickets?: Prisma.TicketUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2175,25 +2285,27 @@ export type UserUncheckedUpdateWithoutPrefillDataInput = {
 
 export type UserCreateWithoutCreatedTeamInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -2205,26 +2317,28 @@ export type UserCreateWithoutCreatedTeamInput = {
 
 export type UserUncheckedCreateWithoutCreatedTeamInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -2240,25 +2354,27 @@ export type UserCreateOrConnectWithoutCreatedTeamInput = {
 
 export type UserCreateWithoutTeamInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -2270,25 +2386,27 @@ export type UserCreateWithoutTeamInput = {
 
 export type UserUncheckedCreateWithoutTeamInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -2321,25 +2439,27 @@ export type UserUpdateToOneWithWhereWithoutCreatedTeamInput = {
 
 export type UserUpdateWithoutCreatedTeamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -2351,26 +2471,28 @@ export type UserUpdateWithoutCreatedTeamInput = {
 
 export type UserUncheckedUpdateWithoutCreatedTeamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -2400,41 +2522,45 @@ export type UserScalarWhereInput = {
   OR?: Prisma.UserScalarWhereInput[]
   NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
-  name?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumROLEFilter<"User"> | $Enums.ROLE
-  emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  multiFactorEnabled?: Prisma.BoolFilter<"User"> | boolean
+  twoFactorEnabled?: Prisma.BoolNullableFilter<"User"> | boolean | null
   totpSecret?: Prisma.StringNullableFilter<"User"> | string | null
   totpBackupCodes?: Prisma.StringNullableListFilter<"User">
   travelReimbursementId?: Prisma.StringNullableFilter<"User"> | string | null
+  prefillData?: Prisma.JsonNullableFilter<"User">
+  isRegistered?: Prisma.BoolFilter<"User"> | boolean
   teamId?: Prisma.StringNullableFilter<"User"> | string | null
 }
 
 export type UserCreateWithoutProjectInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -2446,26 +2572,28 @@ export type UserCreateWithoutProjectInput = {
 
 export type UserUncheckedCreateWithoutProjectInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -2492,25 +2620,27 @@ export type UserUpdateToOneWithWhereWithoutProjectInput = {
 
 export type UserUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -2522,26 +2652,28 @@ export type UserUpdateWithoutProjectInput = {
 
 export type UserUncheckedUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -2552,24 +2684,26 @@ export type UserUncheckedUpdateWithoutProjectInput = {
 
 export type UserCreateWithoutCreatedReimbursementInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -2582,25 +2716,27 @@ export type UserCreateWithoutCreatedReimbursementInput = {
 
 export type UserUncheckedCreateWithoutCreatedReimbursementInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -2617,24 +2753,26 @@ export type UserCreateOrConnectWithoutCreatedReimbursementInput = {
 
 export type UserCreateWithoutTravelReimbursementInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -2647,25 +2785,27 @@ export type UserCreateWithoutTravelReimbursementInput = {
 
 export type UserUncheckedCreateWithoutTravelReimbursementInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -2698,24 +2838,26 @@ export type UserUpdateToOneWithWhereWithoutCreatedReimbursementInput = {
 
 export type UserUpdateWithoutCreatedReimbursementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -2728,25 +2870,27 @@ export type UserUpdateWithoutCreatedReimbursementInput = {
 
 export type UserUncheckedUpdateWithoutCreatedReimbursementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -2774,24 +2918,26 @@ export type UserUpdateManyWithWhereWithoutTravelReimbursementInput = {
 
 export type UserCreateWithoutReimbursementInvitesInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -2804,25 +2950,27 @@ export type UserCreateWithoutReimbursementInvitesInput = {
 
 export type UserUncheckedCreateWithoutReimbursementInvitesInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -2850,24 +2998,26 @@ export type UserUpdateToOneWithWhereWithoutReimbursementInvitesInput = {
 
 export type UserUpdateWithoutReimbursementInvitesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -2880,25 +3030,27 @@ export type UserUpdateWithoutReimbursementInvitesInput = {
 
 export type UserUncheckedUpdateWithoutReimbursementInvitesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -2910,25 +3062,27 @@ export type UserUncheckedUpdateWithoutReimbursementInvitesInput = {
 
 export type UserCreateWithoutCreatedTicketsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -2940,26 +3094,28 @@ export type UserCreateWithoutCreatedTicketsInput = {
 
 export type UserUncheckedCreateWithoutCreatedTicketsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -2975,25 +3131,27 @@ export type UserCreateOrConnectWithoutCreatedTicketsInput = {
 
 export type UserCreateWithoutClaimedTicketsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyCreateNestedManyWithoutUserInput
   travelReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutMembersInput
   reimbursementInvites?: Prisma.ReimbursementInviteCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanCreateNestedManyWithoutUserInput
@@ -3005,26 +3163,28 @@ export type UserCreateWithoutClaimedTicketsInput = {
 
 export type UserUncheckedCreateWithoutClaimedTicketsInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  authenticators?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactors?: Prisma.TwoFactorUncheckedCreateNestedManyWithoutUserInput
+  passkeys?: Prisma.PasskeyUncheckedCreateNestedManyWithoutUserInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedCreateNestedManyWithoutUserInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedCreateNestedOneWithoutCreatorInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedCreateNestedManyWithoutAdminInput
   checkinsAsUser?: Prisma.CheckinUncheckedCreateNestedManyWithoutUserInput
-  prefillData?: Prisma.PrefillDataUncheckedCreateNestedOneWithoutUserInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedCreateNestedOneWithoutUserInput
   scansAsAdmin?: Prisma.ScanUncheckedCreateNestedManyWithoutAdminInput
   scansAsUser?: Prisma.ScanUncheckedCreateNestedManyWithoutUserInput
@@ -3051,25 +3211,27 @@ export type UserUpdateToOneWithWhereWithoutCreatedTicketsInput = {
 
 export type UserUpdateWithoutCreatedTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -3081,26 +3243,28 @@ export type UserUpdateWithoutCreatedTicketsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -3122,25 +3286,27 @@ export type UserUpdateToOneWithWhereWithoutClaimedTicketsInput = {
 
 export type UserUpdateWithoutClaimedTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -3152,26 +3318,28 @@ export type UserUpdateWithoutClaimedTicketsInput = {
 
 export type UserUncheckedUpdateWithoutClaimedTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -3182,40 +3350,44 @@ export type UserUncheckedUpdateWithoutClaimedTicketsInput = {
 
 export type UserCreateManyTeamInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
   travelReimbursementId?: string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
 }
 
 export type UserUpdateWithoutTeamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   travelReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutMembersNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -3227,25 +3399,27 @@ export type UserUpdateWithoutTeamInput = {
 
 export type UserUncheckedUpdateWithoutTeamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -3257,54 +3431,60 @@ export type UserUncheckedUpdateWithoutTeamInput = {
 
 export type UserUncheckedUpdateManyWithoutTeamInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
   travelReimbursementId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserCreateManyTravelReimbursementInput = {
   id?: string
-  name?: string | null
+  name: string
   email: string
   role?: $Enums.ROLE
-  emailVerified?: Date | string | null
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean | null
   totpSecret?: string | null
   totpBackupCodes?: Prisma.UserCreatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: boolean
   teamId?: string | null
 }
 
 export type UserUpdateWithoutTravelReimbursementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUpdateManyWithoutUserNestedInput
@@ -3317,25 +3497,27 @@ export type UserUpdateWithoutTravelReimbursementInput = {
 
 export type UserUncheckedUpdateWithoutTravelReimbursementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  authenticators?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactors?: Prisma.TwoFactorUncheckedUpdateManyWithoutUserNestedInput
+  passkeys?: Prisma.PasskeyUncheckedUpdateManyWithoutUserNestedInput
   reimbursementInvites?: Prisma.ReimbursementInviteUncheckedUpdateManyWithoutUserNestedInput
   createdReimbursement?: Prisma.TravelReimbursementUncheckedUpdateOneWithoutCreatorNestedInput
   checkinsAsAdmin?: Prisma.CheckinUncheckedUpdateManyWithoutAdminNestedInput
   checkinsAsUser?: Prisma.CheckinUncheckedUpdateManyWithoutUserNestedInput
-  prefillData?: Prisma.PrefillDataUncheckedUpdateOneWithoutUserNestedInput
   ParticipantInfo?: Prisma.ParticipantInfoUncheckedUpdateOneWithoutUserNestedInput
   scansAsAdmin?: Prisma.ScanUncheckedUpdateManyWithoutAdminNestedInput
   scansAsUser?: Prisma.ScanUncheckedUpdateManyWithoutUserNestedInput
@@ -3347,16 +3529,18 @@ export type UserUncheckedUpdateWithoutTravelReimbursementInput = {
 
 export type UserUncheckedUpdateManyWithoutTravelReimbursementInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumROLEFieldUpdateOperationsInput | $Enums.ROLE
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  multiFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorEnabled?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpBackupCodes?: Prisma.UserUpdatetotpBackupCodesInput | string[]
+  prefillData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -3367,8 +3551,9 @@ export type UserUncheckedUpdateManyWithoutTravelReimbursementInput = {
 
 export type UserCountOutputType = {
   accounts: number
-  authenticators: number
   sessions: number
+  twoFactors: number
+  passkeys: number
   reimbursementInvites: number
   checkinsAsAdmin: number
   checkinsAsUser: number
@@ -3380,8 +3565,9 @@ export type UserCountOutputType = {
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
-  authenticators?: boolean | UserCountOutputTypeCountAuthenticatorsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+  twoFactors?: boolean | UserCountOutputTypeCountTwoFactorsArgs
+  passkeys?: boolean | UserCountOutputTypeCountPasskeysArgs
   reimbursementInvites?: boolean | UserCountOutputTypeCountReimbursementInvitesArgs
   checkinsAsAdmin?: boolean | UserCountOutputTypeCountCheckinsAsAdminArgs
   checkinsAsUser?: boolean | UserCountOutputTypeCountCheckinsAsUserArgs
@@ -3411,15 +3597,22 @@ export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAuthenticatorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AuthenticatorWhereInput
+export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SessionWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SessionWhereInput
+export type UserCountOutputTypeCountTwoFactorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TwoFactorWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPasskeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PasskeyWhereInput
 }
 
 /**
@@ -3481,20 +3674,22 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   image?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean
   totpSecret?: boolean
   totpBackupCodes?: boolean
   travelReimbursementId?: boolean
+  prefillData?: boolean
+  isRegistered?: boolean
   teamId?: boolean
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
-  authenticators?: boolean | Prisma.User$authenticatorsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  twoFactors?: boolean | Prisma.User$twoFactorsArgs<ExtArgs>
+  passkeys?: boolean | Prisma.User$passkeysArgs<ExtArgs>
   travelReimbursement?: boolean | Prisma.User$travelReimbursementArgs<ExtArgs>
   reimbursementInvites?: boolean | Prisma.User$reimbursementInvitesArgs<ExtArgs>
   createdReimbursement?: boolean | Prisma.User$createdReimbursementArgs<ExtArgs>
   checkinsAsAdmin?: boolean | Prisma.User$checkinsAsAdminArgs<ExtArgs>
   checkinsAsUser?: boolean | Prisma.User$checkinsAsUserArgs<ExtArgs>
-  prefillData?: boolean | Prisma.User$prefillDataArgs<ExtArgs>
   ParticipantInfo?: boolean | Prisma.User$ParticipantInfoArgs<ExtArgs>
   scansAsAdmin?: boolean | Prisma.User$scansAsAdminArgs<ExtArgs>
   scansAsUser?: boolean | Prisma.User$scansAsUserArgs<ExtArgs>
@@ -3515,10 +3710,12 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean
   totpSecret?: boolean
   totpBackupCodes?: boolean
   travelReimbursementId?: boolean
+  prefillData?: boolean
+  isRegistered?: boolean
   teamId?: boolean
   travelReimbursement?: boolean | Prisma.User$travelReimbursementArgs<ExtArgs>
   team?: boolean | Prisma.User$teamArgs<ExtArgs>
@@ -3533,10 +3730,12 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean
   totpSecret?: boolean
   totpBackupCodes?: boolean
   travelReimbursementId?: boolean
+  prefillData?: boolean
+  isRegistered?: boolean
   teamId?: boolean
   travelReimbursement?: boolean | Prisma.User$travelReimbursementArgs<ExtArgs>
   team?: boolean | Prisma.User$teamArgs<ExtArgs>
@@ -3551,24 +3750,26 @@ export type UserSelectScalar = {
   image?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  multiFactorEnabled?: boolean
+  twoFactorEnabled?: boolean
   totpSecret?: boolean
   totpBackupCodes?: boolean
   travelReimbursementId?: boolean
+  prefillData?: boolean
+  isRegistered?: boolean
   teamId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "role" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "multiFactorEnabled" | "totpSecret" | "totpBackupCodes" | "travelReimbursementId" | "teamId", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "role" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "twoFactorEnabled" | "totpSecret" | "totpBackupCodes" | "travelReimbursementId" | "prefillData" | "isRegistered" | "teamId", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
-  authenticators?: boolean | Prisma.User$authenticatorsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  twoFactors?: boolean | Prisma.User$twoFactorsArgs<ExtArgs>
+  passkeys?: boolean | Prisma.User$passkeysArgs<ExtArgs>
   travelReimbursement?: boolean | Prisma.User$travelReimbursementArgs<ExtArgs>
   reimbursementInvites?: boolean | Prisma.User$reimbursementInvitesArgs<ExtArgs>
   createdReimbursement?: boolean | Prisma.User$createdReimbursementArgs<ExtArgs>
   checkinsAsAdmin?: boolean | Prisma.User$checkinsAsAdminArgs<ExtArgs>
   checkinsAsUser?: boolean | Prisma.User$checkinsAsUserArgs<ExtArgs>
-  prefillData?: boolean | Prisma.User$prefillDataArgs<ExtArgs>
   ParticipantInfo?: boolean | Prisma.User$ParticipantInfoArgs<ExtArgs>
   scansAsAdmin?: boolean | Prisma.User$scansAsAdminArgs<ExtArgs>
   scansAsUser?: boolean | Prisma.User$scansAsUserArgs<ExtArgs>
@@ -3592,14 +3793,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     accounts: Prisma.$AccountPayload<ExtArgs>[]
-    authenticators: Prisma.$AuthenticatorPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
+    twoFactors: Prisma.$TwoFactorPayload<ExtArgs>[]
+    passkeys: Prisma.$PasskeyPayload<ExtArgs>[]
     travelReimbursement: Prisma.$TravelReimbursementPayload<ExtArgs> | null
     reimbursementInvites: Prisma.$ReimbursementInvitePayload<ExtArgs>[]
     createdReimbursement: Prisma.$TravelReimbursementPayload<ExtArgs> | null
     checkinsAsAdmin: Prisma.$CheckinPayload<ExtArgs>[]
     checkinsAsUser: Prisma.$CheckinPayload<ExtArgs>[]
-    prefillData: Prisma.$PrefillDataPayload<ExtArgs> | null
     ParticipantInfo: Prisma.$ParticipantInfoPayload<ExtArgs> | null
     scansAsAdmin: Prisma.$ScanPayload<ExtArgs>[]
     scansAsUser: Prisma.$ScanPayload<ExtArgs>[]
@@ -3611,17 +3812,19 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    name: string | null
+    name: string
     email: string
     role: $Enums.ROLE
-    emailVerified: Date | null
+    emailVerified: boolean
     image: string | null
     createdAt: Date
     updatedAt: Date
-    multiFactorEnabled: boolean
+    twoFactorEnabled: boolean | null
     totpSecret: string | null
     totpBackupCodes: string[]
     travelReimbursementId: string | null
+    prefillData: runtime.JsonValue | null
+    isRegistered: boolean
     teamId: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
@@ -4018,14 +4221,14 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  authenticators<T extends Prisma.User$authenticatorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authenticatorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  twoFactors<T extends Prisma.User$twoFactorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$twoFactorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TwoFactorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passkeys<T extends Prisma.User$passkeysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passkeysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasskeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   travelReimbursement<T extends Prisma.User$travelReimbursementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$travelReimbursementArgs<ExtArgs>>): Prisma.Prisma__TravelReimbursementClient<runtime.Types.Result.GetResult<Prisma.$TravelReimbursementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reimbursementInvites<T extends Prisma.User$reimbursementInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reimbursementInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReimbursementInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdReimbursement<T extends Prisma.User$createdReimbursementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdReimbursementArgs<ExtArgs>>): Prisma.Prisma__TravelReimbursementClient<runtime.Types.Result.GetResult<Prisma.$TravelReimbursementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   checkinsAsAdmin<T extends Prisma.User$checkinsAsAdminArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$checkinsAsAdminArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckinPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checkinsAsUser<T extends Prisma.User$checkinsAsUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$checkinsAsUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckinPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  prefillData<T extends Prisma.User$prefillDataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$prefillDataArgs<ExtArgs>>): Prisma.Prisma__PrefillDataClient<runtime.Types.Result.GetResult<Prisma.$PrefillDataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   ParticipantInfo<T extends Prisma.User$ParticipantInfoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ParticipantInfoArgs<ExtArgs>>): Prisma.Prisma__ParticipantInfoClient<runtime.Types.Result.GetResult<Prisma.$ParticipantInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   scansAsAdmin<T extends Prisma.User$scansAsAdminArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$scansAsAdminArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   scansAsUser<T extends Prisma.User$scansAsUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$scansAsUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4067,14 +4270,16 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'ROLE'>
-  readonly emailVerified: Prisma.FieldRef<"User", 'DateTime'>
+  readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
-  readonly multiFactorEnabled: Prisma.FieldRef<"User", 'Boolean'>
+  readonly twoFactorEnabled: Prisma.FieldRef<"User", 'Boolean'>
   readonly totpSecret: Prisma.FieldRef<"User", 'String'>
   readonly totpBackupCodes: Prisma.FieldRef<"User", 'String[]'>
   readonly travelReimbursementId: Prisma.FieldRef<"User", 'String'>
+  readonly prefillData: Prisma.FieldRef<"User", 'Json'>
+  readonly isRegistered: Prisma.FieldRef<"User", 'Boolean'>
   readonly teamId: Prisma.FieldRef<"User", 'String'>
 }
     
@@ -4501,30 +4706,6 @@ export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
- * User.authenticators
- */
-export type User$authenticatorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Authenticator
-   */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Authenticator
-   */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
-  where?: Prisma.AuthenticatorWhereInput
-  orderBy?: Prisma.AuthenticatorOrderByWithRelationInput | Prisma.AuthenticatorOrderByWithRelationInput[]
-  cursor?: Prisma.AuthenticatorWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AuthenticatorScalarFieldEnum | Prisma.AuthenticatorScalarFieldEnum[]
-}
-
-/**
  * User.sessions
  */
 export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4546,6 +4727,54 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * User.twoFactors
+ */
+export type User$twoFactorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TwoFactor
+   */
+  select?: Prisma.TwoFactorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TwoFactor
+   */
+  omit?: Prisma.TwoFactorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TwoFactorInclude<ExtArgs> | null
+  where?: Prisma.TwoFactorWhereInput
+  orderBy?: Prisma.TwoFactorOrderByWithRelationInput | Prisma.TwoFactorOrderByWithRelationInput[]
+  cursor?: Prisma.TwoFactorWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TwoFactorScalarFieldEnum | Prisma.TwoFactorScalarFieldEnum[]
+}
+
+/**
+ * User.passkeys
+ */
+export type User$passkeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Passkey
+   */
+  select?: Prisma.PasskeySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Passkey
+   */
+  omit?: Prisma.PasskeyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasskeyInclude<ExtArgs> | null
+  where?: Prisma.PasskeyWhereInput
+  orderBy?: Prisma.PasskeyOrderByWithRelationInput | Prisma.PasskeyOrderByWithRelationInput[]
+  cursor?: Prisma.PasskeyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PasskeyScalarFieldEnum | Prisma.PasskeyScalarFieldEnum[]
 }
 
 /**
@@ -4656,25 +4885,6 @@ export type User$checkinsAsUserArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.CheckinScalarFieldEnum | Prisma.CheckinScalarFieldEnum[]
-}
-
-/**
- * User.prefillData
- */
-export type User$prefillDataArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PrefillData
-   */
-  select?: Prisma.PrefillDataSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PrefillData
-   */
-  omit?: Prisma.PrefillDataOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PrefillDataInclude<ExtArgs> | null
-  where?: Prisma.PrefillDataWhereInput
 }
 
 /**

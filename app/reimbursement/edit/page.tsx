@@ -47,13 +47,13 @@ const reimbursementSchema = z
       (val) => (val === "" ? undefined : Number(val)),
       z
         .number({ message: "Distance is required." })
-        .positive({ message: "Distance must be positive." })
+        .positive({ message: "Distance must be positive." }),
     ),
     estimatedCost: z.preprocess(
       (val) => (val === "" ? undefined : Number(val)),
       z
         .number({ message: "Estimated cost is required." })
-        .nonnegative({ message: "Estimated cost must be non-negative." })
+        .nonnegative({ message: "Estimated cost must be non-negative." }),
     ),
     reason: z.string().min(10, {
       message: "Reason must be at least 10 characters.",
@@ -66,7 +66,7 @@ const reimbursementSchema = z
           id: z.string(),
           email: z.string().email(),
           name: z.string(),
-        })
+        }),
       )
       .default([]),
   })
@@ -76,7 +76,7 @@ const reimbursementSchema = z
       message:
         "If applying as a group, you must add at least one group member.",
       path: ["groupMembers"],
-    }
+    },
   );
 
 type ReimbursementFormData = z.infer<typeof reimbursementSchema>;
@@ -165,7 +165,7 @@ export default function EditReimbursementForm() {
         {
           types: ["address"],
           componentRestrictions: { country: "us" },
-        }
+        },
       );
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
@@ -199,7 +199,7 @@ export default function EditReimbursementForm() {
           setIsSearching(false);
         }
       }, 300),
-    []
+    [],
   );
 
   // Handler to add a member from search results
@@ -247,7 +247,7 @@ export default function EditReimbursementForm() {
           loading: "Saving changes...",
           success: "Reimbursement updated successfully!",
           error: "Failed to update reimbursement.",
-        }
+        },
       );
       router.push("/profile");
     } catch (error) {
@@ -262,7 +262,7 @@ export default function EditReimbursementForm() {
   async function handleDelete() {
     if (!reimbursementId) return;
     const confirmed = window.confirm(
-      "Are you sure you want to delete this reimbursement?"
+      "Are you sure you want to delete this reimbursement?",
     );
     if (!confirmed) return;
     try {
@@ -275,7 +275,7 @@ export default function EditReimbursementForm() {
           loading: "Deleting reimbursement...",
           success: "Reimbursement deleted successfully!",
           error: "Failed to delete reimbursement.",
-        }
+        },
       );
       router.push("/profile");
     } catch (err) {
@@ -375,7 +375,7 @@ export default function EditReimbursementForm() {
                           size="sm"
                           onClick={() => {
                             const updated = groupMembers.filter(
-                              (m) => m.id !== member.id
+                              (m) => m.id !== member.id,
                             );
                             setGroupMembers(updated);
                             form.setValue("groupMembers", updated);
@@ -462,7 +462,7 @@ export default function EditReimbursementForm() {
                     onChange={(e) => {
                       const formattedValue = e.target.value.replace(
                         /^0+(?=\d)/,
-                        ""
+                        "",
                       );
                       field.onChange(formattedValue);
                     }}

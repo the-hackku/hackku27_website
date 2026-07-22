@@ -1,41 +1,77 @@
-# Setting up a Developer Environment
+# Developer Environment
+> **Bun version**: Use Bun v1.3. Most webpack/library issues are caused by a mismatched Bun version.
 
-You'll need to install [node.js](https://nodejs.org/en) to get started.
+## 1. Clone and install
 
-You can mostly follow the [setup instructions](/the-hackku/hackku26_website?tab=readme-ov-file#setup--installation) from the README file but you'll need to get a `.env` file from a tech co-lead.
+```bash
+git clone https://github.com/the-hackku/hackku27_website
+cd hackku27_website
+bun install
+```
 
-# Changing Code
+## 2. Configure environment variables
 
-> [!WARNING]
-> Please make sure to create your own branch before commiting any code. You will not be able to make changes in the `main` branch directly and need to make changes through a pull request from a different branch.
+Copy the example file and fill in values:
 
-1. Create your own git branch once you have a local working copy. You can name it whatever you want, but its best practice to include your name and feature(s) that you are working on.
-   
-   This can be done with the following git command:
+```bash
+cp .env.example .env
+```
 
-   ```bash
-   git switch -c my-username/my-feature
-   ```
+Required variables:
 
-2. You should be in the new git branch now. You can check by running `git branch`. The branch you are currently on will be starred.
+| Variable                                      | Description                                                          |
+| --------------------------------------------- | -------------------------------------------------------------------- |
+| `DATABASE_URL`                                | PostgreSQL connection string                                         |
+| `BETTER_AUTH_URL`                             | Full URL of the app (e.g. `http://localhost:3000`)                   |
+| `BETTER_AUTH_SECRET`                          | Random secret for Better Auth (generate with `bunx --bun @better-auth/cli@latest secret`) |
+| `AUTH_RESEND_KEY`                             | API key for Resend                                                   |
+| `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET`       | Google OAuth app credentials                                         |
+| `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET`       | GitHub OAuth app credentials                                         |
+| `AUTH_DISCORD_ID` / `AUTH_DISCORD_SECRET`     | Discord OAuth app credentials                                        |
+| `AUTH_MYMLH_ID` / `AUTH_MYMLH_SECRET`         | MyMLH OAuth app credentials                                          |
+| `GOOGLE_SERVICE_ACCOUNT_KEY`                  | JSON key for Google Sheets export (base64 or raw)                    |
+| `NEXT_PUBLIC_GOOGLE_API_KEY`                  | Google API key (public, used client-side)                            |
+| `BLOB_READ_WRITE_TOKEN`                       | Vercel Blob token for resume uploads                                 |
 
-   ```
-     astro_rr
-     develop
-     initial_site
-   * main
+## 3. Start the database
 
-   ```
+A Docker Compose file is included for local Postgres:
 
-3. Make whatever changes and commits you need to.
+```bash
+bun run db:up
+```
 
-4. Once you're done making all the changes you need. Push your code to the GitHub repository with the following git command:
+This starts a `postgres:18` container on port `5432` with:
 
-   ```bash
-   git push -u origin my-username/my-feature
-   ```
+- User: `hackku`, Password: `hackku`, Database: `hackku_dev`
 
-5. Go to the [pull request tab](https://github.com/the-hackku/hackku26_website/pulls) in the GitHub repo and create a new pull request with the **base** as `main` and the **compare** as `my-username/my-feature`.
+Set `DATABASE_URL` accordingly:
 
-6. Someone will review and merge your changes if everything looks good!
+```
+DATABASE_URL="postgresql://hackku:hackku@localhost:5432/hackku_dev"
+```
 
+## 4. Run database migrations
+
+```bash
+bunx prisma migrate dev
+```
+
+This applies all migrations and regenerates the Prisma client. Re-run this after any schema changes.
+
+## 5. Start the development server
+
+```bash
+bun run dev
+```
+
+Visit `http://localhost:3000`.
+
+## Other useful commands
+
+```bash
+bun run build          # Production build
+bun run lint           # Run ESLint
+bun run db:down        # Stop the local Postgres container
+bun run db:studio      # Browse the database in a GUI
+```
