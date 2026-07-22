@@ -20,7 +20,7 @@ export default function HomePage() {
   const [view, setView] = useState<"welcome" | "learn">("welcome");
 
   const { data: session } = authClient.useSession();
-  const isRegistered = session?.user?.isRegistered;
+  const isRegistered = session?.session.isRegistered;
 
   const registerText = isRegistered ? "Sign Out" : "Register Now";
   const registerColor = isRegistered ? "#16a34a" : "#f2a900"; // green or yellow
