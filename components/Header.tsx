@@ -117,14 +117,20 @@ export function Header({ isAdmin, isVolunteer }: Props) {
               transition: { duration: 0.2 },
             }}
           >
-            <Image
-              src="/images/mlh-badge.svg"
-              alt="MLH Badge"
-              width={0}
-              height={0}
-              style={{ width: "clamp(30px, 4vw, 100px)", height: "clamp(50px, 6.5vw, 150px)" }}
-              preload={true}
-            />
+          <Image
+            src="/images/mlh-badge.svg"
+            alt="MLH Badge"
+            width={0}
+            height={0}
+            className="
+              w-[70px] h-[80px]        
+              sm:w-[80px] sm:h-[130px]  
+              md:w-[clamp(30px,4vw,100px)] 
+              md:h-[clamp(50px,6.5vw,150px)] 
+            "
+            preload={true}
+          />
+
           </motion.div>
         </Link>
       </div>

@@ -115,14 +115,23 @@ body {
 }
 
 .page-card {
-  border-top-left-radius: clamp(0.75rem, 4vw, 1.5rem);
-  border-top-right-radius: clamp(0.75rem, 4vw, 1.5rem);
+  border-top-left-radius: 20% clamp(0.75rem, 7vw, 3rem);
+  border-top-right-radius: 20% clamp(0.75rem, 7vw, 3rem);
+}
+
+.about-card {
+  border-top-left-radius: 30% clamp(0.75rem, 7vw, 3rem);
+  border-top-right-radius: 30% clamp(0.75rem, 7vw, 3rem);
 }
 
 @media (min-width: 640px) {
   .page-card {
-    border-top-left-radius: 50% clamp(0.5rem, 2.7vw, 2rem);
-    border-top-right-radius: 50% clamp(0.5rem, 2.7vw, 2rem);
+    border-top-left-radius: 50% clamp(0.75rem, 2.7vw, 3.5rem);
+    border-top-right-radius: 50% clamp(0.5rem, 2.7vw, 3.5rem);
   }
+  .about-card {
+    border-top-left-radius: 60% clamp(0.75rem, 2.7vw, 3.5rem);
+    border-top-right-radius: 60% clamp(0.5rem, 2.7vw, 3.5rem);
+}
 }
 

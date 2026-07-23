@@ -204,7 +204,7 @@ const SignInPage = () => {
   }
 
   return (
-    <div className="relative flex flex-col items-center justify-center px-4" style={{ marginTop: "-2vw" }}>
+    <div className="relative flex flex-col items-center justify-center px-4 -mt-[70px] md:-mt-[40px]">
       <div className="border bg-white page-card" style={cardStyle}>
         {/* Title */}
         <h2 className="text-center text-xl font-semibold">Sign In or Sign Up</h2>

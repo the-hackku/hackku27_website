@@ -35,8 +35,7 @@ export default function HomePage() {
     registerPage = "/register";
   }
   return (
-    <div className="relative flex flex-col items-center justify-center px-4"
-      style={{ marginTop: "clamp(-40px, -2vw, -16px)" }}>
+    <div className="relative flex flex-col items-center justify-center px-4 -mt-[70px] md:-mt-[40px]">
 
       <div className="relative z-10 flex flex-row items-center justify-center w-full"
         style={{ overflow: "visible" }}>
@@ -114,14 +113,15 @@ export default function HomePage() {
           {view === "learn" && (
             <motion.div
               key="learn"
-              className="border bg-white page-card flex flex-col w-full overflow-hidden"
+              className="border bg-white about-card flex flex-col w-full overflow-hidden"
               style={{
                 ...pageCardStyle,
                 width: "100%",
                 maxWidth: "650px",
                 gap: "1.25rem",
                 padding: "1.5rem",
-                paddingTop: "2.5rem",
+                paddingTop: "2.25rem",
+                paddingBottom: "1rem"
               }}
               initial={{ x: "30vw", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -134,7 +134,7 @@ export default function HomePage() {
                 </h2>
                 <button
                   onClick={() => setView("welcome")}
-                  className="text-gray-400 hover:text-gray-700 transition-colors text-sm"
+                  className="text-gray-400 hover:text-gray-700 transition-colors text-sm cursor-pointer"
                 >
                   ← Back
                 </button>
@@ -164,10 +164,11 @@ export default function HomePage() {
 
               <Link
                 href={registerPage}
-                className="register-btn group relative flex items-center justify-center overflow-hidden shadow-md transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-xl cursor-pointer w-full h-14"
+                className="group relative flex items-center justify-center overflow-hidden shadow-md transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-xl cursor-pointer w-full h-14"
                 style={{
                   backgroundColor: registerColor,
                   border: "1px solid rgba(0,0,0,0.1)",
+                  borderRadius: "20px"
                 }}
               >
                 <span className={`font-semibold text-lg opacity-90 group-hover:opacity-100 ${isRegistered ? "text-white" : "text-black"}`}>
