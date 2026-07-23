@@ -110,6 +110,7 @@ export function RegistrationForm({
       placeholder: "First name",
       required: isFieldRequired("firstName"),
       type: "text",
+      autocomplete: "given-name",
     },
     {
       name: "lastName" as const,
@@ -117,6 +118,7 @@ export function RegistrationForm({
       placeholder: "Last name",
       required: isFieldRequired("lastName"),
       type: "text",
+      autocomplete: "family-name",
     },
     {
       name: "phoneNumber" as const,
@@ -124,6 +126,7 @@ export function RegistrationForm({
       placeholder: "Phone number",
       required: isFieldRequired("phoneNumber"),
       type: "number",
+      autocomplete: "tel",
     },
     {
       name: "age" as const,

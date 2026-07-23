@@ -4,7 +4,7 @@ import { authClient } from "@/lib/auth/auth-client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { pageCardStyle } from "@/components/PageCard";
 
 export default function HomePage() {
@@ -26,16 +26,22 @@ export default function HomePage() {
 
   const registerText = isRegistered ? "Sign Out" : "Register Now";
   const registerColor = isRegistered ? "#16a34a" : "#f2a900"; // green or yellow
-  const registerPage = isRegistered ? "/signout" : "/register";
-
+  let registerPage: string;
+  if (isRegistered) {
+    registerPage = "/signout";
+  } else if (!session) {
+    registerPage = "/signin";
+  } else {
+    registerPage = "/register";
+  }
   return (
     <div className="relative flex flex-col items-center justify-center px-4"
-      style={{ marginTop: "-2vw" }}>
+      style={{ marginTop: "clamp(-40px, -2vw, -16px)" }}>
 
       <div className="relative z-10 flex flex-row items-center justify-center w-full"
         style={{ overflow: "visible" }}>
 
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="popLayout" initial={false}>
           {view === "welcome" && (
             <motion.div
               key="welcome"
@@ -52,7 +58,7 @@ export default function HomePage() {
               initial={{ x: "60vw", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-60vw", opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ type: "spring", stiffness: 300, damping: 35 }}
             >
               <h1 className="font-bold text-center text-4xl">
                 Welcome to Hack
@@ -120,7 +126,7 @@ export default function HomePage() {
               initial={{ x: "30vw", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-30vw", opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ type: "spring", stiffness: 300, damping: 35 }}
             >
               <div className="flex items-center justify-between">
                 <h2 className="font-bold text-gray-900 text-2xl">
@@ -136,22 +142,22 @@ export default function HomePage() {
 
               <p className="text-gray-600 leading-relaxed text-base">
                 HackKU is the University of Kansas's biggest hackathon, a
-                24-hour event where students come together to build, create, and
+                36-hour event where students come together to build, create, and
                 innovate.
               </p>
 
               {/* Stats row */}
               <div className="flex gap-3">
                 <div className="flex-1 rounded-lg px-4 py-3 text-center" style={{ backgroundColor: "#fff3cd", border: "1px solid #f2a900" }}>
-                  <div className="font-bold text-xl" style={{ color: "#b87a00" }}>72h</div>
-                  <div className="text-xs text-gray-500 mt-0.5">Hacking Time</div>
+                  <div className="font-bold text-xl" style={{ color: "#b87a00" }}>68+</div>
+                  <div className="text-xs text-gray-500 mt-0.5">Schools</div>
                 </div>
                 <div className="flex-1 rounded-lg px-4 py-3 text-center" style={{ backgroundColor: "#e8f0fe", border: "1px solid #1a73e8" }}>
                   <div className="font-bold text-xl text-blue-700">400+</div>
                   <div className="text-xs text-gray-500 mt-0.5">Hackers</div>
                 </div>
                 <div className="flex-1 rounded-lg px-4 py-3 text-center" style={{ backgroundColor: "#fce8e6", border: "1px solid #ea4335" }}>
-                  <div className="font-bold text-xl text-red-600">$10k+</div>
+                  <div className="font-bold text-xl text-red-600">$8k+</div>
                   <div className="text-xs text-gray-500 mt-0.5">In Prizes</div>
                 </div>
               </div>

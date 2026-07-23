@@ -16,6 +16,7 @@ interface FormInputFieldProps {
   placeholder?: string;
   required?: boolean;
   type?: string;
+  autocomplete?: string;
   inputRef?: React.Ref<HTMLInputElement>;
   formatValue?: (value: string) => string;
 }
@@ -25,7 +26,8 @@ export function FormInputField({
   label,
   placeholder,
   required = false,
-  type = "text", // Default to text
+  type = "text",
+  autocomplete = "off",
   inputRef,
   formatValue,
 }: FormInputFieldProps) {
@@ -48,6 +50,7 @@ export function FormInputField({
               placeholder={placeholder}
               value={formatValue ? formatValue(field.value) : field.value || ""}
               onChange={(e) => field.onChange(e.target.value)}
+              autoComplete={autocomplete}
               className="w-full text-base"
             />
           </FormControl>

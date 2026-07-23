@@ -45,6 +45,13 @@ export const auth = betterAuth({
       disableImplicitLinking: false
     }
   },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 5, // 5 minutes
+      strategy: "compact"
+    }
+  },
   socialProviders: {
     google: {
       clientId: process.env.AUTH_GOOGLE_ID!,

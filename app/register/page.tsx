@@ -19,14 +19,9 @@ export default async function RegisterPage() {
     headers: await headers()
   });
 
-  // If the user is not authenticated, redirect to the signin page
-  if (!session) {
-    redirect("/signin");
-  }
-
   // Fetch user details from the database to check if they are already registered
   const user = await prisma.user.findUnique({
-    where: { id: session.session.userId }
+    where: { id: session?.session.userId }
   });
 
   const participant = user?.isRegistered;
