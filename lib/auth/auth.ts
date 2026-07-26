@@ -1,12 +1,18 @@
-import { betterAuth } from "better-auth";
+import { betterAuth } from "better-auth/minimal";
 import { APIError } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { genericOAuth, magicLink, twoFactor, customSession } from "better-auth/plugins";
+import { genericOAuth, magicLink, twoFactor, customSession, admin, organization } from "better-auth/plugins";
+import { ac, roles } from "@/lib/auth/permissions";
 import { passkey } from "@better-auth/passkey"
 import { prisma } from "@/lib/prisma";
 import { jsx } from 'react/jsx-runtime'
 import { resend } from "@/lib/resend";
 import MagicLink from "@/components/email/MagicLink";
+import { forbidden, unauthorized } from "next/navigation";
+
+type PermissionMap = {
+  [Resource in keyof typeof ac.statements]?: Array<typeof ac.statements[Resource][number]>;
+};
 
 export const auth = betterAuth({
   appName: "HackKU",
@@ -166,6 +172,25 @@ export const auth = betterAuth({
           role: typedUser.role
         }
       }
+    }),
+    admin({
+      ac,
+      roles: {
+        hacker: roles.hacker,
+        mentor: roles.mentor,
+        judge: roles.judge,
+        bronze_sponsor: roles.bronze_sponsor,
+        silver_sponsor: roles.silver_sponsor,
+        gold_sponsor: roles.gold_sponsor,
+        volunteer: roles.volunteer,
+        writer: roles.writer,
+        admin: roles.admin
+      },
+      defaultRole: "hacker"
+    }),
+    organization({
+      allowUserToCreateOrganization: false,
+      organizationLimit: 2,
     })
   ],
   onAPIError: {
@@ -198,3 +223,20 @@ export const auth = betterAuth({
     }
   }
 });
+
+export async function hasPermissions(session: Awaited<ReturnType<typeof auth.api.getSession>>, resources: PermissionMap): Promise<boolean> {
+  if (!session) {
+    unauthorized();
+  }
+  const data = await auth.api.userHasPermission({
+    body: {
+      userId: session?.session.userId,
+      permissions: resources
+    }
+  });
+  if (data.success) {
+    return data.success;
+  } else {
+    forbidden();
+  }
+}

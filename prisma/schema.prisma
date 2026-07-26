@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output = "./generated"
+  output   = "./generated"
 }
 
 datasource db {
@@ -10,157 +10,169 @@ datasource db {
 // Models
 
 model User {
-  id                   String               @id @default(cuid(2))
-  name                 String
-  email                String               @unique
-  role                 ROLE                 @default(HACKER)
-  emailVerified        Boolean              @default(false)
-  image                String?
-  createdAt            DateTime             @db.Timestamptz(3) @default(now())
-  updatedAt            DateTime             @db.Timestamptz(3) @updatedAt
-  twoFactorEnabled     Boolean?             @default(false)
-  totpSecret           String?
-  totpBackupCodes      String[]             @default([])
-  accounts             Account[]
-  sessions             Session[]
-  twoFactors           TwoFactor[]
-  passkeys             Passkey[]
+  id               String      @id @default(cuid(2))
+  name             String
+  email            String      @unique
+  role             String?     @default("HACKER")
+  emailVerified    Boolean     @default(false)
+  image            String?
+  createdAt        DateTime    @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime    @updatedAt @db.Timestamptz(3)
+  twoFactorEnabled Boolean?    @default(false)
+  totpSecret       String?
+  totpBackupCodes  String[]    @default([])
+  accounts         Account[]
+  sessions         Session[]
+  twoFactors       TwoFactor[]
+  passkeys         Passkey[]
+
+  banned     Boolean?
+  banReason  String?
+  banExpires DateTime? @db.Timestamptz(3)
 
   travelReimbursementId String?
-  travelReimbursement  TravelReimbursement? @relation(fields: [travelReimbursementId], references: [id], onDelete: SetNull, name: "travelReimbursement")
-  reimbursementInvites ReimbursementInvite[]
-  createdReimbursement TravelReimbursement? @relation("reimbursementCreator")
-  
-  checkinsAsAdmin      Checkin[]            @relation("AdminCheckin")
-  checkinsAsUser       Checkin[]            @relation("UserCheckedIn")
-  prefillData          Json?
-  ParticipantInfo      ParticipantInfo?
-  isRegistered         Boolean              @default(false)
-  scansAsAdmin         Scan[]               @relation("AdminScanner")
-  scansAsUser          Scan[]               @relation("UserScanned")
+  travelReimbursement   TravelReimbursement?  @relation(fields: [travelReimbursementId], references: [id], onDelete: SetNull, name: "travelReimbursement")
+  reimbursementInvites  ReimbursementInvite[]
+  createdReimbursement  TravelReimbursement?  @relation("reimbursementCreator")
 
-  createdTickets       Ticket[]             @relation("createdTickets")
-  claimedTickets       Ticket[]             @relation("claimedTickets")
+  checkinsPerformed Checkin[]        @relation("AdminCheckin")
+  checkins          Checkin[]        @relation("UserCheckedIn")
+  prefillData       Json?
+  ParticipantInfo   ParticipantInfo?
+  isRegistered      Boolean          @default(false)
+  scansPerformed    ScanAttempt[]    @relation("AdminScanner")
+  scanAttempts      ScanAttempt[]    @relation("UserScanned")
 
-  teamId               String?
-  team                 Team?                @relation("teamMembers", fields: [teamId], references: [id])
-  createdTeam          Team?                @relation("teamCreator")
-  project              Project?             @relation("projectCreator")
+  createdTickets Ticket[] @relation("createdTickets")
+  claimedTickets Ticket[] @relation("claimedTickets")
+
+  project                 Project?       @relation("projectCreator")
+  organizationMemberships Member[]
+  createdTeams            Organization[] @relation("teamCreator")
+  sentInvitations         Invitation[]
+
   @@map("user")
 }
 
 model Account {
-	id String @id
-	user User @relation(fields: [userId], references: [id])
-	userId String
-	accountId String
-	providerId String
-	accessToken String?
-	refreshToken String?
-	accessTokenExpiresAt DateTime? @db.Timestamptz(3)
-	refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
-	scope String?
-	idToken String?
-	password String?
-	createdAt DateTime @db.Timestamptz(3)
-	updatedAt DateTime @db.Timestamptz(3)
+  id                    String    @id
+  user                  User      @relation(fields: [userId], references: [id])
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime? @db.Timestamptz(3)
+  refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @db.Timestamptz(3)
+  updatedAt             DateTime  @db.Timestamptz(3)
+
   @@unique([providerId, accountId])
   @@index([userId])
-	@@map("account")
+  @@map("account")
 }
 
 model Session {
-	id String @id
-	user User @relation(fields: [userId], references: [id])
-	userId String
-	token String @unique
-	expiresAt DateTime @db.Timestamptz(3)
-	ipAddress String?
-	userAgent String?
-	createdAt DateTime @db.Timestamptz(3)
-	updatedAt DateTime @db.Timestamptz(3)
-  @@index([userId])
-	@@map("session")
+  id                   String   @id
+  user                 User     @relation(fields: [userId], references: [id])
+  userId               String
+  token                String   @unique
+  expiresAt            DateTime @db.Timestamptz(3)
+  ipAddress            String?
+  userAgent            String?
+  createdAt            DateTime @db.Timestamptz(3)
+  updatedAt            DateTime @db.Timestamptz(3)
+  impersonatedBy       String?
+  activeOrganizationId String?
+  activeTeamId         String?
+
+  @@index([userId, token])
+  @@map("session")
 }
 
 model Verification {
-	id String @id
-	identifier String
-	value String
-	expiresAt DateTime @db.Timestamptz(3)
-	createdAt DateTime @db.Timestamptz(3)
-	updatedAt DateTime @db.Timestamptz(3)
-	@@map("verification")
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime @db.Timestamptz(3)
+  createdAt  DateTime @db.Timestamptz(3)
+  updatedAt  DateTime @db.Timestamptz(3)
+
+  @@index([identifier])
+  @@map("verification")
 }
 
 model TwoFactor {
-	id String @id
-	user User @relation(fields: [userId], references: [id])
-	userId String
-	secret String
-	backupCodes String
-	verified Boolean
-	failedVerificationCount Int
-	lockedUntil DateTime? @db.Timestamptz(3)
-	@@map("twoFactor")
+  id                      String    @id
+  user                    User      @relation(fields: [userId], references: [id])
+  userId                  String
+  secret                  String
+  backupCodes             String
+  verified                Boolean
+  failedVerificationCount Int
+  lockedUntil             DateTime? @db.Timestamptz(3)
+
+  @@map("twoFactor")
 }
 
 model Passkey {
-	id String @id
-	name String?
-	publicKey String
-	user User @relation(fields: [userId], references: [id])
-	userId String
-	credentialID String
-	counter Int
-	deviceType String
-	backedUp Boolean
-	transports String?
-	createdAt DateTime? @db.Timestamptz(3)
-	aaguid String?
-	@@map("passkey")
+  id           String    @id
+  name         String?
+  publicKey    String
+  user         User      @relation(fields: [userId], references: [id])
+  userId       String
+  credentialID String
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime? @db.Timestamptz(3)
+  aaguid       String?
+
+  @@map("passkey")
 }
 
 model Event {
-  id          String    @id @default(cuid())
+  id          String        @id @default(cuid())
   name        String
   startDate   DateTime
   endDate     DateTime
   location    String?
   description String?
-  eventType   EventType @default(REQUIRED)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  eventType   EventType     @default(REQUIRED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   checkins    Checkin[]
-  scans       Scan[]
+  scans       ScanAttempt[]
 }
 
-model Scan {
+model ScanAttempt {
   id         String   @id @default(cuid())
   userId     String
   eventId    String
-  adminId    String?
-  selfScan   Boolean  @default(false)
+  adminId    String
   checkinId  String?
   successful Boolean
   createdAt  DateTime @default(now())
-  admin      User?    @relation("AdminScanner", fields: [adminId], references: [id])
+  admin      User     @relation("AdminScanner", fields: [adminId], references: [id])
   checkin    Checkin? @relation(fields: [checkinId], references: [id])
   event      Event    @relation(fields: [eventId], references: [id])
   user       User     @relation("UserScanned", fields: [userId], references: [id])
 }
 
 model Checkin {
-  id        String   @id @default(cuid())
+  id        String        @id @default(cuid())
   userId    String
   eventId   String
-  adminId   String?
-  selfCheckin Boolean  @default(false)
-  createdAt DateTime @default(now())
-  admin     User?     @relation("AdminCheckin", fields: [adminId], references: [id])
-  event     Event    @relation(fields: [eventId], references: [id])
-  user      User     @relation("UserCheckedIn", fields: [userId], references: [id])
-  Scan      Scan[]
+  adminId   String
+  createdAt DateTime      @default(now())
+  admin     User          @relation("AdminCheckin", fields: [adminId], references: [id])
+  event     Event         @relation(fields: [eventId], references: [id])
+  user      User          @relation("UserCheckedIn", fields: [userId], references: [id])
+  Scan      ScanAttempt[]
 }
 
 model ParticipantInfo {
@@ -197,55 +209,87 @@ model ParticipantInfo {
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Team {
-  id        String   @id @default(cuid())
-  creatorId String   @unique
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  inviteCode String  @unique @default(cuid())
-  creator   User     @relation("teamCreator", fields: [creatorId], references: [id], onDelete: Cascade)
-  members   User[]   @relation("teamMembers")
-  project   Project?
+model Organization {
+  id          String       @id
+  creatorId   String       @unique
+  name        String
+  slug        String       @unique
+  logo        String?
+  metadata    String?
+  createdAt   DateTime     @db.Timestamptz(3)
+  creator     User?        @relation("teamCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  members     Member[]
+  invitations Invitation[]
+  project     Project?
+
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  role           String
+  createdAt      DateTime     @db.Timestamptz(3)
+
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id
+  email          String
+  inviter        User         @relation(fields: [inviterId], references: [id])
+  inviterId      String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  teamId         String?
+  role           String?
+  status         String
+  createdAt      DateTime     @db.Timestamptz(3)
+  expiresAt      DateTime     @db.Timestamptz(3)
+
+  @@map("invitation")
 }
 
 model Project {
-  id          String   @id @default(cuid())
-  teamId      String?  @unique
-  creatorId   String?  @unique
+  id          String        @id @default(cuid())
+  teamId      String?       @unique
+  creatorId   String?       @unique
   name        String
   description String?
   devpostURL  String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  team        Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  creator     User?    @relation("projectCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  team        Organization? @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  creator     User?         @relation("projectCreator", fields: [creatorId], references: [id], onDelete: Cascade)
 }
 
 model TravelReimbursement {
-  id                   String   @id @default(cuid())
-  userId               String   @unique
+  id                   String                @id @default(cuid())
+  userId               String                @unique
   transportationMethod String
   address              String
   reason               String
   distance             Float
   estimatedCost        Float
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  creator              User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "reimbursementCreator")
-  members              User[]   @relation("travelReimbursement") 
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  creator              User                  @relation(fields: [userId], references: [id], onDelete: Cascade, name: "reimbursementCreator")
+  members              User[]                @relation("travelReimbursement")
   invites              ReimbursementInvite[]
 }
 
 model ReimbursementInvite {
-  id                 String   @id @default(cuid())
-  reimbursementId    String
-  userId            String
-  status            ReimbursementInviteStatus @default(PENDING)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reimbursement     TravelReimbursement   @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
+  id              String                    @id @default(cuid())
+  reimbursementId String
+  userId          String
+  status          ReimbursementInviteStatus @default(PENDING)
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+  user            User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reimbursement   TravelReimbursement       @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
 
   @@unique([userId, reimbursementId]) // Prevents duplicate invites
 }
@@ -270,14 +314,15 @@ model ReservationRequest {
 }
 
 model ThemedRoomReservation {
-  id           String     @id @default(cuid())
-  userId       String     @unique
+  id           String    @id @default(cuid())
+  userId       String    @unique
   teamName     String
   memberEmails String
   timeSlot     TimeSlot
   theme        RoomTheme
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
   @@unique([theme, timeSlot], name: "theme_timeSlot")
 }
 
@@ -340,15 +385,6 @@ enum EventType {
   WORKSHOPS
   SPONSOR
   ACTIVITIES
-}
-
-enum ROLE {
-  HACKER
-  MENTOR
-  JUDGE
-  SPONSOR
-  VOLUNTEER
-  ADMIN
 }
 
 enum TicketType {

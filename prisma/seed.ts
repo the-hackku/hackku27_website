@@ -1,8 +1,7 @@
-import { PrismaClient, ROLE } from "@/prisma/generated/client";
+import { ROLE } from "@/prisma/generated/client";
+import { prisma } from "@/lib/prisma";
 import * as readline from "readline";
 import constants from "../constants";
-
-const prisma = new PrismaClient();
 
 async function confirmDatabaseUrl(): Promise<void> {
   const url = process.env.POSTGRES_PRISMA_URL ?? "(not set)";
@@ -212,7 +211,7 @@ async function main() {
         name: `${def.firstName} ${def.lastName}`,
         email: def.email,
         role: def.role,
-        emailVerified: new Date(),
+        emailVerified: true,
       },
     });
 

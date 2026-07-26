@@ -19,7 +19,6 @@ import { ROLE, TravelReimbursement } from "@/prisma/generated/browser";
 import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
 import { EventDetailsDialog } from "@/components/admin/EventDetailsDialog"; // Import EventDetailsDialog
 import Link from "next/link";
-import { format } from "date-fns";
 import { ParticipantInfo } from "@/prisma/generated/browser";
 import { IconArrowUpRight } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
@@ -286,7 +285,15 @@ export default function AdminTabsPage() {
       header: "Time",
       cell: ({ row }) => {
         const date = new Date(row.original.createdAt);
-        return format(date, "MMMM d, yyyy, h:mm a");
+        // Format the date using Intl.DateTimeFormat
+        return Intl.DateTimeFormat("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        }).format(date);
       },
     },
   ];

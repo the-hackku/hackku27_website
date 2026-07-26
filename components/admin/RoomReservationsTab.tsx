@@ -26,7 +26,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { format } from "date-fns";
 import { IconLoader, IconX } from "@tabler/icons-react";
 import {
   type AdminThemedRoom,
@@ -357,7 +356,11 @@ export function RoomReservationsTab() {
                     )}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {format(new Date(req.createdAt), "MMM d, yyyy")}
+                    {Intl.DateTimeFormat("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    }).format(new Date(req.createdAt))}
                   </TableCell>
                   <TableCell>
                     <Button

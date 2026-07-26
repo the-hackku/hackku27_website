@@ -391,7 +391,7 @@ export const ModelName = {
   TwoFactor: 'TwoFactor',
   Passkey: 'Passkey',
   Event: 'Event',
-  Scan: 'Scan',
+  ScanAttempt: 'ScanAttempt',
   Checkin: 'Checkin',
   ParticipantInfo: 'ParticipantInfo',
   Team: 'Team',
@@ -418,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verification" | "twoFactor" | "passkey" | "event" | "scan" | "checkin" | "participantInfo" | "team" | "project" | "travelReimbursement" | "reimbursementInvite" | "themedRoom" | "reservationRequest" | "themedRoomReservation" | "infoPageContent" | "ticket"
+    modelProps: "user" | "account" | "session" | "verification" | "twoFactor" | "passkey" | "event" | "scanAttempt" | "checkin" | "participantInfo" | "team" | "project" | "travelReimbursement" | "reimbursementInvite" | "themedRoom" | "reservationRequest" | "themedRoomReservation" | "infoPageContent" | "ticket"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -940,77 +940,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Scan: {
-      payload: Prisma.$ScanPayload<ExtArgs>
-      fields: Prisma.ScanFieldRefs
+    ScanAttempt: {
+      payload: Prisma.$ScanAttemptPayload<ExtArgs>
+      fields: Prisma.ScanAttemptFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.ScanFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload> | null
+          args: Prisma.ScanAttemptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.ScanFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>
+          args: Prisma.ScanAttemptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>
         }
         findFirst: {
-          args: Prisma.ScanFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload> | null
+          args: Prisma.ScanAttemptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.ScanFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>
+          args: Prisma.ScanAttemptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>
         }
         findMany: {
-          args: Prisma.ScanFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>[]
+          args: Prisma.ScanAttemptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>[]
         }
         create: {
-          args: Prisma.ScanCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>
+          args: Prisma.ScanAttemptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>
         }
         createMany: {
-          args: Prisma.ScanCreateManyArgs<ExtArgs>
+          args: Prisma.ScanAttemptCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.ScanCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>[]
+          args: Prisma.ScanAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>[]
         }
         delete: {
-          args: Prisma.ScanDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>
+          args: Prisma.ScanAttemptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>
         }
         update: {
-          args: Prisma.ScanUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>
+          args: Prisma.ScanAttemptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>
         }
         deleteMany: {
-          args: Prisma.ScanDeleteManyArgs<ExtArgs>
+          args: Prisma.ScanAttemptDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.ScanUpdateManyArgs<ExtArgs>
+          args: Prisma.ScanAttemptUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.ScanUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>[]
+          args: Prisma.ScanAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>[]
         }
         upsert: {
-          args: Prisma.ScanUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanPayload>
+          args: Prisma.ScanAttemptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScanAttemptPayload>
         }
         aggregate: {
-          args: Prisma.ScanAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateScan>
+          args: Prisma.ScanAttemptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateScanAttempt>
         }
         groupBy: {
-          args: Prisma.ScanGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ScanGroupByOutputType>[]
+          args: Prisma.ScanAttemptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ScanAttemptGroupByOutputType>[]
         }
         count: {
-          args: Prisma.ScanCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ScanCountAggregateOutputType> | number
+          args: Prisma.ScanAttemptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ScanAttemptCountAggregateOutputType> | number
         }
       }
     }
@@ -1879,6 +1879,9 @@ export const UserScalarFieldEnum = {
   twoFactorEnabled: 'twoFactorEnabled',
   totpSecret: 'totpSecret',
   totpBackupCodes: 'totpBackupCodes',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires',
   travelReimbursementId: 'travelReimbursementId',
   prefillData: 'prefillData',
   isRegistered: 'isRegistered',
@@ -1915,7 +1918,8 @@ export const SessionScalarFieldEnum = {
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  impersonatedBy: 'impersonatedBy'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -1978,18 +1982,17 @@ export const EventScalarFieldEnum = {
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
-export const ScanScalarFieldEnum = {
+export const ScanAttemptScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   eventId: 'eventId',
   adminId: 'adminId',
-  selfScan: 'selfScan',
   checkinId: 'checkinId',
   successful: 'successful',
   createdAt: 'createdAt'
 } as const
 
-export type ScanScalarFieldEnum = (typeof ScanScalarFieldEnum)[keyof typeof ScanScalarFieldEnum]
+export type ScanAttemptScalarFieldEnum = (typeof ScanAttemptScalarFieldEnum)[keyof typeof ScanAttemptScalarFieldEnum]
 
 
 export const CheckinScalarFieldEnum = {
@@ -1997,7 +2000,6 @@ export const CheckinScalarFieldEnum = {
   userId: 'userId',
   eventId: 'eventId',
   adminId: 'adminId',
-  selfCheckin: 'selfCheckin',
   createdAt: 'createdAt'
 } as const
 
@@ -2216,20 +2218,6 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'String[]'
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-/**
- * Reference to a field of type 'ROLE'
- */
-export type EnumROLEFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ROLE'>
-    
-
-
-/**
- * Reference to a field of type 'ROLE[]'
- */
-export type ListEnumROLEFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ROLE[]'>
     
 
 
@@ -2496,7 +2484,7 @@ export type GlobalOmitConfig = {
   twoFactor?: Prisma.TwoFactorOmit
   passkey?: Prisma.PasskeyOmit
   event?: Prisma.EventOmit
-  scan?: Prisma.ScanOmit
+  scanAttempt?: Prisma.ScanAttemptOmit
   checkin?: Prisma.CheckinOmit
   participantInfo?: Prisma.ParticipantInfoOmit
   team?: Prisma.TeamOmit

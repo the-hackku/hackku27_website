@@ -12,7 +12,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { format } from "date-fns";
 
 ChartJS.register(
   CategoryScale,
@@ -61,7 +60,14 @@ export default function EventCheckinChart() {
 
   const labels = data.map(
     (event) =>
-      `${event.name} (${format(new Date(event.startTime), "MMM d h:mm a")})`,
+      //`${event.name} (${format(new Date(event.startTime), "MMM d h:mm a")})`,
+      `${event.name} (${Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }).format(new Date(event.startTime))})`
   );
   const checkinCounts = data.map((event) => event.checkins);
 

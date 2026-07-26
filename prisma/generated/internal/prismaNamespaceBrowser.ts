@@ -58,7 +58,7 @@ export const ModelName = {
   TwoFactor: 'TwoFactor',
   Passkey: 'Passkey',
   Event: 'Event',
-  Scan: 'Scan',
+  ScanAttempt: 'ScanAttempt',
   Checkin: 'Checkin',
   ParticipantInfo: 'ParticipantInfo',
   Team: 'Team',
@@ -100,6 +100,9 @@ export const UserScalarFieldEnum = {
   twoFactorEnabled: 'twoFactorEnabled',
   totpSecret: 'totpSecret',
   totpBackupCodes: 'totpBackupCodes',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires',
   travelReimbursementId: 'travelReimbursementId',
   prefillData: 'prefillData',
   isRegistered: 'isRegistered',
@@ -136,7 +139,8 @@ export const SessionScalarFieldEnum = {
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  impersonatedBy: 'impersonatedBy'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -199,18 +203,17 @@ export const EventScalarFieldEnum = {
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
-export const ScanScalarFieldEnum = {
+export const ScanAttemptScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   eventId: 'eventId',
   adminId: 'adminId',
-  selfScan: 'selfScan',
   checkinId: 'checkinId',
   successful: 'successful',
   createdAt: 'createdAt'
 } as const
 
-export type ScanScalarFieldEnum = (typeof ScanScalarFieldEnum)[keyof typeof ScanScalarFieldEnum]
+export type ScanAttemptScalarFieldEnum = (typeof ScanAttemptScalarFieldEnum)[keyof typeof ScanAttemptScalarFieldEnum]
 
 
 export const CheckinScalarFieldEnum = {
@@ -218,7 +221,6 @@ export const CheckinScalarFieldEnum = {
   userId: 'userId',
   eventId: 'eventId',
   adminId: 'adminId',
-  selfCheckin: 'selfCheckin',
   createdAt: 'createdAt'
 } as const
 

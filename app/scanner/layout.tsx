@@ -1,5 +1,6 @@
+import { auth, hasPermissions } from "@/lib/auth/auth";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { isAdminOrVolunteer } from "@/middlewares/isAdmin";
 
 export default async function ScannerLayout({
   children,
@@ -7,7 +8,10 @@ export default async function ScannerLayout({
   children: React.ReactNode;
 }) {
   try {
-    await isAdminOrVolunteer();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    await hasPermissions(session, { checkins: ["perform"] });
   } catch (error) {
     redirect("/signin");
   }

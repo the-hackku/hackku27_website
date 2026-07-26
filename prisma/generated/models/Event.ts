@@ -215,7 +215,7 @@ export type EventWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   checkins?: Prisma.CheckinListRelationFilter
-  scans?: Prisma.ScanListRelationFilter
+  scans?: Prisma.ScanAttemptListRelationFilter
 }
 
 export type EventOrderByWithRelationInput = {
@@ -229,7 +229,7 @@ export type EventOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   checkins?: Prisma.CheckinOrderByRelationAggregateInput
-  scans?: Prisma.ScanOrderByRelationAggregateInput
+  scans?: Prisma.ScanAttemptOrderByRelationAggregateInput
 }
 
 export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -246,7 +246,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   checkins?: Prisma.CheckinListRelationFilter
-  scans?: Prisma.ScanListRelationFilter
+  scans?: Prisma.ScanAttemptListRelationFilter
 }, "id">
 
 export type EventOrderByWithAggregationInput = {
@@ -290,7 +290,7 @@ export type EventCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   checkins?: Prisma.CheckinCreateNestedManyWithoutEventInput
-  scans?: Prisma.ScanCreateNestedManyWithoutEventInput
+  scans?: Prisma.ScanAttemptCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateInput = {
@@ -304,7 +304,7 @@ export type EventUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   checkins?: Prisma.CheckinUncheckedCreateNestedManyWithoutEventInput
-  scans?: Prisma.ScanUncheckedCreateNestedManyWithoutEventInput
+  scans?: Prisma.ScanAttemptUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventUpdateInput = {
@@ -318,7 +318,7 @@ export type EventUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkins?: Prisma.CheckinUpdateManyWithoutEventNestedInput
-  scans?: Prisma.ScanUpdateManyWithoutEventNestedInput
+  scans?: Prisma.ScanAttemptUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateInput = {
@@ -332,7 +332,7 @@ export type EventUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkins?: Prisma.CheckinUncheckedUpdateManyWithoutEventNestedInput
-  scans?: Prisma.ScanUncheckedUpdateManyWithoutEventNestedInput
+  scans?: Prisma.ScanAttemptUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventCreateManyInput = {
@@ -522,7 +522,7 @@ export type EventCreateWithoutCheckinsInput = {
   eventType?: $Enums.EventType
   createdAt?: Date | string
   updatedAt?: Date | string
-  scans?: Prisma.ScanCreateNestedManyWithoutEventInput
+  scans?: Prisma.ScanAttemptCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutCheckinsInput = {
@@ -535,7 +535,7 @@ export type EventUncheckedCreateWithoutCheckinsInput = {
   eventType?: $Enums.EventType
   createdAt?: Date | string
   updatedAt?: Date | string
-  scans?: Prisma.ScanUncheckedCreateNestedManyWithoutEventInput
+  scans?: Prisma.ScanAttemptUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutCheckinsInput = {
@@ -564,7 +564,7 @@ export type EventUpdateWithoutCheckinsInput = {
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  scans?: Prisma.ScanUpdateManyWithoutEventNestedInput
+  scans?: Prisma.ScanAttemptUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutCheckinsInput = {
@@ -577,7 +577,7 @@ export type EventUncheckedUpdateWithoutCheckinsInput = {
   eventType?: Prisma.EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  scans?: Prisma.ScanUncheckedUpdateManyWithoutEventNestedInput
+  scans?: Prisma.ScanAttemptUncheckedUpdateManyWithoutEventNestedInput
 }
 
 
@@ -616,7 +616,7 @@ export type EventCountOutputTypeCountCheckinsArgs<ExtArgs extends runtime.Types.
  * EventCountOutputType without action
  */
 export type EventCountOutputTypeCountScansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ScanWhereInput
+  where?: Prisma.ScanAttemptWhereInput
 }
 
 
@@ -684,7 +684,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Event"
   objects: {
     checkins: Prisma.$CheckinPayload<ExtArgs>[]
-    scans: Prisma.$ScanPayload<ExtArgs>[]
+    scans: Prisma.$ScanAttemptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1091,7 +1091,7 @@ readonly fields: EventFieldRefs;
 export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   checkins<T extends Prisma.Event$checkinsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$checkinsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CheckinPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  scans<T extends Prisma.Event$scansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$scansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  scans<T extends Prisma.Event$scansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$scansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1551,23 +1551,23 @@ export type Event$checkinsArgs<ExtArgs extends runtime.Types.Extensions.Internal
  */
 export type Event$scansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Scan
+   * Select specific fields to fetch from the ScanAttempt
    */
-  select?: Prisma.ScanSelect<ExtArgs> | null
+  select?: Prisma.ScanAttemptSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Scan
+   * Omit specific fields from the ScanAttempt
    */
-  omit?: Prisma.ScanOmit<ExtArgs> | null
+  omit?: Prisma.ScanAttemptOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ScanInclude<ExtArgs> | null
-  where?: Prisma.ScanWhereInput
-  orderBy?: Prisma.ScanOrderByWithRelationInput | Prisma.ScanOrderByWithRelationInput[]
-  cursor?: Prisma.ScanWhereUniqueInput
+  include?: Prisma.ScanAttemptInclude<ExtArgs> | null
+  where?: Prisma.ScanAttemptWhereInput
+  orderBy?: Prisma.ScanAttemptOrderByWithRelationInput | Prisma.ScanAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.ScanAttemptWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ScanScalarFieldEnum | Prisma.ScanScalarFieldEnum[]
+  distinct?: Prisma.ScanAttemptScalarFieldEnum | Prisma.ScanAttemptScalarFieldEnum[]
 }
 
 /**

@@ -55,7 +55,3 @@ Server actions called directly from client components. Key actions:
 
 - `register.ts` — creates `ParticipantInfo`, exports row to Google Sheets
 - `checkin.ts` — validates QR codes and records `Scan` / `Checkin` entries
-
-### `middlewares/`
-
-`isAdmin()` and `isAdminOrVolunteer()` helpers that guard server actions and admin pages.

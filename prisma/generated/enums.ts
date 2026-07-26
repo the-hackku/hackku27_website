@@ -56,18 +56,6 @@ export const EventType = {
 export type EventType = (typeof EventType)[keyof typeof EventType]
 
 
-export const ROLE = {
-  HACKER: 'HACKER',
-  MENTOR: 'MENTOR',
-  JUDGE: 'JUDGE',
-  SPONSOR: 'SPONSOR',
-  VOLUNTEER: 'VOLUNTEER',
-  ADMIN: 'ADMIN'
-} as const
-
-export type ROLE = (typeof ROLE)[keyof typeof ROLE]
-
-
 export const TicketType = {
   MENTOR_HELP: 'MENTOR_HELP',
   INCIDENT_REPORT: 'INCIDENT_REPORT'

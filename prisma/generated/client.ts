@@ -77,10 +77,10 @@ export type Passkey = Prisma.PasskeyModel
  */
 export type Event = Prisma.EventModel
 /**
- * Model Scan
+ * Model ScanAttempt
  * 
  */
-export type Scan = Prisma.ScanModel
+export type ScanAttempt = Prisma.ScanAttemptModel
 /**
  * Model Checkin
  * 

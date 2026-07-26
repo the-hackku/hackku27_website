@@ -29,7 +29,6 @@ export type CheckinMinAggregateOutputType = {
   userId: string | null
   eventId: string | null
   adminId: string | null
-  selfCheckin: boolean | null
   createdAt: Date | null
 }
 
@@ -38,7 +37,6 @@ export type CheckinMaxAggregateOutputType = {
   userId: string | null
   eventId: string | null
   adminId: string | null
-  selfCheckin: boolean | null
   createdAt: Date | null
 }
 
@@ -47,7 +45,6 @@ export type CheckinCountAggregateOutputType = {
   userId: number
   eventId: number
   adminId: number
-  selfCheckin: number
   createdAt: number
   _all: number
 }
@@ -58,7 +55,6 @@ export type CheckinMinAggregateInputType = {
   userId?: true
   eventId?: true
   adminId?: true
-  selfCheckin?: true
   createdAt?: true
 }
 
@@ -67,7 +63,6 @@ export type CheckinMaxAggregateInputType = {
   userId?: true
   eventId?: true
   adminId?: true
-  selfCheckin?: true
   createdAt?: true
 }
 
@@ -76,7 +71,6 @@ export type CheckinCountAggregateInputType = {
   userId?: true
   eventId?: true
   adminId?: true
-  selfCheckin?: true
   createdAt?: true
   _all?: true
 }
@@ -157,8 +151,7 @@ export type CheckinGroupByOutputType = {
   id: string
   userId: string
   eventId: string
-  adminId: string | null
-  selfCheckin: boolean
+  adminId: string
   createdAt: Date
   _count: CheckinCountAggregateOutputType | null
   _min: CheckinMinAggregateOutputType | null
@@ -187,26 +180,24 @@ export type CheckinWhereInput = {
   id?: Prisma.StringFilter<"Checkin"> | string
   userId?: Prisma.StringFilter<"Checkin"> | string
   eventId?: Prisma.StringFilter<"Checkin"> | string
-  adminId?: Prisma.StringNullableFilter<"Checkin"> | string | null
-  selfCheckin?: Prisma.BoolFilter<"Checkin"> | boolean
+  adminId?: Prisma.StringFilter<"Checkin"> | string
   createdAt?: Prisma.DateTimeFilter<"Checkin"> | Date | string
-  admin?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  admin?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  Scan?: Prisma.ScanListRelationFilter
+  Scan?: Prisma.ScanAttemptListRelationFilter
 }
 
 export type CheckinOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
-  adminId?: Prisma.SortOrderInput | Prisma.SortOrder
-  selfCheckin?: Prisma.SortOrder
+  adminId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   admin?: Prisma.UserOrderByWithRelationInput
   event?: Prisma.EventOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
-  Scan?: Prisma.ScanOrderByRelationAggregateInput
+  Scan?: Prisma.ScanAttemptOrderByRelationAggregateInput
 }
 
 export type CheckinWhereUniqueInput = Prisma.AtLeast<{
@@ -216,21 +207,19 @@ export type CheckinWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CheckinWhereInput | Prisma.CheckinWhereInput[]
   userId?: Prisma.StringFilter<"Checkin"> | string
   eventId?: Prisma.StringFilter<"Checkin"> | string
-  adminId?: Prisma.StringNullableFilter<"Checkin"> | string | null
-  selfCheckin?: Prisma.BoolFilter<"Checkin"> | boolean
+  adminId?: Prisma.StringFilter<"Checkin"> | string
   createdAt?: Prisma.DateTimeFilter<"Checkin"> | Date | string
-  admin?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  admin?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  Scan?: Prisma.ScanListRelationFilter
+  Scan?: Prisma.ScanAttemptListRelationFilter
 }, "id">
 
 export type CheckinOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
-  adminId?: Prisma.SortOrderInput | Prisma.SortOrder
-  selfCheckin?: Prisma.SortOrder
+  adminId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.CheckinCountOrderByAggregateInput
   _max?: Prisma.CheckinMaxOrderByAggregateInput
@@ -244,63 +233,56 @@ export type CheckinScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Checkin"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Checkin"> | string
   eventId?: Prisma.StringWithAggregatesFilter<"Checkin"> | string
-  adminId?: Prisma.StringNullableWithAggregatesFilter<"Checkin"> | string | null
-  selfCheckin?: Prisma.BoolWithAggregatesFilter<"Checkin"> | boolean
+  adminId?: Prisma.StringWithAggregatesFilter<"Checkin"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Checkin"> | Date | string
 }
 
 export type CheckinCreateInput = {
   id?: string
-  selfCheckin?: boolean
   createdAt?: Date | string
-  admin?: Prisma.UserCreateNestedOneWithoutCheckinsAsAdminInput
+  admin: Prisma.UserCreateNestedOneWithoutCheckinsPerformedInput
   event: Prisma.EventCreateNestedOneWithoutCheckinsInput
-  user: Prisma.UserCreateNestedOneWithoutCheckinsAsUserInput
-  Scan?: Prisma.ScanCreateNestedManyWithoutCheckinInput
+  user: Prisma.UserCreateNestedOneWithoutCheckinsInput
+  Scan?: Prisma.ScanAttemptCreateNestedManyWithoutCheckinInput
 }
 
 export type CheckinUncheckedCreateInput = {
   id?: string
   userId: string
   eventId: string
-  adminId?: string | null
-  selfCheckin?: boolean
+  adminId: string
   createdAt?: Date | string
-  Scan?: Prisma.ScanUncheckedCreateNestedManyWithoutCheckinInput
+  Scan?: Prisma.ScanAttemptUncheckedCreateNestedManyWithoutCheckinInput
 }
 
 export type CheckinUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  admin?: Prisma.UserUpdateOneWithoutCheckinsAsAdminNestedInput
+  admin?: Prisma.UserUpdateOneRequiredWithoutCheckinsPerformedNestedInput
   event?: Prisma.EventUpdateOneRequiredWithoutCheckinsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutCheckinsAsUserNestedInput
-  Scan?: Prisma.ScanUpdateManyWithoutCheckinNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCheckinsNestedInput
+  Scan?: Prisma.ScanAttemptUpdateManyWithoutCheckinNestedInput
 }
 
 export type CheckinUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Scan?: Prisma.ScanUncheckedUpdateManyWithoutCheckinNestedInput
+  Scan?: Prisma.ScanAttemptUncheckedUpdateManyWithoutCheckinNestedInput
 }
 
 export type CheckinCreateManyInput = {
   id?: string
   userId: string
   eventId: string
-  adminId?: string | null
-  selfCheckin?: boolean
+  adminId: string
   createdAt?: Date | string
 }
 
 export type CheckinUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -308,8 +290,7 @@ export type CheckinUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -333,7 +314,6 @@ export type CheckinCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   adminId?: Prisma.SortOrder
-  selfCheckin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -342,7 +322,6 @@ export type CheckinMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   adminId?: Prisma.SortOrder
-  selfCheckin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -351,7 +330,6 @@ export type CheckinMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   adminId?: Prisma.SortOrder
-  selfCheckin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -499,20 +477,18 @@ export type CheckinUpdateOneWithoutScanNestedInput = {
 
 export type CheckinCreateWithoutAdminInput = {
   id?: string
-  selfCheckin?: boolean
   createdAt?: Date | string
   event: Prisma.EventCreateNestedOneWithoutCheckinsInput
-  user: Prisma.UserCreateNestedOneWithoutCheckinsAsUserInput
-  Scan?: Prisma.ScanCreateNestedManyWithoutCheckinInput
+  user: Prisma.UserCreateNestedOneWithoutCheckinsInput
+  Scan?: Prisma.ScanAttemptCreateNestedManyWithoutCheckinInput
 }
 
 export type CheckinUncheckedCreateWithoutAdminInput = {
   id?: string
   userId: string
   eventId: string
-  selfCheckin?: boolean
   createdAt?: Date | string
-  Scan?: Prisma.ScanUncheckedCreateNestedManyWithoutCheckinInput
+  Scan?: Prisma.ScanAttemptUncheckedCreateNestedManyWithoutCheckinInput
 }
 
 export type CheckinCreateOrConnectWithoutAdminInput = {
@@ -527,20 +503,18 @@ export type CheckinCreateManyAdminInputEnvelope = {
 
 export type CheckinCreateWithoutUserInput = {
   id?: string
-  selfCheckin?: boolean
   createdAt?: Date | string
-  admin?: Prisma.UserCreateNestedOneWithoutCheckinsAsAdminInput
+  admin: Prisma.UserCreateNestedOneWithoutCheckinsPerformedInput
   event: Prisma.EventCreateNestedOneWithoutCheckinsInput
-  Scan?: Prisma.ScanCreateNestedManyWithoutCheckinInput
+  Scan?: Prisma.ScanAttemptCreateNestedManyWithoutCheckinInput
 }
 
 export type CheckinUncheckedCreateWithoutUserInput = {
   id?: string
   eventId: string
-  adminId?: string | null
-  selfCheckin?: boolean
+  adminId: string
   createdAt?: Date | string
-  Scan?: Prisma.ScanUncheckedCreateNestedManyWithoutCheckinInput
+  Scan?: Prisma.ScanAttemptUncheckedCreateNestedManyWithoutCheckinInput
 }
 
 export type CheckinCreateOrConnectWithoutUserInput = {
@@ -576,8 +550,7 @@ export type CheckinScalarWhereInput = {
   id?: Prisma.StringFilter<"Checkin"> | string
   userId?: Prisma.StringFilter<"Checkin"> | string
   eventId?: Prisma.StringFilter<"Checkin"> | string
-  adminId?: Prisma.StringNullableFilter<"Checkin"> | string | null
-  selfCheckin?: Prisma.BoolFilter<"Checkin"> | boolean
+  adminId?: Prisma.StringFilter<"Checkin"> | string
   createdAt?: Prisma.DateTimeFilter<"Checkin"> | Date | string
 }
 
@@ -599,20 +572,18 @@ export type CheckinUpdateManyWithWhereWithoutUserInput = {
 
 export type CheckinCreateWithoutEventInput = {
   id?: string
-  selfCheckin?: boolean
   createdAt?: Date | string
-  admin?: Prisma.UserCreateNestedOneWithoutCheckinsAsAdminInput
-  user: Prisma.UserCreateNestedOneWithoutCheckinsAsUserInput
-  Scan?: Prisma.ScanCreateNestedManyWithoutCheckinInput
+  admin: Prisma.UserCreateNestedOneWithoutCheckinsPerformedInput
+  user: Prisma.UserCreateNestedOneWithoutCheckinsInput
+  Scan?: Prisma.ScanAttemptCreateNestedManyWithoutCheckinInput
 }
 
 export type CheckinUncheckedCreateWithoutEventInput = {
   id?: string
   userId: string
-  adminId?: string | null
-  selfCheckin?: boolean
+  adminId: string
   createdAt?: Date | string
-  Scan?: Prisma.ScanUncheckedCreateNestedManyWithoutCheckinInput
+  Scan?: Prisma.ScanAttemptUncheckedCreateNestedManyWithoutCheckinInput
 }
 
 export type CheckinCreateOrConnectWithoutEventInput = {
@@ -643,19 +614,17 @@ export type CheckinUpdateManyWithWhereWithoutEventInput = {
 
 export type CheckinCreateWithoutScanInput = {
   id?: string
-  selfCheckin?: boolean
   createdAt?: Date | string
-  admin?: Prisma.UserCreateNestedOneWithoutCheckinsAsAdminInput
+  admin: Prisma.UserCreateNestedOneWithoutCheckinsPerformedInput
   event: Prisma.EventCreateNestedOneWithoutCheckinsInput
-  user: Prisma.UserCreateNestedOneWithoutCheckinsAsUserInput
+  user: Prisma.UserCreateNestedOneWithoutCheckinsInput
 }
 
 export type CheckinUncheckedCreateWithoutScanInput = {
   id?: string
   userId: string
   eventId: string
-  adminId?: string | null
-  selfCheckin?: boolean
+  adminId: string
   createdAt?: Date | string
 }
 
@@ -677,19 +646,17 @@ export type CheckinUpdateToOneWithWhereWithoutScanInput = {
 
 export type CheckinUpdateWithoutScanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  admin?: Prisma.UserUpdateOneWithoutCheckinsAsAdminNestedInput
+  admin?: Prisma.UserUpdateOneRequiredWithoutCheckinsPerformedNestedInput
   event?: Prisma.EventUpdateOneRequiredWithoutCheckinsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutCheckinsAsUserNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCheckinsNestedInput
 }
 
 export type CheckinUncheckedUpdateWithoutScanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -697,101 +664,89 @@ export type CheckinCreateManyAdminInput = {
   id?: string
   userId: string
   eventId: string
-  selfCheckin?: boolean
   createdAt?: Date | string
 }
 
 export type CheckinCreateManyUserInput = {
   id?: string
   eventId: string
-  adminId?: string | null
-  selfCheckin?: boolean
+  adminId: string
   createdAt?: Date | string
 }
 
 export type CheckinUpdateWithoutAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventUpdateOneRequiredWithoutCheckinsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutCheckinsAsUserNestedInput
-  Scan?: Prisma.ScanUpdateManyWithoutCheckinNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCheckinsNestedInput
+  Scan?: Prisma.ScanAttemptUpdateManyWithoutCheckinNestedInput
 }
 
 export type CheckinUncheckedUpdateWithoutAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Scan?: Prisma.ScanUncheckedUpdateManyWithoutCheckinNestedInput
+  Scan?: Prisma.ScanAttemptUncheckedUpdateManyWithoutCheckinNestedInput
 }
 
 export type CheckinUncheckedUpdateManyWithoutAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CheckinUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  admin?: Prisma.UserUpdateOneWithoutCheckinsAsAdminNestedInput
+  admin?: Prisma.UserUpdateOneRequiredWithoutCheckinsPerformedNestedInput
   event?: Prisma.EventUpdateOneRequiredWithoutCheckinsNestedInput
-  Scan?: Prisma.ScanUpdateManyWithoutCheckinNestedInput
+  Scan?: Prisma.ScanAttemptUpdateManyWithoutCheckinNestedInput
 }
 
 export type CheckinUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Scan?: Prisma.ScanUncheckedUpdateManyWithoutCheckinNestedInput
+  Scan?: Prisma.ScanAttemptUncheckedUpdateManyWithoutCheckinNestedInput
 }
 
 export type CheckinUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CheckinCreateManyEventInput = {
   id?: string
   userId: string
-  adminId?: string | null
-  selfCheckin?: boolean
+  adminId: string
   createdAt?: Date | string
 }
 
 export type CheckinUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  admin?: Prisma.UserUpdateOneWithoutCheckinsAsAdminNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutCheckinsAsUserNestedInput
-  Scan?: Prisma.ScanUpdateManyWithoutCheckinNestedInput
+  admin?: Prisma.UserUpdateOneRequiredWithoutCheckinsPerformedNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCheckinsNestedInput
+  Scan?: Prisma.ScanAttemptUpdateManyWithoutCheckinNestedInput
 }
 
 export type CheckinUncheckedUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Scan?: Prisma.ScanUncheckedUpdateManyWithoutCheckinNestedInput
+  Scan?: Prisma.ScanAttemptUncheckedUpdateManyWithoutCheckinNestedInput
 }
 
 export type CheckinUncheckedUpdateManyWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  selfCheckin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -822,7 +777,7 @@ export type CheckinCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
  * CheckinCountOutputType without action
  */
 export type CheckinCountOutputTypeCountScanArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ScanWhereInput
+  where?: Prisma.ScanAttemptWhereInput
 }
 
 
@@ -831,9 +786,8 @@ export type CheckinSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   userId?: boolean
   eventId?: boolean
   adminId?: boolean
-  selfCheckin?: boolean
   createdAt?: boolean
-  admin?: boolean | Prisma.Checkin$adminArgs<ExtArgs>
+  admin?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   Scan?: boolean | Prisma.Checkin$ScanArgs<ExtArgs>
@@ -845,9 +799,8 @@ export type CheckinSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   userId?: boolean
   eventId?: boolean
   adminId?: boolean
-  selfCheckin?: boolean
   createdAt?: boolean
-  admin?: boolean | Prisma.Checkin$adminArgs<ExtArgs>
+  admin?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["checkin"]>
@@ -857,9 +810,8 @@ export type CheckinSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   userId?: boolean
   eventId?: boolean
   adminId?: boolean
-  selfCheckin?: boolean
   createdAt?: boolean
-  admin?: boolean | Prisma.Checkin$adminArgs<ExtArgs>
+  admin?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["checkin"]>
@@ -869,25 +821,24 @@ export type CheckinSelectScalar = {
   userId?: boolean
   eventId?: boolean
   adminId?: boolean
-  selfCheckin?: boolean
   createdAt?: boolean
 }
 
-export type CheckinOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eventId" | "adminId" | "selfCheckin" | "createdAt", ExtArgs["result"]["checkin"]>
+export type CheckinOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eventId" | "adminId" | "createdAt", ExtArgs["result"]["checkin"]>
 export type CheckinInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.Checkin$adminArgs<ExtArgs>
+  admin?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   Scan?: boolean | Prisma.Checkin$ScanArgs<ExtArgs>
   _count?: boolean | Prisma.CheckinCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CheckinIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.Checkin$adminArgs<ExtArgs>
+  admin?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CheckinIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.Checkin$adminArgs<ExtArgs>
+  admin?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -895,17 +846,16 @@ export type CheckinIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $CheckinPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Checkin"
   objects: {
-    admin: Prisma.$UserPayload<ExtArgs> | null
+    admin: Prisma.$UserPayload<ExtArgs>
     event: Prisma.$EventPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
-    Scan: Prisma.$ScanPayload<ExtArgs>[]
+    Scan: Prisma.$ScanAttemptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
     eventId: string
-    adminId: string | null
-    selfCheckin: boolean
+    adminId: string
     createdAt: Date
   }, ExtArgs["result"]["checkin"]>
   composites: {}
@@ -1301,10 +1251,10 @@ readonly fields: CheckinFieldRefs;
  */
 export interface Prisma__CheckinClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  admin<T extends Prisma.Checkin$adminArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Checkin$adminArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  admin<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   event<T extends Prisma.EventDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EventDefaultArgs<ExtArgs>>): Prisma.Prisma__EventClient<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  Scan<T extends Prisma.Checkin$ScanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Checkin$ScanArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Scan<T extends Prisma.Checkin$ScanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Checkin$ScanArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1338,7 +1288,6 @@ export interface CheckinFieldRefs {
   readonly userId: Prisma.FieldRef<"Checkin", 'String'>
   readonly eventId: Prisma.FieldRef<"Checkin", 'String'>
   readonly adminId: Prisma.FieldRef<"Checkin", 'String'>
-  readonly selfCheckin: Prisma.FieldRef<"Checkin", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Checkin", 'DateTime'>
 }
     
@@ -1741,46 +1690,27 @@ export type CheckinDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Checkin.admin
- */
-export type Checkin$adminArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-}
-
-/**
  * Checkin.Scan
  */
 export type Checkin$ScanArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Scan
+   * Select specific fields to fetch from the ScanAttempt
    */
-  select?: Prisma.ScanSelect<ExtArgs> | null
+  select?: Prisma.ScanAttemptSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Scan
+   * Omit specific fields from the ScanAttempt
    */
-  omit?: Prisma.ScanOmit<ExtArgs> | null
+  omit?: Prisma.ScanAttemptOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ScanInclude<ExtArgs> | null
-  where?: Prisma.ScanWhereInput
-  orderBy?: Prisma.ScanOrderByWithRelationInput | Prisma.ScanOrderByWithRelationInput[]
-  cursor?: Prisma.ScanWhereUniqueInput
+  include?: Prisma.ScanAttemptInclude<ExtArgs> | null
+  where?: Prisma.ScanAttemptWhereInput
+  orderBy?: Prisma.ScanAttemptOrderByWithRelationInput | Prisma.ScanAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.ScanAttemptWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ScanScalarFieldEnum | Prisma.ScanScalarFieldEnum[]
+  distinct?: Prisma.ScanAttemptScalarFieldEnum | Prisma.ScanAttemptScalarFieldEnum[]
 }
 
 /**

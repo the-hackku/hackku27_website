@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { isAdmin, isAdminOrVolunteer } from "@/middlewares/isAdmin";
 import {
   Checkin,
   EventType,
@@ -10,6 +9,7 @@ import {
   TravelReimbursement,
   User,
 } from "@/prisma/generated/client";
+import { auth, hasPermissions } from "@/lib/auth/auth";
 
 export type AdminThemedRoom = {
   id: string;
@@ -29,6 +29,7 @@ export type AdminReservationRequest = {
   createdAt: Date;
 };
 import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
+import { headers } from "next/headers";
 
 // Type for the Event data used in creating or updating events// Type for the Event data used in creating or updating events
 
@@ -68,7 +69,10 @@ export async function getUsers(
   pageSize: number = 20,
   searchQuery: string = "",
 ) {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
 
   const skip = (page - 1) * pageSize;
 
@@ -89,7 +93,7 @@ export async function getUsers(
     include: {
       ParticipantInfo: true,
       _count: {
-        select: { checkinsAsUser: true },
+        select: { checkins: true },
       },
     },
     skip,
@@ -123,7 +127,10 @@ export async function getCheckins(
   pageSize: number = 20,
   searchQuery: string = "",
 ) {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["view"] });
 
   const skip = (page - 1) * pageSize;
 
@@ -183,7 +190,10 @@ export async function getCheckins(
 export async function batchUpdateCheckins(
   changes: Record<string, Partial<Checkin>>,
 ) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["manage"] });
 
   const updatePromises = Object.entries(changes).map(([checkinId, fields]) =>
     prisma.checkin.update({
@@ -198,7 +208,10 @@ export async function batchUpdateCheckins(
 
 // Create a new event
 export async function createEvent(data: EventData) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["create"] });
 
   return await prisma.event.create({
     data: {
@@ -222,7 +235,10 @@ export async function createEvent(data: EventData) {
 }
 
 export async function updateEvent(eventId: string, data: EventData) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["manage"] });
 
   return await prisma.event.update({
     where: { id: eventId },
@@ -248,7 +264,10 @@ export async function updateEvent(eventId: string, data: EventData) {
 
 // Delete an event
 export async function deleteEvent(eventId: string) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["delete"] });
 
   return await prisma.event.delete({
     where: { id: eventId },
@@ -264,11 +283,14 @@ export async function validateQrCode(
   eventId: string,
 ): Promise<ValidateQrCodeResult> {
   // Ensure the user is an admin or volunteer
-  const session = await isAdminOrVolunteer();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["perform"] });
 
   // Fetch the admin user
   const admin = await prisma.user.findUnique({
-    where: { id: session.session.userId },
+    where: { id: session?.session.userId },
     select: { id: true },
   });
 
@@ -317,7 +339,7 @@ export async function validateQrCode(
 
   if (existingCheckin) {
     // Create a 'failed' Scan record if you still want to log the attempt with the real user.id
-    await prisma.scan.create({
+    await prisma.scanAttempt.create({
       data: {
         userId: user.id,
         adminId: admin.id,
@@ -340,7 +362,7 @@ export async function validateQrCode(
         eventId: eventId,
       },
     }),
-    prisma.scan.create({
+    prisma.scanAttempt.create({
       data: {
         userId: user.id,
         adminId: admin.id,
@@ -395,11 +417,14 @@ export async function manualCheckIn(
   };
 }> {
   // Ensure the user performing this action is either admin or volunteer
-  const session = await isAdminOrVolunteer();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["perform"] });
 
   // Find the admin user (the staff or volunteer performing the check)
   const admin = await prisma.user.findUnique({
-    where: { id: session.session.userId },
+    where: { id: session?.session.userId },
     select: { id: true },
   });
 
@@ -458,7 +483,7 @@ export async function manualCheckIn(
         eventId: eventId,
       },
     }),
-    prisma.scan.create({
+    prisma.scanAttempt.create({
       data: {
         userId: user.id,
         adminId: admin.id,
@@ -496,8 +521,12 @@ export async function manualCheckIn(
 }
 
 export async function fetchScanHistory() {
-  await isAdminOrVolunteer();
-  const history = await prisma.scan.findMany({
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["view"] });
+
+  const history = await prisma.scanAttempt.findMany({
     include: {
       user: {
         include: {
@@ -528,7 +557,10 @@ export async function updateUserField(
   field: string,
   value: unknown,
 ) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["manage"] });
   await prisma.user.update({
     where: { id: userId },
     data: { [field]: value },
@@ -541,7 +573,10 @@ export async function updateParticipantField(
   field: string,
   value: unknown,
 ) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["manage"] });
   await prisma.participantInfo.update({
     where: { id: participantId },
     data: { [field]: value },
@@ -549,7 +584,10 @@ export async function updateParticipantField(
 }
 
 export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["manage"] });
 
   const updatePromises = Object.entries(changes).map(([userId, fields]) =>
     prisma.user.update({
@@ -564,7 +602,10 @@ export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
 
 // app/actions/admin.ts
 export async function getEventById(eventId: string) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["manage"] });
   try {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
@@ -591,7 +632,10 @@ export async function getEventById(eventId: string) {
 }
 
 export async function getUserById(userId: string) {
-  isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -622,7 +666,10 @@ export async function getUserById(userId: string) {
 export async function batchUpdateParticipants(
   changes: Record<string, Partial<ParticipantInfo>>,
 ) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["manage"] });
 
   const updatePromises = Object.entries(changes).map(
     ([participantId, fields]) =>
@@ -640,7 +687,10 @@ export async function getReimbursements(
   pageSize: number = 20,
   searchQuery: string = "",
 ) {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { travel_reimbursements: ["view"] });
 
   const skip = (page - 1) * pageSize;
 
@@ -709,7 +759,10 @@ export async function getReimbursements(
 export async function batchUpdateReimbursements(
   changes: Record<string, Partial<TravelReimbursement>>,
 ) {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { travel_reimbursements: ["manage"] });
 
   const updatePromises = Object.entries(changes).map(
     ([reimbursementId, fields]) =>
@@ -724,7 +777,10 @@ export async function batchUpdateReimbursements(
 }
 
 export async function backupRegistrationScript() {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
   try {
     await batchBackupRegistration();
     return { success: true, message: "Backup completed successfully!" };
@@ -735,13 +791,19 @@ export async function backupRegistrationScript() {
 }
 
 export async function getTotalRegistrationNumber() {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
   const totalRegistrations = await prisma.participantInfo.count();
   return totalRegistrations;
 }
 
 export async function getHackathonCheckinCount(eventId: string) {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["view"] });
 
   const count = await prisma.checkin.count({
     where: { eventId },
@@ -751,7 +813,10 @@ export async function getHackathonCheckinCount(eventId: string) {
 }
 
 export async function searchUsers(searchQuery: string) {
-  await isAdminOrVolunteer();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
   const trimmed = searchQuery.trim();
 
   // Basic conditions for email and individual name fields.
@@ -799,7 +864,10 @@ export async function getReservationRequests(
   pageSize: number = 10,
   searchQuery: string = "",
 ): Promise<{ requests: AdminReservationRequest[]; total: number }> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { room_reservations: ["view"] });
   const skip = (page - 1) * pageSize;
   const where = searchQuery
     ? {
@@ -851,7 +919,10 @@ export async function assignRoomToRequest(
   requestId: string,
   themedRoomId: string | null,
 ): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { room_reservations: ["manage"] });
   await prisma.reservationRequest.update({
     where: { id: requestId },
     data: { themedRoomId },
@@ -861,12 +932,18 @@ export async function assignRoomToRequest(
 export async function deleteReservationRequest(
   requestId: string,
 ): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { room_reservations: ["delete"] });
   await prisma.reservationRequest.delete({ where: { id: requestId } });
 }
 
 export async function getThemedRooms(): Promise<AdminThemedRoom[]> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { room_reservations: ["view"] });
   return prisma.themedRoom.findMany({ orderBy: { name: "asc" } });
 }
 
@@ -874,7 +951,10 @@ export async function createThemedRoom(data: {
   name: string;
   location: string;
 }): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { themed_rooms: ["create"] });
   await prisma.themedRoom.create({ data });
 }
 
@@ -882,11 +962,17 @@ export async function updateAdminThemedRoom(
   id: string,
   data: { name?: string; location?: string },
 ): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { themed_rooms: ["manage"] });
   await prisma.themedRoom.update({ where: { id }, data });
 }
 
 export async function deleteAdminThemedRoom(id: string): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { themed_rooms: ["delete"] });
   await prisma.themedRoom.delete({ where: { id } });
 }

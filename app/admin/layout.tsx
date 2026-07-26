@@ -1,5 +1,6 @@
-import { redirect } from "next/navigation";
-import { isAdmin } from "@/middlewares/isAdmin";
+import { auth } from "@/lib/auth/auth";
+import { headers } from "next/headers";
+import { forbidden, redirect } from "next/navigation";
 
 export default async function AdminLayout({
   children,
@@ -8,7 +9,16 @@ export default async function AdminLayout({
 }) {
   try {
     // Check if the user is an admin
-    await isAdmin();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session) {
+      // Redirect to sign-in page if not authorized
+      redirect("/signin");
+    } else if (session.session.role !== "ADMIN") {
+      // Redirect to sign-in page if not authorized
+      forbidden();
+    }
   } catch (error) {
     // Redirect to sign-in page if not authorized
     redirect("/signin");
