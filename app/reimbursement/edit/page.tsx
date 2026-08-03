@@ -1,10 +1,24 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useMemo } from "react";
-import Script from "next/script";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IconLoader } from "@tabler/icons-react";
+import { debounce } from "lodash";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Script from "next/script";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+// Server actions
+import {
+  deleteTravelReimbursement,
+  getInvitedUsers,
+  getReimbursementDetails,
+  searchUsersByEmail,
+  updateTravelReimbursement,
+  // (if you want to support adding members manually on edit)
+} from "@/app/actions/reimbursement";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,21 +29,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { IconLoader } from "@tabler/icons-react";
-import Link from "next/link";
-import { debounce } from "lodash";
-
-// Server actions
-import {
-  updateTravelReimbursement,
-  getReimbursementDetails,
-  deleteTravelReimbursement,
-  searchUsersByEmail,
-  getInvitedUsers,
-  // (if you want to support adding members manually on edit)
-} from "@/app/actions/reimbursement";
 
 // Define the schema for the reimbursement form
 const reimbursementSchema = z
@@ -64,7 +63,7 @@ const reimbursementSchema = z
       .array(
         z.object({
           id: z.string(),
-          email: z.string().email(),
+          email: z.email(),
           name: z.string(),
         }),
       )
@@ -209,7 +208,7 @@ export default function EditReimbursementForm() {
     name: string;
   }) => {
     // Prevent duplicates
-    if (groupMembers.some((m) => m.id === user.id)) return;
+    if (groupMembers.some((m) => m.id === user.id)) { return; }
     if (groupMembers.length >= 10) {
       toast.error("A group can have a maximum of 10 members.");
       return;
@@ -223,13 +222,12 @@ export default function EditReimbursementForm() {
   };
 
   // Form submission handler (update reimbursement)
-  const onSubmit = async (data: ReimbursementFormData) => {
+  const onSubmit = (data: ReimbursementFormData) => {
     setIsSubmitting(true);
     try {
-      await toast.promise(
+      toast.promise(
         async () => {
-          // Prepare payload; you may need to merge the groupMembers array if isGroup is true
-          const result = await updateTravelReimbursement({
+          await updateTravelReimbursement({
             reimbursementId: reimbursementId as string,
             transportationMethod: data.transportationMethod,
             address: data.address,
@@ -240,8 +238,6 @@ export default function EditReimbursementForm() {
               ? data.groupMembers.map((m) => m.email)
               : undefined,
           });
-
-          if (!result.success) throw new Error("Update failed.");
         },
         {
           loading: "Saving changes...",
@@ -260,16 +256,15 @@ export default function EditReimbursementForm() {
 
   // Handler for deleting the reimbursement
   async function handleDelete() {
-    if (!reimbursementId) return;
+    if (!reimbursementId) { return; }
     const confirmed = window.confirm(
       "Are you sure you want to delete this reimbursement?",
     );
-    if (!confirmed) return;
+    if (!confirmed) { return; }
     try {
       await toast.promise(
         async () => {
-          const result = await deleteTravelReimbursement(reimbursementId);
-          if (!result.success) throw new Error("Deletion failed.");
+          await deleteTravelReimbursement(reimbursementId);
         },
         {
           loading: "Deleting reimbursement...",
@@ -312,7 +307,7 @@ export default function EditReimbursementForm() {
           </div>
 
           {/* Group Members Section */}
-          {isGroup && (
+          {isGroup ? (
             <>
               <div className="space-y-2">
                 <p className="bg-yellow-200 p-2 rounded">
@@ -328,12 +323,12 @@ export default function EditReimbursementForm() {
                     debouncedSearch(e.target.value);
                   }}
                 />
-                {isSearching && (
+                {isSearching ? (
                   <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
                     <IconLoader className="animate-spin" size={16} />
                     Searching...
                   </div>
-                )}
+                ) : null}
                 {!isSearching &&
                   hasSearched &&
                   searchQuery.length >= 3 &&
@@ -347,8 +342,7 @@ export default function EditReimbursementForm() {
                     {searchResults.map((user) => (
                       <div
                         key={user.id}
-                        className="flex justify-between items-center py-1"
-                      >
+                        className="flex justify-between items-center py-1">
                         <span>
                           {user.name} ({user.email})
                         </span>
@@ -365,8 +359,7 @@ export default function EditReimbursementForm() {
                     {groupMembers.map((member) => (
                       <div
                         key={member.id}
-                        className="flex items-center justify-between py-1"
-                      >
+                        className="flex items-center justify-between py-1">
                         <span>
                           {member.name} ({member.email})
                         </span>
@@ -379,8 +372,7 @@ export default function EditReimbursementForm() {
                             );
                             setGroupMembers(updated);
                             form.setValue("groupMembers", updated);
-                          }}
-                        >
+                          }}>
                           Remove
                         </Button>
                       </div>
@@ -390,7 +382,7 @@ export default function EditReimbursementForm() {
               </div>
               <hr className="my-8" />
             </>
-          )}
+          ) : null}
 
           {/* Transportation Method */}
           <FormField
@@ -402,8 +394,7 @@ export default function EditReimbursementForm() {
                 <FormControl>
                   <select
                     {...field}
-                    className="border p-1 rounded w-full text-md"
-                  >
+                    className="border p-1 rounded w-full text-md">
                     <option value="Car">Car</option>
                     <option value="Bus">Bus</option>
                     <option value="Train">Train</option>
@@ -448,8 +439,7 @@ export default function EditReimbursementForm() {
                   <Link
                     href="https://g.co/kgs/25TjzVB"
                     target="_blank"
-                    className="underline"
-                  >
+                    className="underline">
                     (1536 W 15th St, Lawrence, KS)
                   </Link>
                 </FormLabel>
@@ -525,8 +515,7 @@ export default function EditReimbursementForm() {
             <Button
               type="submit"
               className="w-full"
-              disabled={isSubmitting || !form.formState.isValid}
-            >
+              disabled={isSubmitting || !form.formState.isValid}>
               {isSubmitting ? (
                 <>
                   <IconLoader className="animate-spin" size={20} />
@@ -541,8 +530,7 @@ export default function EditReimbursementForm() {
               variant="destructive"
               className="w-full"
               onClick={handleDelete}
-              disabled={isSubmitting}
-            >
+              disabled={isSubmitting}>
               Delete Reimbursement
             </Button>
           </div>

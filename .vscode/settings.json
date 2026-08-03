@@ -1,4 +1,9 @@
 {
-    "files.eol": "\n",
-    "js/ts.tsdk.path": "node_modules/typescript/lib"
+  "files.eol": "\n",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit"
+  }
 }

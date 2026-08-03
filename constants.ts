@@ -10,6 +10,8 @@ const constants = {
   cutoffDate: "2027-04-09T00:00:00.000Z",
   startDate: "2027-04-09T22:00:00.000Z", // 5 PM CDT Friday (check-in open)
   endDate: "2027-04-11T20:00:00.000Z", // 3 PM CDT Sunday (closing ceremony end)
+  // biome-ignore lint/security/noSecrets: Event ID, not a secret
+  checkinEventId: "cm6vgqdwr0000l703iuxogwcy",
 };
 
 export default constants;

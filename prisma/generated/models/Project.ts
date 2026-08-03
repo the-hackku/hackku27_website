@@ -206,7 +206,7 @@ export type ProjectWhereInput = {
   devpostURL?: Prisma.StringFilter<"Project"> | string
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
-  team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
+  team?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
@@ -219,7 +219,7 @@ export type ProjectOrderByWithRelationInput = {
   devpostURL?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  team?: Prisma.TeamOrderByWithRelationInput
+  team?: Prisma.OrganizationOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -235,7 +235,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   devpostURL?: Prisma.StringFilter<"Project"> | string
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
-  team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
+  team?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "teamId" | "creatorId">
 
@@ -274,7 +274,7 @@ export type ProjectCreateInput = {
   devpostURL: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  team?: Prisma.TeamCreateNestedOneWithoutProjectInput
+  team?: Prisma.OrganizationCreateNestedOneWithoutProjectInput
   creator?: Prisma.UserCreateNestedOneWithoutProjectInput
 }
 
@@ -296,7 +296,7 @@ export type ProjectUpdateInput = {
   devpostURL?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  team?: Prisma.TeamUpdateOneWithoutProjectNestedInput
+  team?: Prisma.OrganizationUpdateOneWithoutProjectNestedInput
   creator?: Prisma.UserUpdateOneWithoutProjectNestedInput
 }
 
@@ -451,7 +451,7 @@ export type ProjectCreateWithoutCreatorInput = {
   devpostURL: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  team?: Prisma.TeamCreateNestedOneWithoutProjectInput
+  team?: Prisma.OrganizationCreateNestedOneWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutCreatorInput = {
@@ -487,7 +487,7 @@ export type ProjectUpdateWithoutCreatorInput = {
   devpostURL?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  team?: Prisma.TeamUpdateOneWithoutProjectNestedInput
+  team?: Prisma.OrganizationUpdateOneWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutCreatorInput = {
@@ -625,7 +625,7 @@ export type ProjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Project"
   objects: {
-    team: Prisma.$TeamPayload<ExtArgs> | null
+    team: Prisma.$OrganizationPayload<ExtArgs> | null
     creator: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1031,7 +1031,7 @@ readonly fields: ProjectFieldRefs;
  */
 export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  team<T extends Prisma.Project$teamArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$teamArgs<ExtArgs>>): Prisma.Prisma__TeamClient<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  team<T extends Prisma.Project$teamArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$teamArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.Project$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1475,18 +1475,18 @@ export type ProjectDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
  */
 export type Project$teamArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Team
+   * Select specific fields to fetch from the Organization
    */
-  select?: Prisma.TeamSelect<ExtArgs> | null
+  select?: Prisma.OrganizationSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Team
+   * Omit specific fields from the Organization
    */
-  omit?: Prisma.TeamOmit<ExtArgs> | null
+  omit?: Prisma.OrganizationOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TeamInclude<ExtArgs> | null
-  where?: Prisma.TeamWhereInput
+  include?: Prisma.OrganizationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationWhereInput
 }
 
 /**

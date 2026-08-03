@@ -1,10 +1,10 @@
 "use client";
 
+import { IconAlertCircle } from "@tabler/icons-react";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation"; // Import usePathname
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { IconAlertCircle } from "@tabler/icons-react";
-import { motion, AnimatePresence } from "motion/react";
 
 export default function RegisterAlert() {
   const pathname = usePathname(); // Get the current route
@@ -21,8 +21,7 @@ export default function RegisterAlert() {
         initial={{ x: "100%" }}
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-      >
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}>
         <motion.div className="rounded-lg bg-red-50 text-red-700 shadow-md">
           <Alert variant="destructive" className="rounded-lg p-3">
             <div className="flex items-center justify-between space-x-3">

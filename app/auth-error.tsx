@@ -1,13 +1,17 @@
-import Image from "next/image";
-import { motion } from "motion/react";
 import { AlertCircle } from "lucide-react";
+import { motion } from "motion/react";
+import Image from "next/image";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import constants from "@/constants";
 
-export default async function NotFound({ searchParams }: {searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) {
-  const { error="unknown" } = await searchParams;
-  let message;
+export default async function NotFound({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const { error = "unknown" } = await searchParams;
+  let message: string;
   if (
     error === "invalid_callback_request" ||
     error === "state_not_found" ||
@@ -18,25 +22,32 @@ export default async function NotFound({ searchParams }: {searchParams: Promise<
     error === "unable_to_create_user" ||
     error === "unable_to_create_session"
   ) {
-    message = "An error occurred on our end, please contact us and try again later.";
+    message =
+      "An error occurred on our end, please contact us and try again later.";
   } else if (
-    error == "invalid_code" ||
+    error === "invalid_code" ||
     error === "state_mismatch" ||
     error === "no_code"
   ) {
     message = "We couldn't verify your sign-in, please try again.";
   } else if (error === "email_not_found") {
-    message = "We didn't receive an email from your provider, please try with a different provider or account.";
+    message =
+      "We didn't receive an email from your provider, please try with a different provider or account.";
   } else if (error === "email_doesn't_match") {
-    message = "The email from your provider doesn't match the email you used to sign up, please try with a different provider or account.";
+    message =
+      "The email from your provider doesn't match the email you used to sign up, please try with a different provider or account.";
   } else if (error === "unable_to_link_account") {
-    message = "We couldn't link your account, please try with a different provider or account.";
+    message =
+      "We couldn't link your account, please try with a different provider or account.";
   } else if (error === "account_not_linked") {
-    message = "Please sign in with the provider you used to sign up to link this provider.";
+    message =
+      "Please sign in with the provider you used to sign up to link this provider.";
   } else if (error === "account_already_linked_to_different_user") {
-    message = "This account is already linked to a different user, please try with a different provider or account.";
+    message =
+      "This account is already linked to a different user, please try with a different provider or account.";
   } else if (error === "signup_disabled") {
-    message = "The provider you are trying to sign in with is disabled, please try with a different provider or account.";
+    message =
+      "The provider you are trying to sign in with is disabled, please try with a different provider or account.";
   } else {
     message = "An unknown error occurred, please try again later.";
   }
@@ -64,9 +75,11 @@ export default async function NotFound({ searchParams }: {searchParams: Promise<
         <AlertCircle className="h-5 w-5 text-red-600" />
         <AlertTitle>Error while authenticating!</AlertTitle>
         <AlertDescription>
-          {message + " "}
+          {`${message} `}
           If that doesn't help, contact us at
-          <a href={`mailto:${constants.supportEmail}`} style={{ color: "#1a73e8", textDecoration: "none" }}>
+          <a
+            href={`mailto:${constants.supportEmail}`}
+            style={{ color: "#1a73e8", textDecoration: "none" }}>
             {constants.supportEmail}
           </a>
           for assistance.
@@ -75,9 +88,7 @@ export default async function NotFound({ searchParams }: {searchParams: Promise<
 
       {/* Button to go back to home */}
       <Button variant="outline" size="lg">
-        <a href="/">
-          Go Back to Home
-        </a>
+        <a href="/">Go Back to Home</a>
       </Button>
     </div>
   );

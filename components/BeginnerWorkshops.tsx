@@ -1,13 +1,13 @@
 "use client";
-import React from "react";
-import { EventType } from "@/prisma/generated/browser";
 import {
-  IconMapPin,
   IconCalendar,
-  IconInfoCircle,
   IconClock,
+  IconInfoCircle,
+  IconMapPin,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import type React from "react";
+import type { EventType } from "@/prisma/generated/browser";
 
 type ScheduleEvent = {
   id: string;
@@ -65,7 +65,8 @@ function getGradientStyle(index: number, total: number) {
     borderImage: `linear-gradient(to bottom, ${startColor} ${
       position * 100
     }%, ${endColor} ${position * 100}%) 1`,
-    background: `linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(249,250,251,1) 100%)`,
+    background:
+      "linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(249,250,251,1) 100%)",
     transition: "transform 0.2s, box-shadow 0.2s",
   };
 }
@@ -110,8 +111,7 @@ const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
                   ? "opacity-50 grayscale hover:cursor-not-allowed"
                   : "shadow-sm hover:shadow-md hover:transform hover:scale-102"
               }`}
-              style={getGradientStyle(index, sortedEvents.length)}
-            >
+              style={getGradientStyle(index, sortedEvents.length)}>
               <div className="flex items-center text-sm text-gray-600">
                 <IconCalendar size={18} className="mr-1" />
                 {new Date(ev.startDate).toLocaleDateString(undefined, {

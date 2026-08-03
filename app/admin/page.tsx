@@ -1,36 +1,39 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { GenericDataContainer } from "@/components/admin/GenericDataContainer";
+import { IconArrowUpRight } from "@tabler/icons-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
-  getUsers,
+  backupRegistrationScript,
+  batchUpdateCheckins,
+  batchUpdateReimbursements,
   batchUpdateUsers,
   getCheckins,
-  batchUpdateCheckins,
-  getReimbursements,
-  batchUpdateReimbursements,
-  backupRegistrationScript,
-  getTotalRegistrationNumber,
   getHackathonCheckinCount,
+  getReimbursements,
+  getTotalRegistrationNumber,
+  getUsers,
 } from "@/app/actions/admin";
-import { ColumnDef } from "@tanstack/react-table";
-import { ROLE, TravelReimbursement } from "@/prisma/generated/browser";
-import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
-import { EventDetailsDialog } from "@/components/admin/EventDetailsDialog"; // Import EventDetailsDialog
-import Link from "next/link";
-import { ParticipantInfo } from "@/prisma/generated/browser";
-import { IconArrowUpRight } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
 import AnalyticsChart from "@/components/admin/charts/AnalyticsChart";
 import CombinedDashboard from "@/components/admin/charts/combinedDashboard";
+import { EventDetailsDialog } from "@/components/admin/EventDetailsDialog"; // Import EventDetailsDialog
+import { GenericDataContainer } from "@/components/admin/GenericDataContainer";
 import { RoomReservationsTab } from "@/components/admin/RoomReservationsTab";
+import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import constants from "@/constants";
+import type {
+  ParticipantInfo,
+  TravelReimbursement,
+} from "@/prisma/generated/browser";
 import {
   exportEmails,
   exportParticipantEmails,
   exportUnregisteredEmails,
 } from "@/scripts/emailExporter";
-import { toast } from "sonner";
 
 // Extend the User type to include relations or additional fields
 interface ExtendedUser extends User {
@@ -125,12 +128,22 @@ export default function AdminTabsPage() {
     number | null
   >(null);
 
+  const onUserOpenChange = (open: boolean) => {
+    if (!open) {
+      setSelectedUserId(null);
+    }
+  };
+  
+  const onEventOpenChange = (open: boolean) => {
+    if (!open) {
+      setSelectedEventId(null);
+    }
+  };
+
   useEffect(() => {
     const fetchCheckinCount = async () => {
       try {
-        const count = await getHackathonCheckinCount(
-          "cm6vgqdwr0000l703iuxogwcy",
-        );
+        const count = await getHackathonCheckinCount(constants.checkinEventId);
         setHackathonCheckinCount(count);
       } catch (error) {
         console.error("Failed to fetch check-in count:", error);
@@ -159,15 +172,18 @@ export default function AdminTabsPage() {
       header: "Name",
       cell: ({ row }) => {
         const user = row.original;
+        const handleClick = () => {
+          setSelectedUserId(user.id);
+        };
         return (
           <div className="flex items-center">
             <button
-              onClick={() => setSelectedUserId(user.id)}
+              type="button"
+              onClick={handleClick}
               className={
                 "hover:underline text-left flex flex-row items-center " +
                 (user.ParticipantInfo ? "" : "text-red-300")
-              }
-            >
+              }>
               {user.ParticipantInfo
                 ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
                 : "Unknown"}
@@ -207,12 +223,15 @@ export default function AdminTabsPage() {
         const userName = participantInfo
           ? `${participantInfo.firstName} ${participantInfo.lastName}`
           : "Unknown";
+        const handleClick = () => {
+          setSelectedUserId(reimbursement.creator.id);
+        };
 
         return (
           <button
-            onClick={() => setSelectedUserId(reimbursement.creator.id)}
-            className="hover:underline text-left"
-          >
+            type="button"
+            onClick={handleClick}
+            className="hover:underline text-left">
             {userName} ({reimbursement.creator.email})
           </button>
         );
@@ -254,12 +273,14 @@ export default function AdminTabsPage() {
         const userName = checkin.user.participantInfo
           ? `${checkin.user.participantInfo.firstName} ${checkin.user.participantInfo.lastName}`
           : checkin.user.name || "Unknown";
-
+        const handleClick = () => {
+          setSelectedUserId(checkin.userId);
+        }
         return (
           <button
-            onClick={() => setSelectedUserId(checkin.userId)} // Show user details dialog
-            className="hover:underline text-left"
-          >
+            type="button"
+            onClick={handleClick} // Show user details dialog
+            className="hover:underline text-left">
             {userName}
           </button>
         );
@@ -270,11 +291,14 @@ export default function AdminTabsPage() {
       header: "Event",
       cell: ({ row }) => {
         const checkin = row.original;
+        const handleClick = () => {
+          setSelectedEventId(checkin.eventId); // Show event details dialog
+        }
         return (
           <button
-            onClick={() => setSelectedEventId(checkin.eventId)} // Show event details dialog
-            className="hover:underline text-left"
-          >
+            type="button"
+            onClick={handleClick} // Show event details dialog
+            className="hover:underline text-left">
             {checkin.event.name}
           </button>
         );
@@ -318,13 +342,13 @@ export default function AdminTabsPage() {
       {/* User Details Dialog */}
       <UserDetailsDialog
         userId={selectedUserId}
-        onOpenChange={(open) => !open && setSelectedUserId(null)}
+        onOpenChange={onUserOpenChange}
       />
 
       {/* Event Details Dialog */}
       <EventDetailsDialog
         eventId={selectedEventId}
-        onOpenChange={(open) => !open && setSelectedEventId(null)} // Reset event ID when closed
+        onOpenChange={onEventOpenChange}
       />
 
       <Tabs defaultValue="analytics">
@@ -347,8 +371,7 @@ export default function AdminTabsPage() {
           <div className="flex flex-row gap-2">
             <Link
               href="https://docs.google.com/spreadsheets/d/1BHgfhH0E5Ro5FuzsFgvt-wtNWI9sQ4QPqdk7aNInUi0/edit?gid=0#gid=0"
-              target="_blank"
-            >
+              target="_blank">
               <Button className="bg-green-600 mb-4">Go to Google Sheet</Button>
             </Link>
             <Link href="/scanner">

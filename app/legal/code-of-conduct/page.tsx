@@ -48,8 +48,7 @@ export default function CodeOfConduct() {
               href="https://mlh.io/code-of-conduct"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               MLH Code of Conduct
             </Link>
             .

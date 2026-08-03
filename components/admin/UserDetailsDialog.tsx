@@ -1,17 +1,17 @@
 "use client";
 
+import { IconLoader } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { getUserById } from "@/app/actions/admin";
+import LocalDateTime from "@/components/LocalDateTime";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUserById } from "@/app/actions/admin";
-import { IconLoader } from "@tabler/icons-react";
-import LocalDateTime from "@/components/LocalDateTime";
 
 interface UserDetailsDialogProps {
   userId: string | null;

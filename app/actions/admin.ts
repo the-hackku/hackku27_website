@@ -1,7 +1,8 @@
 "use server";
 
+import { auth, hasPermissions } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import {
+import type {
   Checkin,
   EventType,
   ParticipantInfo,
@@ -9,15 +10,14 @@ import {
   TravelReimbursement,
   User,
 } from "@/prisma/generated/client";
-import { auth, hasPermissions } from "@/lib/auth/auth";
 
-export type AdminThemedRoom = {
+type AdminThemedRoom = {
   id: string;
   name: string;
   location: string;
 };
 
-export type AdminReservationRequest = {
+type AdminReservationRequest = {
   id: string;
   teamName: string;
   userEmail: string;
@@ -28,8 +28,9 @@ export type AdminReservationRequest = {
   themedRoomLocation: string | null;
   createdAt: Date;
 };
-import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
+
 import { headers } from "next/headers";
+import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
 
 // Type for the Event data used in creating or updating events// Type for the Event data used in creating or updating events
 
@@ -64,11 +65,7 @@ type ValidateQrCodeResult =
 
 // Fetch all users and return their names and emails
 // app/actions/admin.ts
-export async function getUsers(
-  page: number = 1,
-  pageSize: number = 20,
-  searchQuery: string = "",
-) {
+export async function getUsers(page = 1, pageSize = 20, searchQuery = "") {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -122,11 +119,7 @@ export async function getUsers(
 }
 
 // Fetch all check-ins and return user names, event names, and check-in time
-export async function getCheckins(
-  page: number = 1,
-  pageSize: number = 20,
-  searchQuery: string = "",
-) {
+export async function getCheckins(page = 1, pageSize = 20, searchQuery = "") {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -343,7 +336,7 @@ export async function validateQrCode(
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
         successful: false,
       },
     });
@@ -359,14 +352,14 @@ export async function validateQrCode(
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
       },
     }),
     prisma.scanAttempt.create({
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
         successful: true,
       },
     }),
@@ -376,7 +369,9 @@ export async function validateQrCode(
     ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
     : "Participant";
 
-  const isHighSchoolStudent = !!user.ParticipantInfo?.isHighSchoolStudent;
+  const isHighSchoolStudent = Boolean(
+    user.ParticipantInfo?.isHighSchoolStudent,
+  );
   const chaperoneInfo = isHighSchoolStudent
     ? {
         chaperoneName: `${user.ParticipantInfo?.chaperoneFirstName || ""} ${
@@ -480,14 +475,14 @@ export async function manualCheckIn(
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
       },
     }),
     prisma.scanAttempt.create({
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
         successful: true,
       },
     }),
@@ -497,10 +492,17 @@ export async function manualCheckIn(
     ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`.trim()
     : "Participant";
 
-  const isHighSchoolStudent =
-    user.ParticipantInfo?.isHighSchoolStudent || false;
+  const isHighSchoolStudent = Boolean(
+    user.ParticipantInfo?.isHighSchoolStudent,
+  );
 
-  let chaperoneInfo;
+  let chaperoneInfo:
+    | {
+        chaperoneName: string;
+        chaperoneEmail: string;
+        chaperonePhone: string;
+      }
+    | undefined;
   if (isHighSchoolStudent) {
     chaperoneInfo = {
       chaperoneName: `${user.ParticipantInfo?.chaperoneFirstName ?? ""} ${
@@ -627,7 +629,7 @@ export async function getEventById(eventId: string) {
     return event;
   } catch (error) {
     console.error("Failed to fetch event:", error);
-    throw new Error("Failed to fetch event details");
+    throw new Error("Failed to fetch event details", { cause: error });
   }
 }
 
@@ -658,7 +660,7 @@ export async function getUserById(userId: string) {
     return user;
   } catch (error) {
     console.error("Failed to fetch user:", error);
-    throw new Error("Failed to fetch user details");
+    throw new Error("Failed to fetch user details", { cause: error });
   }
 }
 
@@ -683,9 +685,9 @@ export async function batchUpdateParticipants(
 }
 
 export async function getReimbursements(
-  page: number = 1,
-  pageSize: number = 20,
-  searchQuery: string = "",
+  page = 1,
+  pageSize = 20,
+  searchQuery = "",
 ) {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -860,9 +862,9 @@ export async function searchUsers(searchQuery: string) {
 }
 
 export async function getReservationRequests(
-  page: number = 1,
-  pageSize: number = 10,
-  searchQuery: string = "",
+  page = 1,
+  pageSize = 10,
+  searchQuery = "",
 ): Promise<{ requests: AdminReservationRequest[]; total: number }> {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -976,3 +978,5 @@ export async function deleteAdminThemedRoom(id: string): Promise<void> {
   await hasPermissions(session, { themed_rooms: ["delete"] });
   await prisma.themedRoom.delete({ where: { id } });
 }
+
+export type { AdminReservationRequest, AdminThemedRoom };

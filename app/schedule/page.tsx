@@ -1,8 +1,8 @@
 import ScheduleGrid from "@/components/ScheduleGrid";
+import constants from "@/constants";
 // import BeginnerWorkshops from "@/components/BeginnerWorkshops";
 import { prisma } from "@/lib/prisma";
-import { Event } from "@/prisma/generated/browser";
-import constants from "@/constants";
+import type { Event } from "@/prisma/generated/browser";
 
 /**
  * Fetch events from your database

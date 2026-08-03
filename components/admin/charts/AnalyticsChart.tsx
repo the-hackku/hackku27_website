@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { getEventCheckinCounts } from "@/app/actions/admin/getAnalyticsData";
-import { Bar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
+import React, { useEffect, useState } from "react";
+import { Bar } from "react-chartjs-2";
+import { getEventCheckinCounts } from "@/app/actions/admin/getAnalyticsData";
 
 ChartJS.register(
   CategoryScale,
@@ -47,7 +47,7 @@ export default function EventCheckinChart() {
 
     fetchData();
 
-    const pollInterval = setInterval(fetchData, 30000);
+    const pollInterval = setInterval(fetchData, 30_000);
     const countdownInterval = setInterval(() => {
       setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
@@ -67,7 +67,7 @@ export default function EventCheckinChart() {
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
-      }).format(new Date(event.startTime))})`
+      }).format(new Date(event.startTime))})`,
   );
   const checkinCounts = data.map((event) => event.checkins);
 

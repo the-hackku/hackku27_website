@@ -1,8 +1,8 @@
 "use client";
 
+import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
 
 interface Props {
   isAdmin: boolean;
@@ -13,15 +13,13 @@ export function Header({ isAdmin, isVolunteer }: Props) {
   return (
     <header
       className="fixed top-0 left-0 right-0 z-40 overflow-hidden bg-transparent"
-      style={{ height: "clamp(160px, 10vw, 230px)" }}
-    >
+      style={{ height: "clamp(160px, 10vw, 230px)" }}>
       {/* SVG wave cutout */}
       <svg
         viewBox="0 0 1440 380"
         preserveAspectRatio="none"
         className="absolute inset-x-0 top-0 h-full w-full"
-        style={{ pointerEvents: "none" }}
-      >
+        style={{ pointerEvents: "none" }}>
         <path
           d="
             M 0 0
@@ -50,15 +48,13 @@ export function Header({ isAdmin, isVolunteer }: Props) {
           href="https://mlh.io/seasons/2027/events"
           target="_blank"
           passHref
-          className="drop-shadow-lg"
-        >
+          className="drop-shadow-lg">
           <motion.div
             whileHover={{
               scale: 1.05,
               y: 2,
               transition: { duration: 0.2 },
-            }}
-          >
+            }}>
             <Image
               src="/images/mlh-badge.svg"
               alt="MLH Badge"

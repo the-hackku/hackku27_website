@@ -1,12 +1,10 @@
 "use server";
 
-import { auth, hasPermissions } from "@/lib/auth/auth";
-import { prisma } from "@/lib/prisma";
-import { EventType } from "@/prisma/generated/client";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-
-// app/actions/events.ts
+import { auth, hasPermissions } from "@/lib/auth/auth";
+import { prisma } from "@/lib/prisma";
+import type { EventType } from "@/prisma/generated/client";
 
 export async function fetchEvents() {
   return await prisma.event.findMany({

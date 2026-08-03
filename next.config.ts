@@ -1,10 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
   experimental: {
     authInterrupts: true,
   },
-  async redirects() {
+  redirects() {
     return [
       {
         source: "/mlh/code-of-conduct",
@@ -29,7 +30,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async rewrites() {
+  rewrites() {
     return [
       {
         source: "/apple-touch-icon.png",
@@ -38,8 +39,8 @@ const nextConfig: NextConfig = {
       {
         source: "/apple-touch-icon-precomposed.png",
         destination: "/images/branding/apple-touch-icon.png",
-      }
-    ]
+      },
+    ];
   },
   images: {
     remotePatterns: [

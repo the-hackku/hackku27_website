@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { handleGroupInvite } from "@/app/actions/reimbursement";
-import { getUserWithReimbursement } from "@/app/actions/reimbursement";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { IconCheck, IconLoader, IconX } from "@tabler/icons-react";
 import Link from "next/link";
-import { IconLoader, IconCheck, IconX } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import {
+  getUserWithReimbursement,
+  handleGroupInvite,
+} from "@/app/actions/reimbursement";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 /**
  * ✅ Corrected Invite Type - Matches Server Response
@@ -144,8 +146,7 @@ export default function InviteListPage() {
                     onClick={() =>
                       handleInviteResponse(invite.reimbursement.id, true)
                     }
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2"
-                  >
+                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2">
                     {isPending ? (
                       <IconLoader className="animate-spin" size={16} />
                     ) : (
@@ -158,8 +159,7 @@ export default function InviteListPage() {
                     onClick={() =>
                       handleInviteResponse(invite.reimbursement.id, false)
                     }
-                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center gap-2"
-                  >
+                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center gap-2">
                     {isPending ? (
                       <IconLoader className="animate-spin" size={16} />
                     ) : (

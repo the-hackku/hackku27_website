@@ -1,11 +1,16 @@
-"use client"
+"use client";
 
-import RegisterAlert from "./RegisterAlert";
-import Header from "./Header";
 import { useSession } from "@/lib/auth/auth-client";
+import Header from "./Header";
+import RegisterAlert from "./RegisterAlert";
 
 export default function HeaderWrapper() {
-  const { data: session, isPending, error: sessionError, refetch } = useSession();
+  const {
+    data: session,
+    isPending,
+    error: sessionError,
+    refetch,
+  } = useSession();
 
   if (!session) {
     // 2. If user is NOT logged in, no alert, just the basic Header
@@ -19,7 +24,9 @@ export default function HeaderWrapper() {
   // 5. Show alert if they’re logged in but not registered
   return (
     <>
-      {!session.session.isRegistered && !isAdminUser && !isVolunteerUser && <RegisterAlert />}
+      {!(session.session.isRegistered || isAdminUser || isVolunteerUser) && (
+        <RegisterAlert />
+      )}
       <Header isAdmin={isAdminUser} isVolunteer={isVolunteerUser} />
     </>
   );

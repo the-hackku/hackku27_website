@@ -1,8 +1,8 @@
 "use server";
 
+import { headers } from "next/headers";
 import { auth, hasPermissions } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import { headers } from "next/headers";
 
 export type InfoPageData = {
   id: string;

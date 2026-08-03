@@ -1,9 +1,9 @@
 "use client";
 
-import { authClient } from "@/lib/auth/auth-client";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { authClient } from "@/lib/auth/auth-client";
 
 const cardStyle = {
   borderWidth: "2px",
@@ -29,12 +29,10 @@ export default function HomePage() {
   return (
     <div
       className="relative flex flex-col items-center justify-center px-4"
-      style={{ marginTop: "clamp(-2rem, 5rem, -5rem)" }}
-    >
+      style={{ marginTop: "clamp(-2rem, 5rem, -5rem)" }}>
       <div
         className="relative z-10 flex flex-row items-center justify-center w-full"
-        style={{ overflow: "visible" }}
-      >
+        style={{ overflow: "visible" }}>
         <AnimatePresence mode="wait" initial={false}>
           {view === "welcome" && (
             <motion.div
@@ -52,8 +50,7 @@ export default function HomePage() {
               initial={{ x: "60vw", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-60vw", opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}>
               <h1 className="font-bold text-4xl text-center">
                 Welcome to Hack
                 <span className="text-blue-500">K</span>
@@ -72,8 +69,7 @@ export default function HomePage() {
                     border: "1px solid rgba(0,0,0,0.1)",
                     borderRadius: "0.5rem 0.5rem 0.5rem 1.5rem",
                     height: "clamp(56px, 10vw, 72px)",
-                  }}
-                >
+                  }}>
                   {isRegistered ? (
                     <span className="text-white font-semibold text-xl opacity-90 group-hover:opacity-100">
                       {registerText}
@@ -87,6 +83,7 @@ export default function HomePage() {
                 </Link>
 
                 <button
+                  type="button"
                   onClick={() => setView("learn")}
                   className="group relative flex items-center justify-center overflow-hidden shadow-md transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-xl cursor-pointer flex-1"
                   style={{
@@ -94,8 +91,7 @@ export default function HomePage() {
                     border: "1px solid rgba(0,0,0,0.1)",
                     borderRadius: "0.5rem 0.5rem 1.5rem 0.5rem",
                     height: "clamp(56px, 10vw, 72px)",
-                  }}
-                >
+                  }}>
                   <span className="text-white font-semibold text-xl">
                     Learn More
                   </span>
@@ -117,17 +113,16 @@ export default function HomePage() {
               initial={{ x: "30vw", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-30vw", opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}>
               <div className="flex items-center justify-between">
                 <h2 className="font-bold text-gray-900 text-xl sm:text-2xl lg:text-3xl">
                   About HackKU
                 </h2>
 
                 <button
+                  type="button"
                   onClick={() => setView("welcome")}
-                  className="text-gray-400 hover:text-gray-700 transition-colors"
-                >
+                  className="text-gray-400 hover:text-gray-700 transition-colors">
                   ← Back
                 </button>
               </div>
@@ -147,8 +142,7 @@ export default function HomePage() {
                   borderRadius: "0.5rem 0.5rem 0.5rem 1.5rem",
                   width: "50%",
                   height: "50px",
-                }}
-              >
+                }}>
                 <span className="text-black font-semibold text-xl">
                   {registerText}
                 </span>

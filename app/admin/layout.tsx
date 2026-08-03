@@ -1,6 +1,6 @@
-import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { forbidden, redirect } from "next/navigation";
+import { auth } from "@/lib/auth/auth";
 
 export default async function AdminLayout({
   children,
@@ -19,7 +19,7 @@ export default async function AdminLayout({
       // Redirect to sign-in page if not authorized
       forbidden();
     }
-  } catch (error) {
+  } catch {
     // Redirect to sign-in page if not authorized
     redirect("/signin");
   }

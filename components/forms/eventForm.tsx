@@ -1,8 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { createEvent } from "@/app/actions/admin";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,8 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TimeInput } from "../customui/TimeInput";
-import { createEvent } from "@/app/actions/admin";
-import { useRouter } from "next/navigation";
+
 // import constants from "@/constants";
 
 type FormData = z.infer<typeof formSchema>;
@@ -158,8 +159,7 @@ export function EventForm() {
                       <select
                         value={field.value}
                         onChange={field.onChange}
-                        className="border rounded p-2 w-full"
-                      >
+                        className="border rounded p-2 w-full">
                         <option value="FOOD">Food</option>
                         <option value="REQUIRED">Required</option>
                         <option value="WORKSHOPS">Workshops</option>
@@ -187,8 +187,7 @@ export function EventForm() {
                       <RadioGroup
                         value={field.value}
                         onValueChange={field.onChange}
-                        className="flex space-x-4"
-                      >
+                        className="flex space-x-4">
                         <FormItem>
                           <FormControl>
                             <RadioGroupItem value="2026-04-17" id="friday" />
@@ -265,8 +264,7 @@ export function EventForm() {
               <Button
                 className="bg-blue-600 text-white w-full rounded hover:bg-blue-700"
                 type="submit"
-                disabled={form.formState.isSubmitting}
-              >
+                disabled={form.formState.isSubmitting}>
                 Create Event
               </Button>
             </div>

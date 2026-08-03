@@ -1,28 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition, useMemo } from "react";
+import { IconLoader } from "@tabler/icons-react";
 import { debounce } from "lodash";
-import ScannerComponent from "@/components/ScannerComponent";
-
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { toast } from "sonner";
 // Combined imports for scanning + manual checkin logic
 import {
-  validateQrCode,
   fetchScanHistory,
-  searchUsers,
   manualCheckIn,
+  searchUsers,
+  validateQrCode,
 } from "@/app/actions/admin";
 import { fetchEvents } from "@/app/actions/events";
-
+import ScannerComponent from "@/components/ScannerComponent";
 import {
   Select,
-  SelectTrigger,
   SelectContent,
   SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { toast } from "sonner";
-import { IconLoader } from "@tabler/icons-react";
 
 export default function ScannerPage() {
   /*******************************/
@@ -107,7 +104,7 @@ export default function ScannerPage() {
   };
 
   // Handle scan result
-  const handleScanResult = async (scannedCode: string) => {
+  const handleScanResult = (scannedCode: string) => {
     const selectedEvent = selectedEventRef.current;
 
     if (!selectedEvent) {
@@ -161,6 +158,10 @@ export default function ScannerPage() {
     }
   };
 
+  const handleEventChange = (eventId: string) => {
+    selectedEventRef.current = eventId;
+  }
+
   /***************************************************/
   /***  MANUAL CHECK-IN LOGIC (SHARING EVENT REF)  ***/
   /***************************************************/
@@ -195,16 +196,16 @@ export default function ScannerPage() {
   };
 
   // Manual check-in
-  const handleCheckIn = async () => {
+  const handleCheckIn = () => {
     const eventId = selectedEventRef.current;
-    if (!selectedUserId || !eventId) {
+    if (!(selectedUserId && eventId)) {
       toast.error("Please select a user and event first.");
       return;
     }
 
-    startManualCheckInTransition(async () => {
+    startManualCheckInTransition(() => {
       try {
-        await toast.promise(manualCheckIn(selectedUserId, eventId), {
+        toast.promise(manualCheckIn(selectedUserId, eventId), {
           loading: "Checking user in...",
           success: "Check-in successful!",
           error: "Manual check-in failed.",
@@ -226,15 +227,14 @@ export default function ScannerPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Scanner Section with dynamic background */}
-      <div onClick={resetScreen}>
+      {/** biome-ignore lint/a11y/noStaticElementInteractions: Covers the entire scanner component */}
+      <div onClick={resetScreen} onKeyDown={resetScreen}>
         <Select
-          onValueChange={(value) => {
-            selectedEventRef.current = value;
-          }}
-        >
+          onValueChange={handleEventChange}>
           <SelectTrigger
-            className={selectedEventRef.current === null ? "bg-yellow-200" : ""}
-          >
+            className={
+              selectedEventRef.current === null ? "bg-yellow-200" : ""
+            }>
             <SelectValue placeholder="Select an event" />
           </SelectTrigger>
           <SelectContent>
@@ -261,8 +261,7 @@ export default function ScannerPage() {
             position: "relative",
             transition: "background-color 0.5s ease",
             minHeight: "60vh",
-          }}
-        >
+          }}>
           <div className="space-y-4">
             <div style={{ opacity: isProcessing ? 0 : 1 }}>
               <ScannerComponent
@@ -271,7 +270,7 @@ export default function ScannerPage() {
               />
             </div>
 
-            {(validationResult || loading) && (
+            {(validationResult || loading) ? (
               <div
                 style={{
                   position: "absolute",
@@ -280,8 +279,7 @@ export default function ScannerPage() {
                   transform: "translate(-50%, -50%)",
                   textAlign: "center",
                   zIndex: 10,
-                }}
-              >
+                }}>
                 {loading ? (
                   "Validating..."
                 ) : (
@@ -293,7 +291,7 @@ export default function ScannerPage() {
                   </>
                 )}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
@@ -313,55 +311,57 @@ export default function ScannerPage() {
 
         {/* Search Input */}
         <div className="mb-6">
-          <label className="block mb-1 font-semibold">Search for a user:</label>
+          <label htmlFor="userSearch" className="block mb-1 font-semibold">Search for a user:</label>
           <div className="flex items-center gap-2">
+            {/** biome-ignore lint/correctness/useUniqueElementIds: Guaranteed to be unique by usage */}
             <input
               type="text"
               placeholder="Search by name or email..."
               value={searchQuery}
               onChange={handleSearchChange}
               className="border p-2 rounded w-full"
+              id="userSearch"
             />
-            {isSearching && <IconLoader className="animate-spin" size={20} />}
+            {isSearching ? <IconLoader className="animate-spin" size={20} /> : null}
           </div>
           <p className="text-xs text-gray-500 mt-1">
             Type at least 2 characters to start searching.
           </p>
 
           {/* Search Results */}
-          {searchResults.length > 0 && (
+          {searchResults.length > 0 ? (
             <div className="mt-2 border rounded p-2 bg-gray-50">
-              {searchResults.map((user) => (
-                <label
+              {searchResults.map((user) => {
+                const onRadioChange = () => setSelectedUserId(user.id);
+                return <label
                   key={user.id}
-                  className="block py-1 cursor-pointer hover:bg-gray-100 rounded"
-                >
+                  className="block py-1 cursor-pointer hover:bg-gray-100 rounded">
                   <input
                     type="radio"
                     name="selectedUser"
                     className="mr-2"
                     value={user.id}
-                    onChange={() => setSelectedUserId(user.id)}
+                    onChange={onRadioChange}
                     checked={selectedUserId === user.id}
                   />
                   {user.firstName} {user.lastName} ({user.email})
                 </label>
-              ))}
+              })}
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Check-in button */}
         <button
+          type="submit"
           onClick={handleCheckIn}
           disabled={isPending}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
-        >
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400">
           {isPending ? "Checking in..." : "Check In Manually"}
         </button>
 
         {/* Message display (success or error) */}
-        {message && <p className="mt-4 text-center font-medium">{message}</p>}
+        {message ? <p className="mt-4 text-center font-medium">{message}</p> : null}
       </div>
 
       {/* Scan History Section */}
@@ -374,8 +374,7 @@ export default function ScannerPage() {
                 key={scan.id}
                 className={`border p-2 rounded ${
                   scan.successful ? "bg-green-100" : "bg-red-100"
-                }`}
-              >
+                }`}>
                 <p>
                   <strong>Name:</strong> {scan.name}
                 </p>

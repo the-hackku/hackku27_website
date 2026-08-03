@@ -1,10 +1,19 @@
 "use client";
 
-import React, { useRef, useState, useMemo } from "react";
-import Script from "next/script";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IconLoader } from "@tabler/icons-react";
+import { debounce } from "lodash";
+import Link from "next/link";
+import Script from "next/script";
+import { useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+// Import the server actions
+import {
+  searchUsersByEmail,
+  submitTravelReimbursement,
+} from "@/app/actions/reimbursement";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,16 +24,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { IconLoader } from "@tabler/icons-react";
-import Link from "next/link";
-import { debounce } from "lodash";
-
-// Import the server actions
-import {
-  submitTravelReimbursement,
-  searchUsersByEmail,
-} from "@/app/actions/reimbursement";
 
 // Schema validation
 const reimbursementSchema = z
@@ -58,7 +57,7 @@ const reimbursementSchema = z
       .array(
         z.object({
           id: z.string(),
-          email: z.string().email(),
+          email: z.email(),
           name: z.string(),
         }),
       )
@@ -67,7 +66,7 @@ const reimbursementSchema = z
   .refine(
     (data) => {
       // If applying as a group, at least one other person must be in the group
-      if (data.isGroup && data.groupMembers.length < 1) {
+      if (data.isGroup && data.groupMembers.length === 0) {
         return false;
       }
       return true;
@@ -154,7 +153,7 @@ export default function ReimbursementForm() {
     name: string;
   }) => {
     // Prevent duplicates
-    if (groupMembers.some((m) => m.id === user.id)) return;
+    if (groupMembers.some((m) => m.id === user.id)) { return; }
     // Limit to 10 members
     if (groupMembers.length >= 10) {
       toast.error("A group can have a maximum of 10 members.");
@@ -299,8 +298,7 @@ export default function ReimbursementForm() {
                     {searchResults.map((user) => (
                       <div
                         key={user.id}
-                        className="flex justify-between items-center py-1"
-                      >
+                        className="flex justify-between items-center py-1">
                         <span>
                           {user.name} ({user.email})
                         </span>
@@ -318,8 +316,7 @@ export default function ReimbursementForm() {
                     {groupMembers.map((member) => (
                       <div
                         key={member.id}
-                        className="flex items-center justify-between sm:justify-start py-1"
-                      >
+                        className="flex items-center justify-between sm:justify-start py-1">
                         <span>
                           {member.name} ({member.email})
                         </span>
@@ -330,8 +327,7 @@ export default function ReimbursementForm() {
                             setGroupMembers(
                               groupMembers.filter((m) => m.id !== member.id),
                             )
-                          }
-                        >
+                          }>
                           Remove
                         </Button>
                       </div>
@@ -353,8 +349,7 @@ export default function ReimbursementForm() {
                 <FormControl>
                   <select
                     {...field}
-                    className="border p-1 rounded w-full text-md"
-                  >
+                    className="border p-1 rounded w-full text-md">
                     <option value="Car">Car</option>
                     <option value="Bus">Bus</option>
                     <option value="Train">Train</option>
@@ -400,8 +395,7 @@ export default function ReimbursementForm() {
                     <Link
                       href="https://g.co/kgs/25TjzVB"
                       target="_blank"
-                      className="underline break-words pb-1"
-                    >
+                      className="underline break-words pb-1">
                       (1536 W 15th St, Lawrence, KS)
                     </Link>
                   </div>
@@ -477,8 +471,7 @@ export default function ReimbursementForm() {
           <Button
             type="submit"
             className="w-full"
-            disabled={isSubmitting || !form.formState.isValid}
-          >
+            disabled={isSubmitting || !form.formState.isValid}>
             {isSubmitting ? (
               <>
                 <IconLoader className="animate-spin" size={20} />

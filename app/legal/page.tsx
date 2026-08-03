@@ -9,15 +9,13 @@ export default function LegalPage() {
       <span className="mx-4">|</span>
       <Link
         href="/legal/code-of-conduct"
-        className="text-blue-500 hover:underline"
-      >
+        className="text-blue-500 hover:underline">
         Code of Conduct
       </Link>
       <span className="mx-4">|</span>
       <Link
         href="/legal/privacy-policy"
-        className="text-blue-500 hover:underline"
-      >
+        className="text-blue-500 hover:underline">
         Privacy Policy
       </Link>
     </div>

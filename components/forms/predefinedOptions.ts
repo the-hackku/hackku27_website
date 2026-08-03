@@ -1,23 +1,3 @@
-export const predefinedCountries = [
-  { label: "United States", value: "United States" },
-  { label: "Canada", value: "Canada" },
-  { label: "Mexico", value: "Mexico" },
-  { label: "Brazil", value: "Brazil" },
-  { label: "United Kingdom", value: "United Kingdom" },
-  { label: "Germany", value: "Germany" },
-  { label: "France", value: "France" },
-  { label: "Spain", value: "Spain" },
-  { label: "Italy", value: "Italy" },
-  { label: "China", value: "China" },
-  { label: "Japan", value: "Japan" },
-  { label: "Australia", value: "Australia" },
-  { label: "India", value: "India" },
-  { label: "Singapore", value: "Singapore" },
-  { label: "India", value: "India" },
-  { label: "Singapore", value: "Singapore" },
-  { label: "Other", value: "Other" },
-];
-
 // Predefined options
 export const predefinedSchools = [
   { label: "University of Kansas", value: "University of Kansas" },

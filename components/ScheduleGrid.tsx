@@ -1,38 +1,37 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  IconFilter,
-  IconMapPin,
-  IconInfoCircle,
-  IconTag,
-  IconChevronRight,
   IconChevronLeft,
+  IconChevronRight,
+  IconFilter,
+  IconInfoCircle,
+  IconMapPin,
+  IconTag,
   IconX,
 } from "@tabler/icons-react";
+import { AnimatePresence, motion } from "motion/react";
+import Image, { type StaticImageData } from "next/image";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Checkbox } from "./ui/checkbox";
-import { AnimatePresence, motion } from "motion/react";
-import { EventType } from "@/prisma/generated/browser";
-import { Input } from "./ui/input";
-import Image, { StaticImageData } from "next/image";
-
+import type { EventType } from "@/prisma/generated/browser";
 import activityBg from "@/public/images/schedule/activities.png";
 import foodBg from "@/public/images/schedule/food.png";
 import dawnBg from "@/public/images/schedule/required dawn.png";
 import duskBg from "@/public/images/schedule/required dusk.png";
 import sponsorBg from "@/public/images/schedule/sponsor.png";
 import workshopBg from "@/public/images/schedule/workshop.png";
+import { Checkbox } from "./ui/checkbox";
+import { Input } from "./ui/input";
 
 type ScheduleEvent = {
   id: string;
@@ -358,16 +357,14 @@ const MobileEventDrawer = ({
           boxShadow: `inset 0 0 0 2px ${
             eventTypeDarkerColors[event.eventType]
           }`,
-        }}
-      >
+        }}>
         <div
           className="fixed rounded-md inset-x-0 bottom-0 z-50 h-[40vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
           style={{
             boxShadow: `inset 0 0 0 2px ${
               eventTypeDarkerColors[event.eventType]
             }`,
-          }}
-        >
+          }}>
           <Image
             src={selectedEventBg}
             alt="event background"
@@ -585,10 +582,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       if (checked) {
         // Add type
         return [...prev, type];
-      } else {
-        // Remove type
-        return prev.filter((t) => t !== type);
       }
+      // Remove type
+      return prev.filter((t) => t !== type);
     });
   };
 
@@ -604,8 +600,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         className="flex-1 flex-col gap-2 md:mb-0 h-[calc(100vh-10rem)] md:h-full md:overflow-y-hidden"
         style={{
           flex: collapsed ? "1 1 100%" : "0 0 75%",
-        }}
-      >
+        }}>
         <div className="flex justify-between items-center space-x-4 pb-2 bg-white sticky top-0 z-40">
           <div className="flex justify-start w-full gap-2">
             <Tabs value={selectedDay} onValueChange={handleDayChange}>
@@ -635,8 +630,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                     <IconX size={16} />
                   </button>
                 )}
@@ -682,8 +676,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     />
                     <label
                       htmlFor="select-all"
-                      className="text-sm cursor-pointer"
-                    >
+                      className="text-sm cursor-pointer">
                       {selectedEventTypes.length === 5
                         ? "Deselect All"
                         : "Select All"}
@@ -712,8 +705,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                         htmlFor={`type-${type}`}
                         className={`text-sm cursor-pointer ${
                           eventTypeColors[type] // Dynamically apply the background color class
-                        } text-white rounded-md px-2 py-1`}
-                      >
+                        } text-white rounded-md px-2 py-1`}>
                         {type.charAt(0).toUpperCase() +
                           type.slice(1).toLowerCase()}
                       </label>
@@ -729,8 +721,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   setTimezoneMode(
                     timezoneMode === "local" ? "central" : "local",
                   )
-                }
-              >
+                }>
                 <span className="font-medium w-[60px] text-center">
                   🕒 {timezoneMode === "local" ? "Local" : "Central"}
                 </span>
@@ -741,8 +732,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           {!isMobile && (
             <span
               onClick={() => setCollapsed(!collapsed)}
-              className="ml-4 cursor-pointer"
-            >
+              className="ml-4 cursor-pointer">
               {collapsed ? (
                 <IconChevronLeft size={24} />
               ) : (
@@ -772,8 +762,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   flex: collapsed ? "1 1 100%" : "0 0 75%", // Full width when collapsed
                 }
               : {}
-          }
-        >
+          }>
           {/* Container for Tabs and Filter */}
 
           {/* Schedule Grid Table */}
@@ -781,7 +770,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             <table className="table-fixed w-full border-collapse h-full">
               <thead className="sticky top-0 bg-gray-100 z-50 border-b">
                 <tr>
-                  <th className="w-16"></th>
+                  <th className="w-16" />
                   {selectedDay === "All" ? (
                     days.map((date) => (
                       <th key={date} className="p-2 text-center">
@@ -810,8 +799,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     <td
                       className={`relative border-r border-gray-300 overflow-visible text-xs ${
                         slotIndex % 2 === 0 ? "" : "border-b border-solid"
-                      }`}
-                    >
+                      }`}>
                       {slotIndex % 2 === 0
                         ? formatTime(slotIndex, baseHour, timezoneMode)
                         : ""}
@@ -828,8 +816,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                             }`}
                             style={{
                               borderRightStyle: "dashed",
-                            }}
-                          >
+                            }}>
                             {filteredGroupedEvents[day]
                               ?.filter(
                                 (event) =>
@@ -901,8 +888,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                       height: `calc(${rowSpan * 3}rem - 4px)`,
                                       position: "absolute",
                                       opacity: isSelected ? "0.8" : "1",
-                                    }}
-                                  >
+                                    }}>
                                     {/* Event content */}
                                     <span
                                       className={`inline-flex flex-wrap items-start text-left ${
@@ -911,14 +897,12 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                         overlapInfo.groupSize > 1
                                           ? "flex-col"
                                           : "flex-row items-center"
-                                      }`}
-                                    >
+                                      }`}>
                                       <p className="text-sm font-bold whitespace-normal break-words mr-1">
                                         {event.eventType === "REQUIRED" && (
                                           <span
                                             className="text-red-500"
-                                            title="Required Event"
-                                          >
+                                            title="Required Event">
                                             *
                                           </span>
                                         )}
@@ -961,8 +945,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                               WebkitLineClamp:
                                                 descriptionLineClamp,
                                               WebkitBoxOrient: "vertical",
-                                            }}
-                                          >
+                                            }}>
                                             <em>{event.description}</em>
                                           </span>
                                         </div>
@@ -977,8 +960,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                     </TooltipTrigger>
                                     <TooltipContent
                                       side="right"
-                                      className="max-w-xs"
-                                    >
+                                      className="max-w-xs">
                                       <p className="font-bold">{event.name}</p>
                                       <p className="text-xs text-muted-foreground">
                                         {formatTimeForSlot(
@@ -1012,7 +994,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         </motion.div>
       </div>
       {/* Draggable Divider */}
-      {!isMobile && !collapsed && (
+      {!(isMobile || collapsed) && (
         <div
           className="bg-gray-300 w-1 cursor-col-resize transition-all duration-100 
              hover:bg-gray-400"
@@ -1050,7 +1032,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             window.addEventListener("mousemove", handleMouseMove);
             window.addEventListener("mouseup", handleMouseUp);
           }}
-        ></div>
+        />
       )}
 
       {/* RIGHT SECTION: Event Details */}
@@ -1071,8 +1053,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           }`}
           animate={isMobile ? { height: selectedEvent ? "65vh" : "0vh" } : {}}
           initial={isMobile ? { height: "0%", opacity: 0 } : {}}
-          transition={{ duration: 0.3 }}
-        >
+          transition={{ duration: 0.3 }}>
           {selectedEvent && (
             <div
               className="relative p-4 w-full rounded-lg shadow-sm border md:h-full flex flex-col justify-between overflow-hidden"
@@ -1082,8 +1063,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   : "#e5e7eb",
                 borderWidth: "2px",
                 backgroundColor: "white",
-              }}
-            >
+              }}>
               {selectedEventBg && (
                 <Image
                   src={selectedEventBg}
@@ -1100,8 +1080,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     {isMobile && (
                       <span
                         onClick={() => setSelectedEvent(null)}
-                        className="cursor-pointer"
-                      >
+                        className="cursor-pointer">
                         <IconX />
                       </span>
                     )}
@@ -1156,8 +1135,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                       className="text-sm overflow-y-scroll pr-1"
                       style={{
                         maxHeight: isMobile ? "40px" : "40vh", // Adjust as needed
-                      }}
-                    >
+                      }}>
                       {selectedEvent.description}
                     </div>
                   </div>
@@ -1178,8 +1156,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                         ? "opacity-30 cursor-not-allowed"
                         : "hover:text-gray-900 focus:outline-none"
                     } `}
-                    disabled={!getPreviousEvent(selectedEvent)}
-                  >
+                    disabled={!getPreviousEvent(selectedEvent)}>
                     &larr; Previous
                   </button>
                   <button
@@ -1193,8 +1170,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                         ? "opacity-30 cursor-not-allowed"
                         : "hover:text-gray-900 focus:outline-none"
                     } `}
-                    disabled={!getNextEvent(selectedEvent)}
-                  >
+                    disabled={!getNextEvent(selectedEvent)}>
                     Next &rarr;
                   </button>
                 </div>
@@ -1204,7 +1180,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
           {
             // Show placeholder if no event is selected
-            !selectedEvent && !isMobile && (
+            !(selectedEvent || isMobile) && (
               <div className="text-center text-gray-500 p-4">
                 Select an event to view more details
               </div>

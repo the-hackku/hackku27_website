@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import { IconLoader, IconX } from "@tabler/icons-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ColumnDef } from "@tanstack/react-table";
 import { EditableTable } from "./EditableTable";
-import { IconLoader, IconX } from "@tabler/icons-react";
 
 interface UseSearchablePaginatedDataProps<T> {
   fetchFunction: (
@@ -80,7 +80,6 @@ function useSearchablePaginatedData<T>({
     fetchData,
   };
 }
-
 
 function useBatchEditing<T extends { id: string }>(originalData: T[]) {
   const [items, setItems] = useState<T[]>(originalData);
@@ -286,8 +285,7 @@ export function GenericDataContainer<T extends { id: string }>({
           {searchQuery && !loading && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute inset-y-0 right-0 flex items-center pr-3"
-            >
+              className="absolute inset-y-0 right-0 flex items-center pr-3">
               <IconX className="h-5 w-5" />
             </button>
           )}
@@ -306,8 +304,7 @@ export function GenericDataContainer<T extends { id: string }>({
               <Button
                 variant="outline"
                 onClick={revert}
-                disabled={totalChanges === 0}
-              >
+                disabled={totalChanges === 0}>
                 Revert
               </Button>
             )
@@ -316,8 +313,7 @@ export function GenericDataContainer<T extends { id: string }>({
             variant={totalChanges === 0 ? "outline" : "default"}
             color={totalChanges === 0 ? "gray" : "yellow"}
             onClick={saveAll}
-            disabled={totalChanges === 0}
-          >
+            disabled={totalChanges === 0}>
             Save All {totalChanges > 0 && `(${totalChanges})`}
           </Button>
         </div>
@@ -337,8 +333,7 @@ export function GenericDataContainer<T extends { id: string }>({
       <div className="flex justify-between items-center mt-4">
         <Button
           onClick={() => setPage((p) => Math.max(p - 1, 1))}
-          disabled={page === 1}
-        >
+          disabled={page === 1}>
           Previous
         </Button>
         <span>
@@ -346,8 +341,7 @@ export function GenericDataContainer<T extends { id: string }>({
         </span>
         <Button
           onClick={() => setPage((p) => (p < totalPages ? p + 1 : p))}
-          disabled={page >= totalPages}
-        >
+          disabled={page >= totalPages}>
           Next
         </Button>
       </div>

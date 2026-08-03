@@ -1,6 +1,6 @@
-import { ROLE } from "@/prisma/generated/client";
-import { prisma } from "@/lib/prisma";
 import * as readline from "readline";
+import { prisma } from "@/lib/prisma";
+import type { ROLE } from "@/prisma/generated/client";
 import constants from "../constants";
 
 async function confirmDatabaseUrl(): Promise<void> {

@@ -1,8 +1,8 @@
 // components/admin/EditableTable.tsx
 "use client";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import React from "react";
-import { ColumnDef } from "@tanstack/react-table";
 import { EditableCell } from "./EditableCell";
 import { EditableSelectCell } from "./EditableSelectCell";
 import { TableComponent } from "./Table";

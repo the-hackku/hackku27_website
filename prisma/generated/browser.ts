@@ -68,10 +68,20 @@ export type Checkin = Prisma.CheckinModel
  */
 export type ParticipantInfo = Prisma.ParticipantInfoModel
 /**
- * Model Team
+ * Model Organization
  * 
  */
-export type Team = Prisma.TeamModel
+export type Organization = Prisma.OrganizationModel
+/**
+ * Model Member
+ * 
+ */
+export type Member = Prisma.MemberModel
+/**
+ * Model Invitation
+ * 
+ */
+export type Invitation = Prisma.InvitationModel
 /**
  * Model Project
  * 

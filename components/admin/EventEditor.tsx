@@ -1,11 +1,11 @@
 "use client";
 
-import { Event, EventType } from "@/prisma/generated/browser";
-import { useState } from "react";
-import { updateEvent } from "@/app/actions/events";
-import { toast } from "sonner";
-import { Button } from "../ui/button";
 import { IconLoader } from "@tabler/icons-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { updateEvent } from "@/app/actions/events";
+import { type Event, EventType } from "@/prisma/generated/browser";
+import { Button } from "../ui/button";
 
 type Props = {
   events: Event[];
@@ -82,8 +82,7 @@ export default function AdminEventEditor({ events }: Props) {
       <select
         className="mb-4 p-2 border rounded w-full"
         value={selectedId ?? ""}
-        onChange={(e) => handleSelectChange(e.target.value)}
-      >
+        onChange={(e) => handleSelectChange(e.target.value)}>
         <option value="" disabled>
           Select an event
         </option>
@@ -143,8 +142,7 @@ export default function AdminEventEditor({ events }: Props) {
             value={formData.eventType}
             onChange={(e) =>
               setFormData({ ...formData, eventType: e.target.value })
-            }
-          >
+            }>
             {Object.values(EventType).map((type) => (
               <option key={type} value={type}>
                 {type}
@@ -178,8 +176,7 @@ export default function AdminEventEditor({ events }: Props) {
           <Button
             type="submit"
             className="bg-yellow-400 text-black w-full rounded hover:bg-yellow-500"
-            disabled={isSubmitting}
-          >
+            disabled={isSubmitting}>
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
                 <IconLoader className="animate-spin" size={20} />

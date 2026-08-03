@@ -1,18 +1,18 @@
 "use client";
 
 import {
-  useReactTable,
-  getCoreRowModel,
-  ColumnDef,
+  type ColumnDef,
   flexRender,
+  getCoreRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableHead,
-  TableRow,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 
 export function TableComponent<T>({

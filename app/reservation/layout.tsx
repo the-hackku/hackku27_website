@@ -1,8 +1,9 @@
 // app/reservation/layout.tsx
-import { ReactNode } from "react";
-import { auth } from "@/lib/auth/auth";
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import type { ReactNode } from "react";
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 
 /**

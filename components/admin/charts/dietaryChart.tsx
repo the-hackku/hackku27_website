@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { getDietaryData } from "@/app/actions/analytics/getData";
-import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { distance } from "fastest-levenshtein";
+import React, { useEffect, useState } from "react";
+import { Pie } from "react-chartjs-2";
+import { getDietaryData } from "@/app/actions/analytics/getData";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -30,7 +30,6 @@ export function fuzzyMatchWithConfidence(input: string, categories: string[]) {
 
   return { category: bestMatch, confidence: highestConfidence };
 }
-
 
 export default function DietaryChart() {
   const [categorizedData, setCategorizedData] = useState<

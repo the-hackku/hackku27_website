@@ -1,7 +1,6 @@
-// schemas.ts
 import { z } from "zod";
 
-export const formSchema = z
+export const participantRegistrationSchema = z
   .object({
     firstName: z.string().min(2, {
       message: "First name must be at least 2 characters.",
@@ -9,29 +8,18 @@ export const formSchema = z
     lastName: z.string().min(2, {
       message: "Last name must be at least 2 characters.",
     }),
-    phoneNumber: z
-      .string()
-      .refine(
-        (value) =>
-          /^[0-9()-\s]+$/.test(value) &&
-          (value.replace(/\D/g, "").length === 10 ||
-            value.replace(/\D/g, "").length === 11),
-        {
-          message: "Phone number must be 10 or 11 digits",
-        },
-      )
-      .transform((value) => value.replace(/\D/g, "")),
+    phoneNumber: z.e164(),
     age: z.coerce
       .number()
       .int()
       .min(14, "You must be at least 14 years old.")
       .max(100, "You must be at most 100 years old."),
-    resumeUrl: z.string().optional(),
+    resumeUrl: z.any().optional(),
 
     genderIdentity: z
       .enum(["Male", "Female", "Non-binary", "Other", "Prefer not to Answer"])
       .optional(),
-    race: z.string(),
+    race: z.array(z.string()).min(1, "Select at least one option"),
     hispanicOrLatino: z.enum(["Yes", "No", "Prefer not to answer"]),
     countryOfResidence: z.string().min(2, "Please enter a valid country."),
     tShirtSize: z.enum(["S", "M", "L", "XL", "XXL", "XXXL"]),
@@ -39,8 +27,8 @@ export const formSchema = z
     specialAccommodations: z.string().optional(),
     currentSchool: z.string(),
     levelOfStudy: z.enum(["High School", "Undergraduate", "Graduate", "Other"]),
-    major: z.string().optional(),
-    minor: z.string().optional(),
+    major: z.array(z.string()).optional(),
+    minor: z.array(z.string()).optional(),
     previousHackathons: z.coerce.number(),
     chaperoneFirstName: z.string().optional(),
     chaperoneLastName: z.string().optional(),
@@ -94,4 +82,4 @@ export const formSchema = z
     }
   });
 
-export type RegistrationData = z.infer<typeof formSchema>;
+export type RegistrationData = z.infer<typeof participantRegistrationSchema>;

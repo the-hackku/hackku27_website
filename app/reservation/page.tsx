@@ -1,15 +1,15 @@
 "use client";
 
-import constants from "@/constants";
-import React, { useState, useMemo } from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IconLoader, IconUser } from "@tabler/icons-react";
+import { debounce } from "lodash";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { IconLoader } from "@tabler/icons-react";
-import Link from "next/link";
-import { debounce } from "lodash";
-
+import { z } from "zod";
+import { searchUsersByEmail } from "@/app/actions/reimbursement";
+import { createReservationRequest } from "@/app/actions/reservationRequest";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,13 +20,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { IconUser } from "@tabler/icons-react";
+import constants from "@/constants";
 
-// -- Import your server actions (adjust paths as needed):
-import { searchUsersByEmail } from "@/app/actions/reimbursement";
-import { createReservationRequest } from "@/app/actions/reservationRequest";
-
-// ----- Zod schema definition
 const reservationSchema = z.object({
   teamName: z.string().min(1, { message: "Team Name is required." }),
   isOutOfStateOrHighSchool: z.enum(["Yes", "No"], {
@@ -105,7 +100,7 @@ export default function RoomReservationForm() {
     name: string;
   }) => {
     // Prevent duplicates
-    if (groupMembers.some((m) => m.id === user.id)) return;
+    if (groupMembers.some((m) => m.id === user.id)) { return; }
 
     // Limit group size if you want. For example, 10:
     if (groupMembers.length >= 10) {
@@ -127,7 +122,7 @@ export default function RoomReservationForm() {
   };
 
   // onSubmit handler
-  const onSubmit = async (data: ReservationFormData) => {
+  const onSubmit = (data: ReservationFormData) => {
     setIsSubmitting(true);
 
     // 1) Parse typed emails into an array
@@ -195,8 +190,7 @@ export default function RoomReservationForm() {
             assigned show up in the
             <Link
               href="/profile"
-              className="border-2 border-gray-400 bg-gray-200 rounded p-[3px] mx-1"
-            >
+              className="border-2 border-gray-400 bg-gray-200 rounded p-[3px] mx-1">
               <IconUser size={16} className="inline-flex align-middle mr-2" />
               Profile
             </Link>
@@ -248,12 +242,12 @@ export default function RoomReservationForm() {
               }}
             />
 
-            {isSearching && (
+            {isSearching ? (
               <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
                 <IconLoader className="animate-spin" size={16} />
                 Searching...
               </div>
-            )}
+            ) : null}
 
             {/* Show "no user found" if search done but no results */}
             {!isSearching &&
@@ -270,8 +264,7 @@ export default function RoomReservationForm() {
                 {searchResults.map((user) => (
                   <div
                     key={user.id}
-                    className="flex justify-between items-center py-1"
-                  >
+                    className="flex justify-between items-center py-1">
                     <span>
                       {user.name} ({user.email})
                     </span>
@@ -289,16 +282,14 @@ export default function RoomReservationForm() {
                 {groupMembers.map((member) => (
                   <div
                     key={member.id}
-                    className="flex items-center justify-between sm:justify-start py-1"
-                  >
+                    className="flex items-center justify-between sm:justify-start py-1">
                     <span>
                       {member.name} ({member.email})
                     </span>
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={() => handleRemoveMember(member.id)}
-                    >
+                      onClick={() => handleRemoveMember(member.id)}>
                       Remove
                     </Button>
                   </div>

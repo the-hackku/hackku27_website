@@ -1,9 +1,9 @@
 "use client";
 
-import type { ExtendedRecordMap } from "notion-types";
-import { NotionRenderer } from "react-notion-x";
 import Image from "next/image";
 import Link from "next/link";
+import type { ExtendedRecordMap } from "notion-types";
+import { NotionRenderer } from "react-notion-x";
 
 export default function NotionPage({
   recordMap,

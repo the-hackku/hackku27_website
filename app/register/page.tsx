@@ -1,10 +1,10 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { RegistrationForm } from "@/components/forms/RegistrationForm";
+import constants from "@/constants";
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import { RegistrationForm } from "@/components/forms/RegistrationForm";
-import { headers } from "next/headers";
-import constants from "@/constants";
-import { RegistrationData } from "../actions/schemas";
+import type { RegistrationData } from "../../types/schemas/participant";
 
 export default async function RegisterPage() {
   if (new Date() > new Date(constants.endDate)) {
@@ -16,7 +16,7 @@ export default async function RegisterPage() {
     );
   }
   const session = await auth.api.getSession({
-    headers: await headers()
+    headers: await headers(),
   });
 
   // If the user is not authenticated, redirect to the signin page
@@ -26,7 +26,7 @@ export default async function RegisterPage() {
 
   // Fetch user details from the database to check if they are already registered
   const user = await prisma.user.findUnique({
-    where: { id: session.session.userId }
+    where: { id: session.session.userId },
   });
 
   const participant = user?.isRegistered;
@@ -36,7 +36,7 @@ export default async function RegisterPage() {
   }
 
   // If not registered, show the registration form and fetch prefill data if available
-  const prefillData = user?.prefillData as RegistrationData || null;
+  const prefillData = (user?.prefillData as RegistrationData) || null;
   return (
     <div className="mb-10">
       <RegistrationForm prefillData={prefillData} />

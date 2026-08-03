@@ -1,6 +1,6 @@
-import { auth, hasPermissions } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { auth, hasPermissions } from "@/lib/auth/auth";
 
 export default async function ScannerLayout({
   children,
@@ -12,7 +12,7 @@ export default async function ScannerLayout({
       headers: await headers(),
     });
     await hasPermissions(session, { checkins: ["perform"] });
-  } catch (error) {
+  } catch {
     redirect("/signin");
   }
 

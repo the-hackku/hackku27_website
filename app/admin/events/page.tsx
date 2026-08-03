@@ -1,12 +1,12 @@
 // app/schedule/page.tsx
 
+import Link from "next/link";
 import AdminEventEditor from "@/components/admin/EventEditor";
 import { EventForm } from "@/components/forms/eventForm";
 import ScheduleGrid from "@/components/ScheduleGrid";
-import { prisma } from "@/lib/prisma";
-import { Event } from "@/prisma/generated/browser";
-import Link from "next/link";
 import constants from "@/constants";
+import { prisma } from "@/lib/prisma";
+import type { Event } from "@/prisma/generated/browser";
 
 // Server-side function to fetch events data
 async function getEvents(): Promise<Event[]> {

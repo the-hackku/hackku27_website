@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import DietaryChart from "./dietaryChart";
 import AccessibilityChart from "./accessabilityChart";
+import DietaryChart from "./dietaryChart";
 
 export default function CombinedDashboard() {
   return (
