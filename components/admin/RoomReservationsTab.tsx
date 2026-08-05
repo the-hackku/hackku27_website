@@ -227,7 +227,8 @@ export function RoomReservationsTab() {
                 <TableRow>
                   <TableCell
                     colSpan={3}
-                    className="text-center text-muted-foreground py-6">
+                    className="text-center text-muted-foreground py-6"
+                  >
                     No rooms yet. Add one to get started.
                   </TableCell>
                 </TableRow>
@@ -241,7 +242,8 @@ export function RoomReservationsTab() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => openEditRoom(room)}>
+                        onClick={() => openEditRoom(room)}
+                      >
                         Edit
                       </Button>
                       <Button
@@ -307,7 +309,8 @@ export function RoomReservationsTab() {
                 <TableRow>
                   <TableCell
                     colSpan={7}
-                    className="text-center text-muted-foreground py-6">
+                    className="text-center text-muted-foreground py-6"
+                  >
                     No reservation requests found.
                   </TableCell>
                 </TableRow>

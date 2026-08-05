@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 
@@ -29,4 +29,4 @@ function Switch({
   )
 }
 
-export { Switch }
+export { Switch };

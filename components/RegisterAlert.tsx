@@ -3,10 +3,10 @@
 import { IconAlertCircle } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Import usePathname
+import { usePathname } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-export default function RegisterAlert() {
+export function RegisterAlert() {
   const pathname = usePathname(); // Get the current route
 
   // Don't show the alert on the /register page

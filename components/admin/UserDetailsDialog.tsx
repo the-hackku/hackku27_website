@@ -12,39 +12,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import type { User } from "@/prisma/generated/browser";
 
 interface UserDetailsDialogProps {
   userId: string | null;
   onOpenChange: (open: boolean) => void;
-}
-
-interface Checkin {
-  id: string;
-  event: { name: string; location?: string | null };
-  createdAt: string;
-}
-
-interface TravelReimbursement {
-  id: string;
-  transportationMethod: string;
-  address: string;
-  distance: number;
-  estimatedCost: number;
-  reason: string;
-  createdAt: string;
-}
-
-interface ParticipantInfo {
-  [key: string]: string | number | boolean | null | undefined;
-}
-
-interface User {
-  name: string | null;
-  email: string;
-  role: string;
-  checkinsAsUser: Checkin[];
-  ParticipantInfo?: ParticipantInfo | null;
-  TravelReimbursement?: TravelReimbursement | null;
 }
 
 function InfoItem({ label, value }: { label: string; value: React.ReactNode }) {
@@ -70,34 +42,7 @@ export function UserDetailsDialog({
         try {
           const user = await getUserById(userId);
 
-          const transformedUser = {
-            ...user,
-            checkinsAsUser: user.checkinsAsUser.map((checkin) => ({
-              ...checkin,
-              createdAt: new Date(checkin.createdAt).toISOString(),
-            })),
-            TravelReimbursement: user.travelReimbursement
-              ? {
-                  ...user.travelReimbursement,
-                  createdAt: new Date(
-                    user.travelReimbursement.createdAt,
-                  ).toISOString(),
-                }
-              : null,
-            ParticipantInfo: user.ParticipantInfo
-              ? {
-                  ...user.ParticipantInfo,
-                  createdAt: new Date(
-                    user.ParticipantInfo.createdAt,
-                  ).toISOString(),
-                  updatedAt: new Date(
-                    user.ParticipantInfo.updatedAt,
-                  ).toISOString(),
-                }
-              : null,
-          };
-
-          setUserDetails(transformedUser);
+          setUserDetails(user);
         } catch (error) {
           console.error("Failed to fetch user details:", error);
           setUserDetails(null);
@@ -110,7 +55,7 @@ export function UserDetailsDialog({
   }, [userId]);
 
   return (
-    <Dialog open={!!userId} onOpenChange={onOpenChange}>
+    <Dialog open={Boolean(userId)} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         {isLoading ? (
           <div className="text-center">
@@ -148,7 +93,7 @@ export function UserDetailsDialog({
                   />
                   <InfoItem
                     label="Total Check-ins"
-                    value={userDetails.checkinsAsUser.length}
+                    value={userDetails.checkins.length}
                   />
                 </CardContent>
               </Card>
@@ -206,8 +151,8 @@ export function UserDetailsDialog({
                   <CardTitle>Check-in History</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {userDetails.checkinsAsUser.length > 0 ? (
-                    userDetails.checkinsAsUser.map((checkin) => (
+                  {userDetails.checkins.length > 0 ? (
+                    userDetails.checkins.map((checkin) => (
                       <div key={checkin.id} className="border p-4 rounded">
                         <InfoItem label="Event" value={checkin.event.name} />
                         <InfoItem

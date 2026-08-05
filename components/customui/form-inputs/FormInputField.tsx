@@ -16,6 +16,7 @@ interface FormInputFieldProps {
   placeholder?: string;
   required?: boolean;
   type?: string;
+  autocomplete?: string;
   inputRef?: React.Ref<HTMLInputElement>;
   formatValue?(value: string): string;
 }

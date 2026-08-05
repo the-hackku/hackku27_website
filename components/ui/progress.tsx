@@ -1,8 +1,28 @@
-"use client"
+"use client";
 
-import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
+import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
 
-import { cn } from "@/lib/utils"
+function Progress({
+  ref,
+  className,
+  value,
+  ...props
+}: React.ComponentProps<typeof ProgressPrimitive.Root>) {
+  return (
+    <ProgressPrimitive.Root
+      ref={ref}
+      className={cn(
+        "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
+        className,
+      )}
+      {...props}>
+      <ProgressPrimitive.Indicator
+        className="h-full w-full flex-1 bg-primary transition-all"
+        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+      />
+    </ProgressPrimitive.Root>
+  );
+}
 
 function Progress({
   className,
@@ -15,14 +35,13 @@ function Progress({
       value={value}
       data-slot="progress"
       className={cn("flex flex-wrap gap-3", className)}
-      {...props}
-    >
+      {...props}>
       {children}
       <ProgressTrack>
         <ProgressIndicator />
       </ProgressTrack>
     </ProgressPrimitive.Root>
-  )
+  );
 }
 
 function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
@@ -30,12 +49,12 @@ function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
     <ProgressPrimitive.Track
       className={cn(
         "relative flex h-1.5 w-full items-center overflow-x-hidden rounded-full bg-muted",
-        className
+        className,
       )}
       data-slot="progress-track"
       {...props}
     />
-  )
+  );
 }
 
 function ProgressIndicator({
@@ -48,7 +67,7 @@ function ProgressIndicator({
       className={cn("h-full bg-primary transition-all", className)}
       {...props}
     />
-  )
+  );
 }
 
 function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
@@ -58,7 +77,7 @@ function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
       data-slot="progress-label"
       {...props}
     />
-  )
+  );
 }
 
 function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
@@ -66,18 +85,18 @@ function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
     <ProgressPrimitive.Value
       className={cn(
         "ml-auto text-sm text-muted-foreground tabular-nums",
-        className
+        className,
       )}
       data-slot="progress-value"
       {...props}
     />
-  )
+  );
 }
 
 export {
   Progress,
-  ProgressTrack,
   ProgressIndicator,
   ProgressLabel,
+  ProgressTrack,
   ProgressValue,
-}
+};

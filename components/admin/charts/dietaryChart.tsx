@@ -107,7 +107,7 @@ export default function DietaryChart() {
     setUncertainData(uncertain);
   }
 
-  if (!Object.keys(categorizedData).length) return <p>Loading...</p>;
+  if (Object.keys(categorizedData).length === 0) { return <p>Loading...</p>; }
 
   const chartData = {
     labels: Object.keys(categorizedData),

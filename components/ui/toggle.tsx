@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -24,8 +24,8 @@ const toggleVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
-)
+  },
+);
 
 function Toggle({
   className,
@@ -42,4 +42,4 @@ function Toggle({
   )
 }
 
-export { Toggle, toggleVariants }
+export { Toggle, toggleVariants };

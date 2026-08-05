@@ -190,7 +190,8 @@ export default function RoomReservationForm() {
             assigned show up in the
             <Link
               href="/profile"
-              className="border-2 border-gray-400 bg-gray-200 rounded p-[3px] mx-1">
+              className="border-2 border-gray-400 bg-gray-200 rounded p-[3px] mx-1"
+            >
               <IconUser size={16} className="inline-flex align-middle mr-2" />
               Profile
             </Link>

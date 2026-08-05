@@ -799,7 +799,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     <td
                       className={`relative border-r border-gray-300 overflow-visible text-xs ${
                         slotIndex % 2 === 0 ? "" : "border-b border-solid"
-                      }`}>
+                      }`}
+                    >
                       {slotIndex % 2 === 0
                         ? formatTime(slotIndex, baseHour, timezoneMode)
                         : ""}
@@ -816,7 +817,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                             }`}
                             style={{
                               borderRightStyle: "dashed",
-                            }}>
+                            }}
+                          >
                             {filteredGroupedEvents[day]
                               ?.filter(
                                 (event) =>
@@ -888,7 +890,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                       height: `calc(${rowSpan * 3}rem - 4px)`,
                                       position: "absolute",
                                       opacity: isSelected ? "0.8" : "1",
-                                    }}>
+                                    }}
+                                  >
                                     {/* Event content */}
                                     <span
                                       className={`inline-flex flex-wrap items-start text-left ${
@@ -897,12 +900,14 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                         overlapInfo.groupSize > 1
                                           ? "flex-col"
                                           : "flex-row items-center"
-                                      }`}>
+                                      }`}
+                                    >
                                       <p className="text-sm font-bold whitespace-normal break-words mr-1">
                                         {event.eventType === "REQUIRED" && (
                                           <span
                                             className="text-red-500"
-                                            title="Required Event">
+                                            title="Required Event"
+                                          >
                                             *
                                           </span>
                                         )}
@@ -945,7 +950,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                               WebkitLineClamp:
                                                 descriptionLineClamp,
                                               WebkitBoxOrient: "vertical",
-                                            }}>
+                                            }}
+                                          >
                                             <em>{event.description}</em>
                                           </span>
                                         </div>
@@ -960,7 +966,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                     </TooltipTrigger>
                                     <TooltipContent
                                       side="right"
-                                      className="max-w-xs">
+                                      className="max-w-xs"
+                                    >
                                       <p className="font-bold">{event.name}</p>
                                       <p className="text-xs text-muted-foreground">
                                         {formatTimeForSlot(

@@ -18,17 +18,20 @@ import {
 } from "@/app/actions/admin";
 import AnalyticsChart from "@/components/admin/charts/AnalyticsChart";
 import CombinedDashboard from "@/components/admin/charts/combinedDashboard";
-import { EventDetailsDialog } from "@/components/admin/EventDetailsDialog"; // Import EventDetailsDialog
+import { EventDetailsDialog } from "@/components/admin/EventDetailsDialog";
 import { GenericDataContainer } from "@/components/admin/GenericDataContainer";
 import { RoomReservationsTab } from "@/components/admin/RoomReservationsTab";
 import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import constants from "@/constants";
+import { roles } from "@/lib/auth/permissions";
 import type {
   ParticipantInfo,
   TravelReimbursement,
+  User,
 } from "@/prisma/generated/browser";
+
 import {
   exportEmails,
   exportParticipantEmails,
@@ -39,13 +42,6 @@ import {
 interface ExtendedUser extends User {
   ParticipantInfo?: ParticipantInfo | null;
   checkinsAsUser?: Checkin[];
-}
-
-interface User {
-  id: string;
-  email: string;
-  role: ROLE;
-  name?: string | null;
 }
 
 interface ExtendedTravelReimbursement extends TravelReimbursement {
@@ -133,7 +129,7 @@ export default function AdminTabsPage() {
       setSelectedUserId(null);
     }
   };
-  
+
   const onEventOpenChange = (open: boolean) => {
     if (!open) {
       setSelectedEventId(null);
@@ -205,7 +201,7 @@ export default function AdminTabsPage() {
       header: "Role",
       accessorFn: (row) => row.role,
       meta: {
-        selectOptions: Object.values(ROLE).map((role) => ({
+        selectOptions: Object.keys(roles).map((role) => ({
           value: role,
           label: role,
         })),
@@ -275,7 +271,7 @@ export default function AdminTabsPage() {
           : checkin.user.name || "Unknown";
         const handleClick = () => {
           setSelectedUserId(checkin.userId);
-        }
+        };
         return (
           <button
             type="button"
@@ -293,7 +289,7 @@ export default function AdminTabsPage() {
         const checkin = row.original;
         const handleClick = () => {
           setSelectedEventId(checkin.eventId); // Show event details dialog
-        }
+        };
         return (
           <button
             type="button"

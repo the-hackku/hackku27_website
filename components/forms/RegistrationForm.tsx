@@ -342,7 +342,8 @@ export function RegistrationForm({
             Registration successful! Please join our discord{" "}
             <a
               className="text-blue-500 font-bold"
-              href={constants.discordInvite}>
+              href={constants.discordInvite}
+            >
               here
             </a>
             !
