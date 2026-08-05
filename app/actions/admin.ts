@@ -643,7 +643,7 @@ export async function getUserById(userId: string) {
       where: { id: userId },
       include: {
         ParticipantInfo: true,
-        checkinsAsUser: {
+        checkins: {
           include: {
             event: true,
           },
