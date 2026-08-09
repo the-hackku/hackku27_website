@@ -2,9 +2,9 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { pageCardStyle } from "@/components/PageCard";
+import { HomeView } from "@/components/pages/home";
 import { authClient } from "@/lib/auth/auth-client";
 
 export default function HomePage() {
@@ -12,17 +12,6 @@ export default function HomePage() {
 
   const { data: session } = authClient.useSession();
   const isRegistered = session?.session.isRegistered;
-
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  // Reset to welcome view when the header logo is clicked (?reset param)
-  useEffect(() => {
-    if (searchParams.has("reset")) {
-      setView("welcome");
-      router.replace("/", { scroll: false });
-    }
-  }, [searchParams, router]);
 
   const registerText = isRegistered ? "Sign Out" : "Register Now";
   const registerColor = isRegistered ? "#16a34a" : "#f2a900"; // green or yellow
@@ -194,6 +183,10 @@ export default function HomePage() {
           )}
         </AnimatePresence>
       </div>
+      {/* This forces the view back to welcome when the header logo is clicked; must be wrapped in Suspense because it calls useSearchParams */}
+      <Suspense>
+        <HomeView setView={setView} />
+      </Suspense>
     </div>
   );
 }

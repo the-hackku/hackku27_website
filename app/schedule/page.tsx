@@ -1,13 +1,10 @@
+import { Suspense } from "react";
 import ScheduleGrid from "@/components/ScheduleGrid";
-import constants from "@/constants";
 // import BeginnerWorkshops from "@/components/BeginnerWorkshops";
 import { prisma } from "@/lib/prisma";
-import type { Event } from "@/prisma/generated/browser";
 
-/**
- * Fetch events from your database
- */
-async function getEvents(): Promise<Event[]> {
+export default async function SchedulePage() {
+  "use cache";
   const events = await prisma.event.findMany({
     select: {
       id: true,
@@ -21,14 +18,9 @@ async function getEvents(): Promise<Event[]> {
       eventType: true,
     },
   });
-  return events;
-}
-
-export default async function SchedulePage() {
-  const events = await getEvents();
 
   // Convert date fields to ISO strings (so that they are serializable on the client)
-  const formattedEvents = events.map((event) => ({
+  const mainScheduleEvents = events.map((event) => ({
     ...event,
     startDate: event.startDate.toISOString(),
     endDate: event.endDate.toISOString(),
@@ -37,7 +29,7 @@ export default async function SchedulePage() {
   }));
 
   // Decide how to identify "beginner workshops" vs. "normal" events.
-  const cutoffDate = new Date(constants.cutoffDate);
+  // const cutoffDate = new Date(constants.cutoffDate);
 
   // Filter out beginner workshops
   // const beginnerWorkshops = formattedEvents.filter(
@@ -45,9 +37,9 @@ export default async function SchedulePage() {
   // );
 
   // Filter out the rest (main schedule)
-  const mainScheduleEvents = formattedEvents.filter(
-    (ev) => new Date(ev.startDate) >= cutoffDate,
-  );
+  // const mainScheduleEvents = formattedEvents.filter(
+  //   (ev) => new Date(ev.startDate) >= cutoffDate,
+  // );
 
   // You could also filter by eventType, for instance:
   // const beginnerWorkshops = formattedEvents.filter(
@@ -60,7 +52,9 @@ export default async function SchedulePage() {
       {/* Pass only the main schedule events to the big schedule */}
       {/* <BeginnerWorkshops schedule={beginnerWorkshops} /> */}
       {/* <hr className="my-8" /> */}
-      <ScheduleGrid schedule={mainScheduleEvents} />
+      <Suspense fallback={<div>Loading schedule...</div>}>
+        <ScheduleGrid schedule={mainScheduleEvents} />
+      </Suspense>
       {/* Pass only the "beginner" events to the simpler layout */}
     </div>
   );

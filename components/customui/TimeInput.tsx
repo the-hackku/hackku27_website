@@ -19,7 +19,7 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
   const initialMinute = value ? value.split(":")[1] : "00";
   const initialAmPm = initialHour >= 12 ? "PM" : "AM";
   const [hours, setHours] = useState(() => {
-    if (!value) return "12";
+    if (!value) { return "12"; }
     const h = Number.parseInt(value.split(":")[0], 10);
     const hour12 = h % 12 === 0 ? 12 : h % 12;
     return hour12.toString();
@@ -60,7 +60,7 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Button variant="outline" className="w-full">
           <Clock className="mr-2 h-4 w-4" />
           {displayTime || "Select time"}
@@ -74,10 +74,9 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
             value={hours}
             onChange={(e) => {
               let newHours = e.target.value;
-              // Limit hours between 1 and 12
               const num = Number.parseInt(newHours, 10);
-              if (num > 12) newHours = "12";
-              if (num < 1 || isNaN(num)) newHours = "1";
+              if (num > 12) { newHours = "12"; }
+              if (num < 1 || Number.isNaN(num)) { newHours = "1"; }
               setHours(newHours);
             }}
             onBlur={handleTimeChange}
@@ -94,8 +93,8 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
             onChange={(e) => {
               let newMinutes = e.target.value;
               const num = Number.parseInt(newMinutes, 10);
-              if (num > 59) newMinutes = "59";
-              if (num < 0 || isNaN(num)) newMinutes = "00";
+              if (num > 59) { newMinutes = "59"; }
+              if (num < 0 || Number.isNaN(num)) { newMinutes = "00"; }
               setMinutes(newMinutes);
             }}
             onBlur={handleTimeChange}
@@ -111,12 +110,12 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
               setAmPm(e.target.value);
               handleTimeChange();
             }}
-            className="text-center border rounded p-2">
+            className="text-center border rounded p-2 text-sm bg-background">
             <option value="AM">AM</option>
             <option value="PM">PM</option>
           </select>
         </div>
-        <Button variant="outline" className="mt-2" onClick={handleTimeChange}>
+        <Button variant="outline" className="mt-2 w-full" onClick={handleTimeChange}>
           Set Time
         </Button>
       </PopoverContent>

@@ -157,12 +157,12 @@ export function RoomReservationsTab() {
   }
 
   // ── Request handlers ──────────────────────────────────────────────────────
-  async function handleAssignRoom(requestId: string, themedRoomId: string) {
+  async function handleAssignRoom(requestId: string, themedRoomId: string | null) {
     setAssigningId(requestId);
     try {
       await assignRoomToRequest(
         requestId,
-        themedRoomId === "none" ? null : themedRoomId,
+        themedRoomId === "none" || themedRoomId === null ? null : themedRoomId,
       );
       toast.success("Room assigned.");
       fetchRequests();

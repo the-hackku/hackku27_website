@@ -310,8 +310,7 @@ export function GenericDataContainer<T extends { id: string }>({
             )
           }
           <Button
-            variant={totalChanges === 0 ? "outline" : "default"}
-            color={totalChanges === 0 ? "gray" : "yellow"}
+            variant={totalChanges === 0 ? "outline" : "destructive"}
             onClick={saveAll}
             disabled={totalChanges === 0}>
             Save All {totalChanges > 0 && `(${totalChanges})`}

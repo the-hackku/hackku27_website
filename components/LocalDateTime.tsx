@@ -2,7 +2,7 @@
 "use client";
 
 type LocalDateTimeProps = {
-  dateString: string;
+  dateString: string | Date;
   showTime?: boolean; // Optional prop to toggle time display
 };
 
@@ -10,7 +10,7 @@ export default function LocalDateTime({
   dateString,
   showTime = false,
 }: LocalDateTimeProps) {
-  const date = new Date(dateString);
+  const date = typeof dateString === "string" ? new Date(dateString) : dateString;
 
   const formattedDate = date.toLocaleDateString(undefined, {
     year: "numeric",

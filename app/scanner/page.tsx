@@ -158,7 +158,7 @@ export default function ScannerPage() {
     }
   };
 
-  const handleEventChange = (eventId: string) => {
+  const handleEventChange = (eventId: string | null) => {
     selectedEventRef.current = eventId;
   }
 
@@ -227,7 +227,7 @@ export default function ScannerPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Scanner Section with dynamic background */}
-      {/** biome-ignore lint/a11y/noStaticElementInteractions: Covers the entire scanner component */}
+      {/** biome-ignore lint/a11y/noStaticElementInteractions: Covers the entire scanner component for interaction */}
       <div onClick={resetScreen} onKeyDown={resetScreen}>
         <Select
           onValueChange={handleEventChange}>

@@ -12,12 +12,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { User } from "@/prisma/generated/browser";
 
 interface UserDetailsDialogProps {
   userId: string | null;
   onOpenChange: (open: boolean) => void;
 }
+
+type UserData = Awaited<ReturnType<typeof getUserById>>;
 
 function InfoItem({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -32,7 +33,7 @@ export function UserDetailsDialog({
   userId,
   onOpenChange,
 }: UserDetailsDialogProps) {
-  const [userDetails, setUserDetails] = useState<User | null>(null);
+  const [userDetails, setUserDetails] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -118,13 +119,13 @@ export function UserDetailsDialog({
                 </Card>
               )}
 
-              {userDetails.TravelReimbursement && (
+              {userDetails.travelReimbursement && (
                 <Card>
                   <CardHeader>
                     <CardTitle>Reimbursement Information</CardTitle>
                   </CardHeader>
                   <CardContent className="grid grid-cols-2 gap-4">
-                    {Object.entries(userDetails.TravelReimbursement)
+                    {Object.entries(userDetails.travelReimbursement)
                       .filter(([key]) => key !== "id" && key !== "userId")
                       .map(([key, value]) => (
                         <InfoItem

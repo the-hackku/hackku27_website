@@ -766,7 +766,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           {/* Container for Tabs and Filter */}
 
           {/* Schedule Grid Table */}
-          <TooltipProvider delayDuration={300}>
+          <TooltipProvider delay={300}>
             <table className="table-fixed w-full border-collapse h-full">
               <thead className="sticky top-0 bg-gray-100 z-50 border-b">
                 <tr>
@@ -961,13 +961,10 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
                                 return isCramped ? (
                                   <Tooltip key={event.id}>
-                                    <TooltipTrigger asChild>
+                                    <TooltipTrigger>
                                       {gridItemContent}
                                     </TooltipTrigger>
-                                    <TooltipContent
-                                      side="right"
-                                      className="max-w-xs"
-                                    >
+                                    <TooltipContent side="right" className="max-w-xs">
                                       <p className="font-bold">{event.name}</p>
                                       <p className="text-xs text-muted-foreground">
                                         {formatTimeForSlot(

@@ -13,6 +13,7 @@ export function Header() {
       {/* SVG Container class */}
       <div className="absolute inset-x-0 top-0 h-full pointer-events-none">
         {/* Left header SVG */}
+        {/** biome-ignore lint/a11y/noSvgWithoutTitle: Stylistic SVG, does not need to be described */}
         <svg
           viewBox="0 0 100 380"
           preserveAspectRatio="none"
@@ -37,6 +38,7 @@ export function Header() {
         </svg>
 
         {/* Header Dip SVG */}
+        {/** biome-ignore lint/a11y/noSvgWithoutTitle: Stylistic SVG, does not need to be described */}
         <svg
           viewBox="0 0 1280 380"
           preserveAspectRatio="none"
@@ -75,6 +77,7 @@ export function Header() {
         </svg>
 
         {/* Right header SVG */}
+        {/** biome-ignore lint/a11y/noSvgWithoutTitle: Stylistic SVG, does not need to be described */}
         <svg
           viewBox="0 0 100 380"
           preserveAspectRatio="none"
@@ -129,7 +132,7 @@ export function Header() {
         </Link>
       </div>
 <div className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 z-50">
-  <Link href="/?reset">
+  <Link href="/?reset" prefetch={false}>
     <Image
       src="/images/branding/logo_nobackground.webp"
       alt="HackKU"

@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { forbidden, redirect } from "next/navigation";
+import { Suspense } from "react";
 import { auth } from "@/lib/auth/auth";
 
 export default async function AdminLayout({
@@ -26,6 +27,13 @@ export default async function AdminLayout({
 
   // If authorized, render the children
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-8">{children}</div>
+    <Suspense
+      fallback={
+        <div className="container mx-auto max-w-7xl px-4 py-8">Loading...</div>
+      }>
+      <div className="container mx-auto max-w-7xl px-4 py-8">{children}</div>
+    </Suspense>
   );
 }
+
+export const instant = false;

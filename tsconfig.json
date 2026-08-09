@@ -30,7 +30,6 @@
     ".next/types/**/*.ts",
     "scripts/fromsheets.js",
     "app/reimbursement",
-    "app/reimbursement",
     "scripts/zipResumes.js",
     ".next/dev/types/**/*.ts"
   ],

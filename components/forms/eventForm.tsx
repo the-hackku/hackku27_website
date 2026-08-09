@@ -18,11 +18,6 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TimeInput } from "../customui/TimeInput";
 
-// import constants from "@/constants";
-
-type FormData = z.infer<typeof formSchema>;
-
-// Define schema using Zod with coercion for the duration
 const formSchema = z.object({
   name: z
     .string()
@@ -35,10 +30,15 @@ const formSchema = z.object({
   eventType: z.enum(["FOOD", "REQUIRED", "WORKSHOPS", "SPONSOR", "ACTIVITIES"]),
 });
 
+// Infer separate input and output types for Zod coercion handling
+type FormInput = z.input<typeof formSchema>;
+type FormOutput = z.output<typeof formSchema>;
+
 export function EventForm() {
   const router = useRouter();
 
-  const form = useForm<FormData>({
+  // Supply both FormInput and FormOutput generics to useForm
+  const form = useForm<FormInput, any, FormOutput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -47,19 +47,15 @@ export function EventForm() {
       duration: 1,
       location: "",
       description: "",
-      eventType: "FOOD", // Default value
+      eventType: "FOOD",
     },
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: FormOutput) => {
     try {
-      // Construct start DateTime object from date and time
       const eventStart = createDateTime(data.date, data.startTime);
-
-      // Calculate end DateTime based on the duration
       const eventEnd = calculateEndTime(eventStart, data.duration);
 
-      // Call backend API to create the event
       await createEvent({
         name: data.name,
         startDate: eventStart.toISOString(),
@@ -69,7 +65,6 @@ export function EventForm() {
         eventType: data.eventType,
       });
 
-      // Reset the form and refresh the page
       form.reset();
       router.refresh();
     } catch (error) {
@@ -77,28 +72,22 @@ export function EventForm() {
     }
   };
 
-  // Helper function to construct a full DateTime object from a date and time string
   const createDateTime = (date: string, time: string) => {
     const [year, month, day] = date.split("-").map(Number);
     const [hours, minutes] = time.split(":").map(Number);
-
-    // Create a new Date object using local time
     return new Date(year, month - 1, day, hours, minutes);
   };
 
-  // Helper function to calculate end time based on start time and duration
   const calculateEndTime = (startDateTime: Date, durationInHours: number) => {
     const endDateTime = new Date(startDateTime);
-    // Calculate duration in minutes
     const durationInMinutes = Math.round(durationInHours * 60);
-    // Set the end time by adding the duration in minutes
     endDateTime.setMinutes(endDateTime.getMinutes() + durationInMinutes);
     return endDateTime;
   };
 
   return (
     <div className="flex justify-center">
-      <div className=" p-4 bg-white rounded-lg shadow-sm border ">
+      <div className="p-4 bg-white rounded-lg shadow-sm border">
         <h2 className="text-lg font-semibold mb-4 text-center bg-green-400">
           Create New Event
         </h2>
@@ -149,6 +138,8 @@ export function EventForm() {
                   </FormItem>
                 )}
               />
+
+              {/* Event Type */}
               <FormField
                 control={form.control}
                 name="eventType"
@@ -159,7 +150,7 @@ export function EventForm() {
                       <select
                         value={field.value}
                         onChange={field.onChange}
-                        className="border rounded p-2 w-full">
+                        className="border rounded p-2 w-full bg-background text-foreground">
                         <option value="FOOD">Food</option>
                         <option value="REQUIRED">Required</option>
                         <option value="WORKSHOPS">Workshops</option>
@@ -182,36 +173,28 @@ export function EventForm() {
                   <FormItem>
                     <FormLabel>Event Date</FormLabel>
                     <FormControl>
-                      {/* add cutom date input here */}
-
                       <RadioGroup
                         value={field.value}
                         onValueChange={field.onChange}
                         className="flex space-x-4">
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroupItem value="2026-04-17" id="friday" />
-                          </FormControl>
-                          <FormLabel htmlFor="friday" className="text-sm">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="2026-04-17" id="friday" />
+                          <FormLabel htmlFor="friday" className="text-sm font-normal cursor-pointer">
                             Friday, 17th
                           </FormLabel>
-                        </FormItem>
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroupItem value="2026-04-18" id="saturday" />
-                          </FormControl>
-                          <FormLabel htmlFor="saturday" className="text-sm">
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="2026-04-18" id="saturday" />
+                          <FormLabel htmlFor="saturday" className="text-sm font-normal cursor-pointer">
                             Saturday, 18th
                           </FormLabel>
-                        </FormItem>
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroupItem value="2026-04-19" id="sunday" />
-                          </FormControl>
-                          <FormLabel htmlFor="sunday" className="text-sm">
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="2026-04-19" id="sunday" />
+                          <FormLabel htmlFor="sunday" className="text-sm font-normal cursor-pointer">
                             Sunday, 19th
                           </FormLabel>
-                        </FormItem>
+                        </div>
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />
@@ -220,7 +203,7 @@ export function EventForm() {
               />
 
               {/* Event Start Time and Duration */}
-              <div className="grid grid-cols-2 gap-1">
+              <div className="grid grid-cols-2 gap-2">
                 <FormField
                   control={form.control}
                   name="startTime"
@@ -250,6 +233,7 @@ export function EventForm() {
                           step="0.5"
                           placeholder="Enter duration in hours"
                           {...field}
+                          value={(field.value as string | number | null) ?? ""}
                         />
                       </FormControl>
                       <FormMessage />

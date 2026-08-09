@@ -20,3 +20,5 @@ export default async function ScannerLayout({
     <div className="container mx-auto max-w-7xl px-4 py-8">{children}</div>
   );
 }
+
+export const instant = false;

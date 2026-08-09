@@ -21,7 +21,7 @@ const LOCAL_STORAGE_KEY = "hackku27_registration_form";
 export function RegistrationForm({
   prefillData,
 }: {
-  prefillData: RegistrationData | null;
+  prefillData: RegistrationData | null | undefined;
 }) {
   const router = useRouter();
 
