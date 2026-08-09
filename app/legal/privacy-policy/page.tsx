@@ -74,19 +74,6 @@ export default function PrivacyPolicy() {
             Section 4).
           </li>
           <li>
-            <strong>Media and Photography:</strong> Please note that
-            photography, filming, and media recording occur throughout the
-            hackathon. Media captured at the event is governed by our separate{" "}
-            <Link
-              href="INSERT_YOUR_LINK_HERE"
-              className="text-blue-600 hover:underline"
-            >
-              HackKU Photo Waiver
-            </Link>
-            , which all participants must review and agree to during the
-            application process.
-          </li>
-          <li>
             <strong>Automatically Collected Information & Analytics:</strong>{" "}
             When you visit our website, we use{" "}
             <strong>Vercel Web Analytics</strong> to collect basic technical

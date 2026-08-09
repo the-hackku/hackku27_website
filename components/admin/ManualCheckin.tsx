@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useTransition } from "react";
-import { debounce } from "lodash";
-import { searchUsers, manualCheckIn } from "@/app/actions/admin"; // Your admin actions
-import { fetchEvents } from "@/app/actions/events"; // Server action to get events
-import { toast } from "sonner";
 // If you want to use a loading spinner icon
 import { IconLoader } from "@tabler/icons-react";
+import { debounce } from "lodash";
+import type React from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import { toast } from "sonner";
+import { manualCheckIn, searchUsers } from "@/app/actions/admin"; // Your admin actions
+import { fetchEvents } from "@/app/actions/events"; // Server action to get events
 
 export default function ManualCheckin() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,7 +80,7 @@ export default function ManualCheckin() {
 
   // ---- 4. Handle manual check-in call ----
   const handleCheckIn = async () => {
-    if (!selectedUserId || !selectedEventId) {
+    if (!(selectedUserId && selectedEventId)) {
       toast.error("Please select a user and an event first.");
       return;
     }
@@ -114,8 +115,7 @@ export default function ManualCheckin() {
         <select
           value={selectedEventId}
           onChange={(e) => setSelectedEventId(e.target.value)}
-          className="border p-2 rounded w-full"
-        >
+          className="border p-2 rounded w-full">
           <option value="">-- Select an event --</option>
           {events.map((evt) => (
             <option key={evt.id} value={evt.id}>
@@ -148,8 +148,7 @@ export default function ManualCheckin() {
             {searchResults.map((user) => (
               <label
                 key={user.id}
-                className="block py-1 cursor-pointer hover:bg-gray-100 rounded"
-              >
+                className="block py-1 cursor-pointer hover:bg-gray-100 rounded">
                 <input
                   type="radio"
                   name="selectedUser"
@@ -168,8 +167,7 @@ export default function ManualCheckin() {
       <button
         onClick={handleCheckIn}
         disabled={isPending}
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
-      >
+        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400">
         {isPending ? "Checking in..." : "Check In Manually"}
       </button>
 

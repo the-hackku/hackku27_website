@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
-import { resolve } from "path";
 import { parse } from "json2csv";
+import { resolve } from "path";
 // import { prisma } from "../lib/prisma.ts"; // use this when running standalone
 import { prisma } from "../lib/prisma";
 

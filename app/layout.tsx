@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
-import HeaderWrapper from "@/components/HeaderWrapper";
-import DoodleBackground from "@/components/DoodleBackground";
-import { getDoodleImages } from "@/lib/getDoodles";
-import Footer from "@/components/Footer";
-import { Toaster } from "@/components/ui/sonner";
-import Providers from "@/providers/ProgressBarProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import DoodleBackground from "@/components/DoodleBackground";
+import Footer from "@/components/Footer";
+import HeaderWrapper from "@/components/HeaderWrapper";
+import { Toaster } from "@/components/ui/sonner";
+import { getDoodleImages } from "@/lib/getDoodles";
+import Providers from "@/providers/ProgressBarProvider";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -28,22 +28,21 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const doodleImages = getDoodleImages();
+  const doodleImages = await getDoodleImages();
 
   return (
     <html lang="en" suppressHydrationWarning className={robotoMono.className}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className={`antialiased min-h-screen flex flex-col`}>
+      <body className="antialiased min-h-screen flex flex-col">
         <Providers>
           <div className="flex flex-col min-h-screen">
             <DoodleBackground images={doodleImages} />
             <HeaderWrapper />
             <main
               className="flex-grow relative z-10"
-              style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}
-            >
+              style={{ paddingTop: "clamp(160px, 10vw, 230px)" }}>
               {children}
             </main>
             <Footer />

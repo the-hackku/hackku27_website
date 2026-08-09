@@ -1,16 +1,28 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import { IconLoader, IconX } from "@tabler/icons-react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import {
+  type AdminReservationRequest,
+  type AdminThemedRoom,
+  assignRoomToRequest,
+  createThemedRoom,
+  deleteAdminThemedRoom,
+  deleteReservationRequest,
+  getReservationRequests,
+  getThemedRooms,
+  updateAdminThemedRoom,
+} from "@/app/actions/admin";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -26,19 +38,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { format } from "date-fns";
-import { IconLoader, IconX } from "@tabler/icons-react";
-import {
-  type AdminThemedRoom,
-  type AdminReservationRequest,
-  getThemedRooms,
-  createThemedRoom,
-  updateAdminThemedRoom,
-  deleteAdminThemedRoom,
-  getReservationRequests,
-  assignRoomToRequest,
-  deleteReservationRequest,
-} from "@/app/actions/admin";
 
 const PAGE_SIZE = 10;
 
@@ -120,7 +119,7 @@ export function RoomReservationsTab() {
   }
 
   async function handleSaveRoom() {
-    if (!roomForm.name.trim() || !roomForm.location.trim()) {
+    if (!(roomForm.name.trim() && roomForm.location.trim())) {
       toast.error("Name and location are required.");
       return;
     }
@@ -158,12 +157,12 @@ export function RoomReservationsTab() {
   }
 
   // ── Request handlers ──────────────────────────────────────────────────────
-  async function handleAssignRoom(requestId: string, themedRoomId: string) {
+  async function handleAssignRoom(requestId: string, themedRoomId: string | null) {
     setAssigningId(requestId);
     try {
       await assignRoomToRequest(
         requestId,
-        themedRoomId === "none" ? null : themedRoomId,
+        themedRoomId === "none" || themedRoomId === null ? null : themedRoomId,
       );
       toast.success("Room assigned.");
       fetchRequests();
@@ -250,8 +249,7 @@ export function RoomReservationsTab() {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => handleDeleteRoom(room.id)}
-                      >
+                        onClick={() => handleDeleteRoom(room.id)}>
                         Delete
                       </Button>
                     </div>
@@ -285,8 +283,7 @@ export function RoomReservationsTab() {
             {requestsSearch && (
               <button
                 onClick={() => setRequestsSearch("")}
-                className="absolute inset-y-0 right-2 flex items-center"
-              >
+                className="absolute inset-y-0 right-2 flex items-center">
                 <IconX size={16} />
               </button>
             )}
@@ -324,8 +321,7 @@ export function RoomReservationsTab() {
                   <TableCell className="text-sm">{req.userEmail}</TableCell>
                   <TableCell
                     className="text-sm max-w-[180px] truncate"
-                    title={req.memberEmails}
-                  >
+                    title={req.memberEmails}>
                     {req.memberEmails}
                   </TableCell>
                   <TableCell>{req.outOfState ? "Yes" : "No"}</TableCell>
@@ -336,8 +332,7 @@ export function RoomReservationsTab() {
                       <Select
                         value={req.themedRoomId ?? "none"}
                         onValueChange={(val) => handleAssignRoom(req.id, val)}
-                        disabled={rooms.length === 0}
-                      >
+                        disabled={rooms.length === 0}>
                         <SelectTrigger className="h-8 text-sm w-48">
                           <SelectValue placeholder="Unassigned" />
                         </SelectTrigger>
@@ -357,14 +352,17 @@ export function RoomReservationsTab() {
                     )}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {format(new Date(req.createdAt), "MMM d, yyyy")}
+                    {Intl.DateTimeFormat("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    }).format(new Date(req.createdAt))}
                   </TableCell>
                   <TableCell>
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={() => handleCancelRequest(req.id)}
-                    >
+                      onClick={() => handleCancelRequest(req.id)}>
                       Cancel
                     </Button>
                   </TableCell>
@@ -379,8 +377,7 @@ export function RoomReservationsTab() {
             variant="outline"
             size="sm"
             disabled={requestsPage <= 1}
-            onClick={() => setRequestsPage((p) => p - 1)}
-          >
+            onClick={() => setRequestsPage((p) => p - 1)}>
             Previous
           </Button>
           <span className="text-sm text-muted-foreground">
@@ -390,8 +387,7 @@ export function RoomReservationsTab() {
             variant="outline"
             size="sm"
             disabled={requestsPage >= requestsTotalPages}
-            onClick={() => setRequestsPage((p) => p + 1)}
-          >
+            onClick={() => setRequestsPage((p) => p + 1)}>
             Next
           </Button>
         </div>
@@ -400,8 +396,7 @@ export function RoomReservationsTab() {
       {/* ── Add / Edit Room Dialog ── */}
       <Dialog
         open={roomDialogOpen}
-        onOpenChange={(open) => !open && setRoomDialogOpen(false)}
-      >
+        onOpenChange={(open) => !open && setRoomDialogOpen(false)}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>{editingRoom ? "Edit Room" : "Add Room"}</DialogTitle>
@@ -437,8 +432,7 @@ export function RoomReservationsTab() {
             <Button
               variant="outline"
               onClick={() => setRoomDialogOpen(false)}
-              disabled={roomSaving}
-            >
+              disabled={roomSaving}>
               Cancel
             </Button>
             <Button onClick={handleSaveRoom} disabled={roomSaving}>

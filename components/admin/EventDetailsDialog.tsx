@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getEventById } from "@/app/actions/admin"; // We will create this server action
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getEventById } from "@/app/actions/admin"; // We will create this server action
 
 interface EventDetailsDialogProps {
   eventId: string | null;

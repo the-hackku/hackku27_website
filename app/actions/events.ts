@@ -1,11 +1,10 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { isAdmin } from "@/middlewares/isAdmin";
-import { EventType } from "@/prisma/generated/client";
 import { revalidatePath } from "next/cache";
-
-// app/actions/events.ts
+import { headers } from "next/headers";
+import { auth, hasPermissions } from "@/lib/auth/auth";
+import { prisma } from "@/lib/prisma";
+import type { EventType } from "@/prisma/generated/client";
 
 export async function fetchEvents() {
   return await prisma.event.findMany({
@@ -31,7 +30,10 @@ export async function updateEvent(
     endDate: string; // ISO
   },
 ) {
-  isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["manage"] });
   await prisma.event.update({
     where: { id },
     data: {

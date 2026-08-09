@@ -1,9 +1,9 @@
 "use client";
 
+import { IconLoader } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { authClient } from "@/lib/auth/auth-client";
-import { useRouter } from "next/navigation";
-import { IconLoader } from "@tabler/icons-react";
 
 export default function SignOutPage() {
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function SignOutPage() {
             onSuccess: () => {
               router.replace("/");
             },
-          }
+          },
         });
       } catch (error) {
         console.error("Error signing out:", error);

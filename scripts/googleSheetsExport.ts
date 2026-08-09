@@ -2,14 +2,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import { google } from "googleapis";
+import { prisma } from "@/lib/prisma";
 // 1. Import Prisma types
 import type {
-  User as PrismaUser,
   ParticipantInfo as PrismaParticipantInfo,
+  User as PrismaUser,
   ReservationRequest,
   ThemedRoomReservation,
 } from "@/prisma/generated/client";
-import { prisma } from "@/lib/prisma";
 
 // Replace with your own Google Sheet ID and desired range:
 const SHEET_ID = "1BHgfhH0E5Ro5FuzsFgvt-wtNWI9sQ4QPqdk7aNInUi0";

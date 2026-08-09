@@ -2,6 +2,8 @@
 
 import { prisma } from "@/lib/prisma";
 
+const IGNORE_PHRASES = ["none", "no special accommodations", "n/a", "na", "no"];
+
 function cleanText(text: string) {
   return text
     .trim()
@@ -17,8 +19,6 @@ export async function getDietaryData() {
 
   return participants.map((p) => cleanText(p.dietaryRestrictions || ""));
 }
-
-const IGNORE_PHRASES = ["none", "no special accommodations", "n/a", "na", "no"];
 
 /** 🔹 Fetch raw accessibility accommodations */
 export async function getAccessibilityData() {

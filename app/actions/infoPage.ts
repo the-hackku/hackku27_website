@@ -1,7 +1,8 @@
 "use server";
 
+import { headers } from "next/headers";
+import { auth, hasPermissions } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import { isAdmin } from "@/middlewares/isAdmin";
 
 export type InfoPageData = {
   id: string;
@@ -27,7 +28,10 @@ export async function updateInfoPage(data: {
   titleImageUrl?: string | null;
   logoUrl?: string | null;
 }): Promise<InfoPageData> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { info_pages: ["manage"] });
 
   const page = await prisma.infoPageContent.upsert({
     where: { id: "singleton" },

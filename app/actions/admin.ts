@@ -1,8 +1,8 @@
 "use server";
 
+import { auth, hasPermissions } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import { isAdmin, isAdminOrVolunteer } from "@/middlewares/isAdmin";
-import {
+import type {
   Checkin,
   EventType,
   ParticipantInfo,
@@ -11,13 +11,13 @@ import {
   User,
 } from "@/prisma/generated/client";
 
-export type AdminThemedRoom = {
+type AdminThemedRoom = {
   id: string;
   name: string;
   location: string;
 };
 
-export type AdminReservationRequest = {
+type AdminReservationRequest = {
   id: string;
   teamName: string;
   userEmail: string;
@@ -28,6 +28,8 @@ export type AdminReservationRequest = {
   themedRoomLocation: string | null;
   createdAt: Date;
 };
+
+import { headers } from "next/headers";
 import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
 
 // Type for the Event data used in creating or updating events// Type for the Event data used in creating or updating events
@@ -63,12 +65,11 @@ type ValidateQrCodeResult =
 
 // Fetch all users and return their names and emails
 // app/actions/admin.ts
-export async function getUsers(
-  page: number = 1,
-  pageSize: number = 20,
-  searchQuery: string = "",
-) {
-  await isAdmin();
+export async function getUsers(page = 1, pageSize = 20, searchQuery = "") {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
 
   const skip = (page - 1) * pageSize;
 
@@ -89,7 +90,7 @@ export async function getUsers(
     include: {
       ParticipantInfo: true,
       _count: {
-        select: { checkinsAsUser: true },
+        select: { checkins: true },
       },
     },
     skip,
@@ -118,12 +119,11 @@ export async function getUsers(
 }
 
 // Fetch all check-ins and return user names, event names, and check-in time
-export async function getCheckins(
-  page: number = 1,
-  pageSize: number = 20,
-  searchQuery: string = "",
-) {
-  await isAdmin();
+export async function getCheckins(page = 1, pageSize = 20, searchQuery = "") {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["view"] });
 
   const skip = (page - 1) * pageSize;
 
@@ -183,7 +183,10 @@ export async function getCheckins(
 export async function batchUpdateCheckins(
   changes: Record<string, Partial<Checkin>>,
 ) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["manage"] });
 
   const updatePromises = Object.entries(changes).map(([checkinId, fields]) =>
     prisma.checkin.update({
@@ -198,7 +201,10 @@ export async function batchUpdateCheckins(
 
 // Create a new event
 export async function createEvent(data: EventData) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["create"] });
 
   return await prisma.event.create({
     data: {
@@ -222,7 +228,10 @@ export async function createEvent(data: EventData) {
 }
 
 export async function updateEvent(eventId: string, data: EventData) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["manage"] });
 
   return await prisma.event.update({
     where: { id: eventId },
@@ -248,7 +257,10 @@ export async function updateEvent(eventId: string, data: EventData) {
 
 // Delete an event
 export async function deleteEvent(eventId: string) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["delete"] });
 
   return await prisma.event.delete({
     where: { id: eventId },
@@ -264,11 +276,14 @@ export async function validateQrCode(
   eventId: string,
 ): Promise<ValidateQrCodeResult> {
   // Ensure the user is an admin or volunteer
-  const session = await isAdminOrVolunteer();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["perform"] });
 
   // Fetch the admin user
   const admin = await prisma.user.findUnique({
-    where: { id: session.session.userId },
+    where: { id: session?.session.userId },
     select: { id: true },
   });
 
@@ -317,11 +332,11 @@ export async function validateQrCode(
 
   if (existingCheckin) {
     // Create a 'failed' Scan record if you still want to log the attempt with the real user.id
-    await prisma.scan.create({
+    await prisma.scanAttempt.create({
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
         successful: false,
       },
     });
@@ -337,14 +352,14 @@ export async function validateQrCode(
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
       },
     }),
-    prisma.scan.create({
+    prisma.scanAttempt.create({
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
         successful: true,
       },
     }),
@@ -354,7 +369,9 @@ export async function validateQrCode(
     ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
     : "Participant";
 
-  const isHighSchoolStudent = !!user.ParticipantInfo?.isHighSchoolStudent;
+  const isHighSchoolStudent = Boolean(
+    user.ParticipantInfo?.isHighSchoolStudent,
+  );
   const chaperoneInfo = isHighSchoolStudent
     ? {
         chaperoneName: `${user.ParticipantInfo?.chaperoneFirstName || ""} ${
@@ -395,11 +412,14 @@ export async function manualCheckIn(
   };
 }> {
   // Ensure the user performing this action is either admin or volunteer
-  const session = await isAdminOrVolunteer();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["perform"] });
 
   // Find the admin user (the staff or volunteer performing the check)
   const admin = await prisma.user.findUnique({
-    where: { id: session.session.userId },
+    where: { id: session?.session.userId },
     select: { id: true },
   });
 
@@ -455,14 +475,14 @@ export async function manualCheckIn(
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
       },
     }),
-    prisma.scan.create({
+    prisma.scanAttempt.create({
       data: {
         userId: user.id,
         adminId: admin.id,
-        eventId: eventId,
+        eventId,
         successful: true,
       },
     }),
@@ -472,10 +492,17 @@ export async function manualCheckIn(
     ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`.trim()
     : "Participant";
 
-  const isHighSchoolStudent =
-    user.ParticipantInfo?.isHighSchoolStudent || false;
+  const isHighSchoolStudent = Boolean(
+    user.ParticipantInfo?.isHighSchoolStudent,
+  );
 
-  let chaperoneInfo;
+  let chaperoneInfo:
+    | {
+        chaperoneName: string;
+        chaperoneEmail: string;
+        chaperonePhone: string;
+      }
+    | undefined;
   if (isHighSchoolStudent) {
     chaperoneInfo = {
       chaperoneName: `${user.ParticipantInfo?.chaperoneFirstName ?? ""} ${
@@ -496,8 +523,12 @@ export async function manualCheckIn(
 }
 
 export async function fetchScanHistory() {
-  await isAdminOrVolunteer();
-  const history = await prisma.scan.findMany({
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["view"] });
+
+  const history = await prisma.scanAttempt.findMany({
     include: {
       user: {
         include: {
@@ -528,7 +559,10 @@ export async function updateUserField(
   field: string,
   value: unknown,
 ) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["manage"] });
   await prisma.user.update({
     where: { id: userId },
     data: { [field]: value },
@@ -541,7 +575,10 @@ export async function updateParticipantField(
   field: string,
   value: unknown,
 ) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["manage"] });
   await prisma.participantInfo.update({
     where: { id: participantId },
     data: { [field]: value },
@@ -549,7 +586,10 @@ export async function updateParticipantField(
 }
 
 export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["manage"] });
 
   const updatePromises = Object.entries(changes).map(([userId, fields]) =>
     prisma.user.update({
@@ -564,7 +604,10 @@ export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
 
 // app/actions/admin.ts
 export async function getEventById(eventId: string) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { events: ["manage"] });
   try {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
@@ -586,18 +629,21 @@ export async function getEventById(eventId: string) {
     return event;
   } catch (error) {
     console.error("Failed to fetch event:", error);
-    throw new Error("Failed to fetch event details");
+    throw new Error("Failed to fetch event details", { cause: error });
   }
 }
 
 export async function getUserById(userId: string) {
-  isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
         ParticipantInfo: true,
-        checkinsAsUser: {
+        checkins: {
           include: {
             event: true,
           },
@@ -614,7 +660,7 @@ export async function getUserById(userId: string) {
     return user;
   } catch (error) {
     console.error("Failed to fetch user:", error);
-    throw new Error("Failed to fetch user details");
+    throw new Error("Failed to fetch user details", { cause: error });
   }
 }
 
@@ -622,7 +668,10 @@ export async function getUserById(userId: string) {
 export async function batchUpdateParticipants(
   changes: Record<string, Partial<ParticipantInfo>>,
 ) {
-  await isAdmin(); // Ensure only admins can access
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["manage"] });
 
   const updatePromises = Object.entries(changes).map(
     ([participantId, fields]) =>
@@ -636,11 +685,14 @@ export async function batchUpdateParticipants(
 }
 
 export async function getReimbursements(
-  page: number = 1,
-  pageSize: number = 20,
-  searchQuery: string = "",
+  page = 1,
+  pageSize = 20,
+  searchQuery = "",
 ) {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { travel_reimbursements: ["view"] });
 
   const skip = (page - 1) * pageSize;
 
@@ -709,7 +761,10 @@ export async function getReimbursements(
 export async function batchUpdateReimbursements(
   changes: Record<string, Partial<TravelReimbursement>>,
 ) {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { travel_reimbursements: ["manage"] });
 
   const updatePromises = Object.entries(changes).map(
     ([reimbursementId, fields]) =>
@@ -724,7 +779,10 @@ export async function batchUpdateReimbursements(
 }
 
 export async function backupRegistrationScript() {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
   try {
     await batchBackupRegistration();
     return { success: true, message: "Backup completed successfully!" };
@@ -735,13 +793,19 @@ export async function backupRegistrationScript() {
 }
 
 export async function getTotalRegistrationNumber() {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
   const totalRegistrations = await prisma.participantInfo.count();
   return totalRegistrations;
 }
 
 export async function getHackathonCheckinCount(eventId: string) {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { checkins: ["view"] });
 
   const count = await prisma.checkin.count({
     where: { eventId },
@@ -751,7 +815,10 @@ export async function getHackathonCheckinCount(eventId: string) {
 }
 
 export async function searchUsers(searchQuery: string) {
-  await isAdminOrVolunteer();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { user_data: ["view"] });
   const trimmed = searchQuery.trim();
 
   // Basic conditions for email and individual name fields.
@@ -795,11 +862,14 @@ export async function searchUsers(searchQuery: string) {
 }
 
 export async function getReservationRequests(
-  page: number = 1,
-  pageSize: number = 10,
-  searchQuery: string = "",
+  page = 1,
+  pageSize = 10,
+  searchQuery = "",
 ): Promise<{ requests: AdminReservationRequest[]; total: number }> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { room_reservations: ["view"] });
   const skip = (page - 1) * pageSize;
   const where = searchQuery
     ? {
@@ -851,7 +921,10 @@ export async function assignRoomToRequest(
   requestId: string,
   themedRoomId: string | null,
 ): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { room_reservations: ["manage"] });
   await prisma.reservationRequest.update({
     where: { id: requestId },
     data: { themedRoomId },
@@ -861,12 +934,18 @@ export async function assignRoomToRequest(
 export async function deleteReservationRequest(
   requestId: string,
 ): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { room_reservations: ["delete"] });
   await prisma.reservationRequest.delete({ where: { id: requestId } });
 }
 
 export async function getThemedRooms(): Promise<AdminThemedRoom[]> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { room_reservations: ["view"] });
   return prisma.themedRoom.findMany({ orderBy: { name: "asc" } });
 }
 
@@ -874,7 +953,10 @@ export async function createThemedRoom(data: {
   name: string;
   location: string;
 }): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { themed_rooms: ["create"] });
   await prisma.themedRoom.create({ data });
 }
 
@@ -882,11 +964,19 @@ export async function updateAdminThemedRoom(
   id: string,
   data: { name?: string; location?: string },
 ): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { themed_rooms: ["manage"] });
   await prisma.themedRoom.update({ where: { id }, data });
 }
 
 export async function deleteAdminThemedRoom(id: string): Promise<void> {
-  await isAdmin();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  await hasPermissions(session, { themed_rooms: ["delete"] });
   await prisma.themedRoom.delete({ where: { id } });
 }
+
+export type { AdminReservationRequest, AdminThemedRoom };

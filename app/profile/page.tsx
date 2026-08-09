@@ -1,26 +1,27 @@
-/* app/profile/page.tsx */
-import { redirect } from "next/navigation";
-// import LocalDateTime from "@/components/LocalDateTime";
-import QrCodeComponent from "@/components/UserQRCode";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress"; // Make sure this is at the top
-import Link from "next/link";
+/** biome-ignore-all lint/correctness/noUnusedImports: To be developed later */
+/** biome-ignore-all lint/suspicious/useAwait: To be developed later */
+
 import {
-  IconMail,
-  IconUser,
-  IconLogout,
-  IconUserFilled,
   // IconHistory,
   // IconCheck,
   IconLock,
+  IconLogout,
+  IconMail,
+  IconUser,
+  IconUserFilled,
   // IconEdit,
 } from "@tabler/icons-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+// import LocalDateTime from "@/components/LocalDateTime";
+import QrCodeComponent from "@/components/UserQRCode";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress"; // Make sure this is at the top
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { prisma } from "@/lib/prisma";
 import {
-  getUserWithReimbursement,
-  // userHasReimbursement,
+  getUserWithReimbursement
 } from "../actions/reimbursement";
 // import type { UserWithReimbursement } from "../actions/reimbursement";
 
@@ -53,7 +54,7 @@ export default async function ProfilePage() {
   if (!userSession) redirect("/signin");
 
   // 2. Check if user has any reimbursement, and if they can edit
-  // const hasReimb = await userHasReimbursement(userSession);
+  // const hasReimb = Boolean(user?.travelReimbursement);
   // const canEdit = hasReimb && canEditReimbursement(userSession);
 
   // 3. Grab check-ins

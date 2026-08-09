@@ -74,4 +74,6 @@ bun run build          # Production build
 bun run lint           # Run ESLint
 bun run db:down        # Stop the local Postgres container
 bun run db:studio      # Browse the database in a GUI
+
+cwebp -preset drawing -q 50 -m 6 -af -sns 80 -alpha_q 50 -mt doodle.png -o doodle.webp # Compress doodle to WEBP
 ```

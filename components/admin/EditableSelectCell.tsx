@@ -1,7 +1,7 @@
 // app/components/admin/EditableSelectCell.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const EditableSelectCell = ({
   value,
@@ -32,8 +32,7 @@ export const EditableSelectCell = ({
       onChange={handleChange}
       className={`w-full p-1 rounded border ${
         isEdited ? "bg-yellow-100" : "bg-white"
-      }`}
-    >
+      }`}>
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}

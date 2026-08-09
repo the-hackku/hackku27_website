@@ -1,15 +1,13 @@
-// app/schedule/page.tsx
-
+import Link from "next/link";
+import { connection } from "next/server";
 import AdminEventEditor from "@/components/admin/EventEditor";
 import { EventForm } from "@/components/forms/eventForm";
 import ScheduleGrid from "@/components/ScheduleGrid";
-import { prisma } from "@/lib/prisma";
-import { Event } from "@/prisma/generated/browser";
-import Link from "next/link";
 import constants from "@/constants";
+import { prisma } from "@/lib/prisma";
 
-// Server-side function to fetch events data
-async function getEvents(): Promise<Event[]> {
+export default async function SchedulePage() {
+  await connection();
   const events = await prisma.event.findMany({
     select: {
       id: true,
@@ -23,12 +21,6 @@ async function getEvents(): Promise<Event[]> {
       eventType: true,
     },
   });
-
-  return events;
-}
-
-export default async function SchedulePage() {
-  const events = await getEvents();
 
   // Convert date to string and include it in the formatted events
   const formattedEvents = events.map((event) => ({

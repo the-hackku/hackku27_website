@@ -1,12 +1,82 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import { IconLoader, IconX } from "@tabler/icons-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ColumnDef } from "@tanstack/react-table";
 import { EditableTable } from "./EditableTable";
-import { IconLoader, IconX } from "@tabler/icons-react";
+
+function useBatchEditing<T extends { id: string }>(originalData: T[]) {
+  const [items, setItems] = useState<T[]>(originalData);
+  const [edited, setEdited] = useState<Record<string, Partial<T>>>({});
+
+  // Reset items and edited when originalData changes
+  useEffect(() => {
+    setItems(originalData);
+    setEdited({});
+  }, [originalData]);
+
+  // Handle cell changes
+  const handleChange = (itemId: string, field: keyof T, newValue: unknown) => {
+    const originalItem = originalData.find((i) => i.id === itemId);
+    const originalValue = originalItem ? originalItem[field] : undefined;
+
+    // If new value is same as original, remove from edited
+    if (String(newValue) === String(originalValue)) {
+      setEdited((prev) => {
+        const updated = { ...prev };
+        const changesForItem = { ...updated[itemId] };
+        delete changesForItem[field];
+
+        if (Object.keys(changesForItem).length === 0) {
+          delete updated[itemId];
+        } else {
+          updated[itemId] = changesForItem;
+        }
+        return updated;
+      });
+    } else {
+      // Otherwise mark as edited
+      setEdited((prev) => ({
+        ...prev,
+        [itemId]: {
+          ...prev[itemId],
+          [field]: newValue,
+        },
+      }));
+      console.log(`Marked Row ${itemId}, Field ${String(field)} as edited`);
+    }
+
+    // Update the local items array
+    setItems((prevItems) =>
+      prevItems.map((i) => (i.id === itemId ? { ...i, [field]: newValue } : i)),
+    );
+  };
+
+  // Revert all local changes to the original data
+  const revertAll = (originalData: T[]) => {
+    setItems(originalData);
+    setEdited({});
+  };
+
+  // Utility function: count total changes
+  const totalChanges = Object.values(edited).reduce(
+    (sum, curr) => sum + Object.keys(curr).length,
+    0,
+  );
+
+  return {
+    items,
+    edited,
+    handleChange,
+    revertAll,
+    setItems,
+    setEdited,
+    totalChanges,
+  };
+}
 
 interface UseSearchablePaginatedDataProps<T> {
   fetchFunction: (
@@ -78,77 +148,6 @@ function useSearchablePaginatedData<T>({
     setPage,
     setSearchQuery,
     fetchData,
-  };
-}
-
-
-function useBatchEditing<T extends { id: string }>(originalData: T[]) {
-  const [items, setItems] = useState<T[]>(originalData);
-  const [edited, setEdited] = useState<Record<string, Partial<T>>>({});
-
-  // Reset items and edited when originalData changes
-  useEffect(() => {
-    setItems(originalData);
-    setEdited({});
-  }, [originalData]);
-
-  // Handle cell changes
-  const handleChange = (itemId: string, field: keyof T, newValue: unknown) => {
-    const originalItem = originalData.find((i) => i.id === itemId);
-    const originalValue = originalItem ? originalItem[field] : undefined;
-
-    // If new value is same as original, remove from edited
-    if (String(newValue) === String(originalValue)) {
-      setEdited((prev) => {
-        const updated = { ...prev };
-        const changesForItem = { ...updated[itemId] };
-        delete changesForItem[field];
-
-        if (Object.keys(changesForItem).length === 0) {
-          delete updated[itemId];
-        } else {
-          updated[itemId] = changesForItem;
-        }
-        return updated;
-      });
-    } else {
-      // Otherwise mark as edited
-      setEdited((prev) => ({
-        ...prev,
-        [itemId]: {
-          ...prev[itemId],
-          [field]: newValue,
-        },
-      }));
-      console.log(`Marked Row ${itemId}, Field ${String(field)} as edited`);
-    }
-
-    // Update the local items array
-    setItems((prevItems) =>
-      prevItems.map((i) => (i.id === itemId ? { ...i, [field]: newValue } : i)),
-    );
-  };
-
-  // Revert all local changes to the original data
-  const revertAll = (originalData: T[]) => {
-    setItems(originalData);
-    setEdited({});
-  };
-
-  // Utility function: count total changes
-  const totalChanges = Object.values(edited).reduce(
-    (sum, curr) => sum + Object.keys(curr).length,
-    0,
-  );
-
-  return {
-    items,
-    edited,
-    handleChange,
-    revertAll,
-    setItems,
-    setEdited,
-    totalChanges,
   };
 }
 
@@ -286,8 +285,7 @@ export function GenericDataContainer<T extends { id: string }>({
           {searchQuery && !loading && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute inset-y-0 right-0 flex items-center pr-3"
-            >
+              className="absolute inset-y-0 right-0 flex items-center pr-3">
               <IconX className="h-5 w-5" />
             </button>
           )}
@@ -306,18 +304,15 @@ export function GenericDataContainer<T extends { id: string }>({
               <Button
                 variant="outline"
                 onClick={revert}
-                disabled={totalChanges === 0}
-              >
+                disabled={totalChanges === 0}>
                 Revert
               </Button>
             )
           }
           <Button
-            variant={totalChanges === 0 ? "outline" : "default"}
-            color={totalChanges === 0 ? "gray" : "yellow"}
+            variant={totalChanges === 0 ? "outline" : "destructive"}
             onClick={saveAll}
-            disabled={totalChanges === 0}
-          >
+            disabled={totalChanges === 0}>
             Save All {totalChanges > 0 && `(${totalChanges})`}
           </Button>
         </div>
@@ -337,8 +332,7 @@ export function GenericDataContainer<T extends { id: string }>({
       <div className="flex justify-between items-center mt-4">
         <Button
           onClick={() => setPage((p) => Math.max(p - 1, 1))}
-          disabled={page === 1}
-        >
+          disabled={page === 1}>
           Previous
         </Button>
         <span>
@@ -346,8 +340,7 @@ export function GenericDataContainer<T extends { id: string }>({
         </span>
         <Button
           onClick={() => setPage((p) => (p < totalPages ? p + 1 : p))}
-          disabled={page >= totalPages}
-        >
+          disabled={page >= totalPages}>
           Next
         </Button>
       </div>

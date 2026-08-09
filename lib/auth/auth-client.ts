@@ -1,16 +1,39 @@
-import { createAuthClient } from "better-auth/react"
-import { magicLinkClient, twoFactorClient, inferAdditionalFields, customSessionClient } from "better-auth/client/plugins"
-import { passkeyClient } from "@better-auth/passkey/client"
-import type { auth } from "@/lib/auth/auth"
+import { passkeyClient } from "@better-auth/passkey/client";
+import {
+  adminClient,
+  customSessionClient,
+  emailOTPClient,
+  inferAdditionalFields,
+  organizationClient,
+  twoFactorClient,
+} from "better-auth/client/plugins";
+import { createAuthClient } from "better-auth/react";
+import type { auth } from "@/lib/auth/auth";
+import { ac, roles } from "@/lib/auth/permissions";
 
 export const authClient = createAuthClient({
-    plugins: [
-        inferAdditionalFields<typeof auth>(),
-        magicLinkClient(),
-        twoFactorClient(),
-        customSessionClient<typeof auth>(),
-        passkeyClient()
-    ]
+  plugins: [
+    inferAdditionalFields<typeof auth>(),
+    emailOTPClient(),
+    twoFactorClient(),
+    customSessionClient<typeof auth>(),
+    passkeyClient(),
+    adminClient({
+      ac,
+      roles: {
+        hacker: roles.hacker,
+        mentor: roles.mentor,
+        judge: roles.judge,
+        bronze_sponsor: roles.bronze_sponsor,
+        silver_sponsor: roles.silver_sponsor,
+        gold_sponsor: roles.gold_sponsor,
+        volunteer: roles.volunteer,
+        writer: roles.writer,
+        admin: roles.admin,
+      },
+    }),
+    organizationClient(),
+  ],
 });
 
 export const { useSession } = authClient;

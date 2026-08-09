@@ -2,6 +2,7 @@
 "use client";
 
 import React from "react";
+
 //import { QRCodeSVG } from "qrcode.react";
 
 interface QrCodeComponentProps {

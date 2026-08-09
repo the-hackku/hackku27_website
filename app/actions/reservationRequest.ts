@@ -1,9 +1,9 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { TimeSlot, RoomTheme } from "@/prisma/generated/client";
+import { auth } from "@/lib/auth/auth";
+import { prisma } from "@/lib/prisma";
+import type { RoomTheme, TimeSlot } from "@/prisma/generated/client";
 
 // 1) Import your Google Sheets export function
 import {
@@ -26,7 +26,7 @@ export async function createReservationRequest(input: {
       throw new Error("Not authenticated! Please sign in first.");
     }
     const user = await prisma.user.findUnique({
-      where: { id: session.session.userId }
+      where: { id: session.session.userId },
     });
 
     if (!user) {
@@ -52,9 +52,12 @@ export async function createReservationRequest(input: {
   } catch (error: unknown) {
     if (error instanceof Error) {
       // e.g., user already has a reservation (unique constraint), or other DB error
-      throw new Error(error.message || "Failed to create reservation request.");
+      throw new Error(
+        error.message || "Failed to create reservation request.",
+        { cause: error },
+      );
     }
-    throw new Error("Failed to create reservation request.");
+    throw new Error("Failed to create reservation request.", { cause: error });
   }
 }
 

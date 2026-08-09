@@ -1,55 +1,60 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import {
-  startOfHour,
-  format,
   eachHourOfInterval,
-  startOfDay,
   endOfDay,
+  format,
+  startOfDay,
+  startOfHour,
 } from "date-fns";
+import { prisma } from "@/lib/prisma";
 
 export async function getAnalyticsData(
   startDate: Date,
   endDate: Date,
   aggregation: "hourly" | "daily",
 ) {
-  let users, checkins;
+  const users = await prisma.participantInfo.findMany({
+    where: {
+      createdAt: { gte: startOfDay(startDate), lte: endOfDay(endDate) },
+    },
+    select: { createdAt: true },
+  });
+
+  const checkins = await prisma.checkin.findMany({
+    where: {
+      createdAt: { gte: startOfDay(startDate), lte: endOfDay(endDate) },
+    },
+    select: { createdAt: true },
+  });
 
   if (aggregation === "hourly") {
-    users = await prisma.participantInfo.findMany({
-      where: {
-        createdAt: { gte: startOfDay(startDate), lte: endOfDay(endDate) },
-      },
-      select: { createdAt: true },
-    });
-
-    checkins = await prisma.checkin.findMany({
-      where: {
-        createdAt: { gte: startOfDay(startDate), lte: endOfDay(endDate) },
-      },
-      select: { createdAt: true },
-    });
-
     const hourlyCounts: Record<
       string,
       { registrations: number; checkins: number }
     > = {};
 
-    eachHourOfInterval({ start: startDate, end: endDate }).forEach((hour) => {
+    for (const hour of eachHourOfInterval({ start: startDate, end: endDate })) {
       const hourStr = format(hour, "yyyy-MM-dd HH:00");
       hourlyCounts[hourStr] = { registrations: 0, checkins: 0 };
-    });
+    }
 
-    users.forEach(({ createdAt }) => {
-      const hourStr = format(startOfHour(createdAt), "yyyy-MM-dd HH:00");
-      if (hourlyCounts[hourStr]) hourlyCounts[hourStr].registrations++;
-    });
+    for (const user of users) {
+      const hourStr = format(startOfHour(user.createdAt), "yyyy-MM-dd HH:00");
+      if (hourlyCounts[hourStr]) {
+        hourlyCounts[hourStr].registrations++;
+      }
+    }
 
-    checkins.forEach(({ createdAt }) => {
-      const hourStr = format(startOfHour(createdAt), "yyyy-MM-dd HH:00");
-      if (hourlyCounts[hourStr]) hourlyCounts[hourStr].checkins++;
-    });
+    for (const checkin of checkins) {
+      const hourStr = format(
+        startOfHour(checkin.createdAt),
+        "yyyy-MM-dd HH:00",
+      );
+      if (hourlyCounts[hourStr]) {
+        hourlyCounts[hourStr].checkins++;
+      }
+    }
 
     return Object.entries(hourlyCounts).map(([date, counts]) => ({
       date,
@@ -58,19 +63,6 @@ export async function getAnalyticsData(
   }
 
   // Fallback to daily aggregation if not hourly
-  users = await prisma.participantInfo.findMany({
-    where: {
-      createdAt: { gte: startOfDay(startDate), lte: endOfDay(endDate) },
-    },
-    select: { createdAt: true },
-  });
-
-  checkins = await prisma.checkin.findMany({
-    where: {
-      createdAt: { gte: startOfDay(startDate), lte: endOfDay(endDate) },
-    },
-    select: { createdAt: true },
-  });
 
   const dailyCounts: Record<
     string,
@@ -82,15 +74,19 @@ export async function getAnalyticsData(
     dailyCounts[dateStr] = { registrations: 0, checkins: 0 };
   }
 
-  users.forEach(({ createdAt }) => {
-    const dateStr = format(createdAt, "yyyy-MM-dd");
-    if (dailyCounts[dateStr]) dailyCounts[dateStr].registrations++;
-  });
+  for (const user of users) {
+    const dateStr = format(user.createdAt, "yyyy-MM-dd");
+    if (dailyCounts[dateStr]) {
+      dailyCounts[dateStr].registrations++;
+    }
+  }
 
-  checkins.forEach(({ createdAt }) => {
-    const dateStr = format(createdAt, "yyyy-MM-dd");
-    if (dailyCounts[dateStr]) dailyCounts[dateStr].checkins++;
-  });
+  for (const checkin of checkins) {
+    const dateStr = format(checkin.createdAt, "yyyy-MM-dd");
+    if (dailyCounts[dateStr]) {
+      dailyCounts[dateStr].checkins++;
+    }
+  }
 
   return Object.entries(dailyCounts).map(([date, counts]) => ({
     date,

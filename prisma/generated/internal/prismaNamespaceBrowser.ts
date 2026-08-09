@@ -58,10 +58,12 @@ export const ModelName = {
   TwoFactor: 'TwoFactor',
   Passkey: 'Passkey',
   Event: 'Event',
-  Scan: 'Scan',
+  ScanAttempt: 'ScanAttempt',
   Checkin: 'Checkin',
   ParticipantInfo: 'ParticipantInfo',
-  Team: 'Team',
+  Organization: 'Organization',
+  Member: 'Member',
+  Invitation: 'Invitation',
   Project: 'Project',
   TravelReimbursement: 'TravelReimbursement',
   ReimbursementInvite: 'ReimbursementInvite',
@@ -100,10 +102,12 @@ export const UserScalarFieldEnum = {
   twoFactorEnabled: 'twoFactorEnabled',
   totpSecret: 'totpSecret',
   totpBackupCodes: 'totpBackupCodes',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires',
   travelReimbursementId: 'travelReimbursementId',
   prefillData: 'prefillData',
-  isRegistered: 'isRegistered',
-  teamId: 'teamId'
+  isRegistered: 'isRegistered'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -136,7 +140,10 @@ export const SessionScalarFieldEnum = {
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  impersonatedBy: 'impersonatedBy',
+  activeOrganizationId: 'activeOrganizationId',
+  activeTeamId: 'activeTeamId'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -199,18 +206,17 @@ export const EventScalarFieldEnum = {
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
-export const ScanScalarFieldEnum = {
+export const ScanAttemptScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   eventId: 'eventId',
   adminId: 'adminId',
-  selfScan: 'selfScan',
   checkinId: 'checkinId',
   successful: 'successful',
   createdAt: 'createdAt'
 } as const
 
-export type ScanScalarFieldEnum = (typeof ScanScalarFieldEnum)[keyof typeof ScanScalarFieldEnum]
+export type ScanAttemptScalarFieldEnum = (typeof ScanAttemptScalarFieldEnum)[keyof typeof ScanAttemptScalarFieldEnum]
 
 
 export const CheckinScalarFieldEnum = {
@@ -218,7 +224,6 @@ export const CheckinScalarFieldEnum = {
   userId: 'userId',
   eventId: 'eventId',
   adminId: 'adminId',
-  selfCheckin: 'selfCheckin',
   createdAt: 'createdAt'
 } as const
 
@@ -261,16 +266,43 @@ export const ParticipantInfoScalarFieldEnum = {
 export type ParticipantInfoScalarFieldEnum = (typeof ParticipantInfoScalarFieldEnum)[keyof typeof ParticipantInfoScalarFieldEnum]
 
 
-export const TeamScalarFieldEnum = {
+export const OrganizationScalarFieldEnum = {
   id: 'id',
   creatorId: 'creatorId',
   name: 'name',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  inviteCode: 'inviteCode'
+  slug: 'slug',
+  logo: 'logo',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
 } as const
 
-export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
+export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const MemberScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  organizationId: 'organizationId',
+  role: 'role',
+  createdAt: 'createdAt'
+} as const
+
+export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
+
+
+export const InvitationScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  inviterId: 'inviterId',
+  organizationId: 'organizationId',
+  teamId: 'teamId',
+  role: 'role',
+  status: 'status',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
 
 
 export const ProjectScalarFieldEnum = {

@@ -1,33 +1,18 @@
 "use client";
 
-import { useForm, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-
-// Custom components
-import { FormInputField } from "../customui/FormInputField";
-import { FormSelectField } from "../customui/FormSelectField";
-import { FormCheckboxField } from "../customui/FormCheckboxField";
-import { ComboboxSelect } from "@/components/customui/ComboSelect";
-
-// Schema and types
-import { RegistrationData, formSchema } from "@/app/actions/schemas";
 import { registerUser } from "@/app/actions/register";
+import { GenericForm } from "@/components/forms/GenericForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import constants from "@/constants";
-
-// import { predefinedSchools } from "./schools"
+import type { FormConfig } from "@/types/form";
+import { participantRegistrationSchema, type RegistrationData } from "@/types/schemas/participant";
 import {
-  predefinedCountries,
-  predefinedSchools,
   predefinedMajors,
   predefinedMinors,
+  predefinedSchools,
   raceOptions,
 } from "./predefinedOptions";
 
@@ -36,168 +21,293 @@ const LOCAL_STORAGE_KEY = "hackku27_registration_form";
 export function RegistrationForm({
   prefillData,
 }: {
-  prefillData: RegistrationData | null;
+  prefillData: RegistrationData | null | undefined;
 }) {
-  const [showChaperoneFields, setShowChaperoneFields] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [progress, setProgress] = useState(0);
   const router = useRouter();
-  let defaults = {};
-  if (prefillData) {
-    defaults = {
-      firstName: prefillData.firstName || undefined,
-      lastName: prefillData.lastName || undefined,
-      phoneNumber: Number(prefillData.phoneNumber?.slice(1)) ?? undefined,
-      age: prefillData.age ?? undefined,
-      countryOfResidence: prefillData.countryOfResidence || undefined,
-      currentSchool: prefillData.currentSchool || undefined,
-      levelOfStudy: prefillData.levelOfStudy || undefined,
-    };
-  }
-  if (typeof window !== "undefined") {
-    const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (savedData) {
-      try {
-        const parsedData = JSON.parse(savedData);
-        delete parsedData.resume; // Ensure 'resume' is not included
-        console.log("Loaded saved form data:", parsedData);
-        defaults = parsedData;
-      } catch (error) {
-        console.error("Failed to parse saved form data:", error);
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
-        defaults = {};
-      }
-    }
-  }
-  const form = useForm<RegistrationData>({
-    resolver: zodResolver(formSchema),
-    mode: "onChange",
-    // Initialize with empty defaultValues
-    defaultValues: defaults,
-  });
 
-  // Function to check if a field is required based on the Zod schema
-  const isFieldRequired = useCallback(
-    (fieldName: keyof RegistrationData) => {
-      const values = form.getValues();
-      const fieldSchema = formSchema.shape[fieldName];
-
-      // Chaperone fields are required only if levelOfStudy is "High School"
-      if (
-        [
-          "chaperoneFirstName",
-          "chaperoneLastName",
-          "chaperoneEmail",
-          "chaperonePhoneNumber",
-        ].includes(fieldName)
-      ) {
-        return values.levelOfStudy === "High School";
-      }
-
-      return !(
-        fieldSchema instanceof z.ZodOptional ||
-        fieldSchema instanceof z.ZodDefault ||
-        fieldSchema.safeParse(undefined).success
-      );
-    },
-    [form],
-  );
-
-  // Define form fields with configurations
-  const personalInfoFields = [
-    {
-      name: "firstName" as const,
+  const formConfig: FormConfig<RegistrationData> = {
+    // --- Personal Information ---
+    firstName: {
+      type: "text",
       label: "First Name",
       placeholder: "First name",
-      required: isFieldRequired("firstName"),
-      type: "text",
+      required: true,
+      group: "Personal Information",
     },
-    {
-      name: "lastName" as const,
+    lastName: {
+      type: "text",
       label: "Last Name",
       placeholder: "Last name",
-      required: isFieldRequired("lastName"),
-      type: "text",
+      required: true,
+      group: "Personal Information",
     },
-    {
-      name: "phoneNumber" as const,
+    phoneNumber: {
+      type: "tel",
       label: "Phone Number",
       placeholder: "Phone number",
-      required: isFieldRequired("phoneNumber"),
-      type: "number",
+      required: true,
+      group: "Personal Information",
     },
-    {
-      name: "age" as const,
+    age: {
+      type: "number",
       label: "Age",
       placeholder: "Age",
-      required: isFieldRequired("age"),
-      type: "number",
+      required: true,
+      group: "Personal Information",
     },
-  ];
+    countryOfResidence: {
+      type: "country",
+      label: "Country of Residence",
+      placeholder: "Select a country...",
+      required: true,
+      group: "Personal Information",
+    },
+    genderIdentity: {
+      type: "select",
+      label: "Gender Identity",
+      options: [
+        { label: "Male", value: "Male" },
+        { label: "Female", value: "Female" },
+        { label: "Non-binary", value: "Non-binary" },
+        { label: "Other", value: "Other" },
+        { label: "Prefer not to Answer", value: "Prefer not to Answer" },
+      ],
+      required: false,
+      group: "Personal Information",
+    },
+    race: {
+      type: "combobox",
+      label: "Race",
+      placeholder: "Race",
+      options: raceOptions,
+      multiselect: true,
+      required: true,
+      group: "Personal Information",
+    },
+    hispanicOrLatino: {
+      type: "select",
+      label: "Hispanic or Latino?",
+      options: [
+        { label: "Yes", value: "Yes" },
+        { label: "No", value: "No" },
+        { label: "Prefer not to answer", value: "Prefer not to answer" },
+      ],
+      required: true,
+      group: "Personal Information",
+    },
 
-  // Define types for select fields
-  type GenderIdentity = NonNullable<RegistrationData["genderIdentity"]>;
-  type HispanicOrLatino = NonNullable<RegistrationData["hispanicOrLatino"]>;
-  type TShirtSize = NonNullable<RegistrationData["tShirtSize"]>;
-  type LevelOfStudy = NonNullable<RegistrationData["levelOfStudy"]>;
+    // --- Education Information ---
+    currentSchool: {
+      type: "combobox",
+      label: "Current School",
+      placeholder: "Enter School",
+      options: predefinedSchools,
+      required: true,
+      group: "Education Information",
+    },
+    levelOfStudy: {
+      type: "select",
+      label: "Level of Study",
+      options: [
+        { label: "Undergraduate", value: "Undergraduate" },
+        { label: "Graduate", value: "Graduate" },
+        { label: "High School", value: "High School" },
+        { label: "Other", value: "Other" },
+      ],
+      required: true,
+      group: "Education Information",
+    },
+    major: {
+      type: "combobox",
+      label: "Major(s)",
+      placeholder: "Select your major(s)",
+      options: predefinedMajors,
+      multiselect: true,
+      required: false,
+      group: "Education Information",
+      renderIf: (v) => v.levelOfStudy !== "High School",
+    },
+    minor: {
+      type: "combobox",
+      label: "Minor(s) / Certificate(s)",
+      placeholder: "Select your minor(s)",
+      options: predefinedMinors,
+      multiselect: true,
+      required: false,
+      group: "Education Information",
+      renderIf: (v) => v.levelOfStudy !== "High School",
+    },
+    resumeUrl: {
+      type: "file",
+      label: "Upload Resume (PDF)",
+      required: false,
+      group: "Education Information",
+    },
 
-  // Define options with correct typing
-  const genderIdentityOptions: { label: string; value: GenderIdentity }[] = [
-    { label: "Male", value: "Male" },
-    { label: "Female", value: "Female" },
-    { label: "Non-binary", value: "Non-binary" },
-    { label: "Other", value: "Other" },
-    { label: "Prefer not to Answer", value: "Prefer not to Answer" },
-  ];
+    // --- Chaperone Information (Conditional) ---
+    chaperoneFirstName: {
+      type: "text",
+      label: "Chaperone First Name",
+      placeholder: "Chaperone's first name",
+      group: "Chaperone Information",
+      renderIf: (v) => v.levelOfStudy === "High School",
+      required: (v) => v.levelOfStudy === "High School",
+    },
+    chaperoneLastName: {
+      type: "text",
+      label: "Chaperone Last Name",
+      placeholder: "Chaperone's last name",
+      group: "Chaperone Information",
+      renderIf: (v) => v.levelOfStudy === "High School",
+      required: (v) => v.levelOfStudy === "High School",
+    },
+    chaperoneEmail: {
+      type: "email",
+      label: "Chaperone Email",
+      placeholder: "Chaperone's email",
+      group: "Chaperone Information",
+      renderIf: (v) => v.levelOfStudy === "High School",
+      required: (v) => v.levelOfStudy === "High School",
+    },
+    chaperonePhoneNumber: {
+      type: "tel",
+      label: "Chaperone Phone #",
+      placeholder: "Chaperone's phone number",
+      group: "Chaperone Information",
+      renderIf: (v) => v.levelOfStudy === "High School",
+      required: (v) => v.levelOfStudy === "High School",
+    },
 
-  const hispanicOrLatinoOptions: { label: string; value: HispanicOrLatino }[] =
-    [
-      { label: "Yes", value: "Yes" },
-      { label: "No", value: "No" },
-      { label: "Prefer not to answer", value: "Prefer not to answer" },
-    ];
+    // --- Additional Information ---
+    tShirtSize: {
+      type: "select",
+      label: "T-Shirt Size",
+      options: [
+        { label: "Small", value: "S" },
+        { label: "Medium", value: "M" },
+        { label: "Large", value: "L" },
+        { label: "XL", value: "XL" },
+        { label: "XXL", value: "XXL" },
+        { label: "XXXL", value: "XXXL" },
+      ],
+      required: true,
+      group: "Additional Information",
+    },
+    previousHackathons: {
+      type: "number",
+      label: "Hackathons Attended",
+      placeholder: "Number of previous hackathons",
+      required: true,
+      group: "Additional Information",
+    },
+    dietaryRestrictions: {
+      type: "text",
+      label: "Dietary Restrictions",
+      placeholder: "Enter any dietary restrictions",
+      required: false,
+      group: "Additional Information",
+    },
+    specialAccommodations: {
+      type: "text",
+      label: "Special Accommodations",
+      placeholder: "Enter any special accommodations",
+      required: false,
+      group: "Additional Information",
+    },
 
-  const tShirtSizeOptions: { label: string; value: TShirtSize }[] = [
-    { label: "Small", value: "S" },
-    { label: "Medium", value: "M" },
-    { label: "Large", value: "L" },
-    { label: "XL", value: "XL" },
-    { label: "XXL", value: "XXL" },
-  ];
-
-  const levelOfStudyOptions: { label: string; value: LevelOfStudy }[] = [
-    { label: "Undergraduate", value: "Undergraduate" },
-    { label: "Graduate", value: "Graduate" },
-    { label: "High School", value: "High School" },
-    { label: "Other", value: "Other" },
-  ];
-
-  // Handle form validation errors
-  const onError = (errors: typeof form.formState.errors) => {
-    console.error("Validation errors:", errors);
-    toast.error("Please correct the errors and try again.");
+    // --- Agreements ---
+    agreeHackKUCode: {
+      type: "checkbox",
+      label: (
+        <>
+          I agree to the{" "}
+          <Link
+            href="/legal/code-of-conduct"
+            className="underline"
+            target="_blank">
+            HackKU Code of Conduct
+          </Link>
+          .
+        </>
+      ),
+      required: true,
+      fullWidth: true,
+      group: "Agreements",
+    },
+    photoWaiver: {
+      type: "checkbox",
+      label: (
+        <>
+          I certify that I am the participant (or parent/guardian if under 18)
+          and consent to the terms of the{" "}
+          <Link href="/legal/waiver" className="underline" target="_blank">
+            HackKU Waiver / Photo Release
+          </Link>
+          .
+        </>
+      ),
+      required: true,
+      fullWidth: true,
+      group: "Agreements",
+    },
+    agreeMLHCode: {
+      type: "checkbox",
+      label: (
+        <>
+          I agree to the{" "}
+          <Link
+            href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+            className="underline"
+            target="_blank">
+            MLH Code of Conduct
+          </Link>
+          .
+        </>
+      ),
+      required: true,
+      fullWidth: true,
+      group: "Agreements",
+    },
+    shareWithMLH: {
+      type: "checkbox",
+      label: (
+        <>
+          I authorize you to share my registration information with Major League
+          Hacking in-line with the{" "}
+          <Link
+            href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
+            target="_blank"
+            className="underline">
+            MLH Privacy Policy
+          </Link>
+          .
+        </>
+      ),
+      required: true,
+      fullWidth: true,
+      group: "Agreements",
+    },
+    receiveEmails: {
+      type: "checkbox",
+      label:
+        "I authorize MLH and DEV to send me occasional emails about relevant events, career opportunities, and community announcements.",
+      required: false,
+      fullWidth: true,
+      group: "Agreements",
+    },
   };
 
-  // Save form state to localStorage whenever values change
-  useEffect(() => {
-    const subscription = form.watch((values) => {
-      const { ...valuesWithoutFile } = values; // Exclude 'resume'
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY,
-        JSON.stringify(valuesWithoutFile),
-      );
-    });
-    return () => subscription.unsubscribe();
-  }, [form]);
-
-  // Clear localStorage on successful submission
-  const onSubmit = async (data: RegistrationData) => {
+  const onSubmit = (data: RegistrationData) => {
     toast.promise(
       (async () => {
-        const file = fileInputRef.current?.files?.[0];
-        let resumeUrl = null;
+        let uploadedResumeUrl: string | undefined;
 
-        if (file) {
+        // react-hook-form binds file inputs to a FileList
+        const fileList = data.resumeUrl as unknown as FileList;
+        const file = fileList?.[0];
+
+        // Ensure we only process if a real file was selected
+        if (file instanceof File) {
           const formData = new FormData();
           formData.append("file", file);
 
@@ -209,14 +319,21 @@ export function RegistrationForm({
             },
           );
 
-          if (!response.ok) throw new Error("File upload failed");
+          if (!response.ok) {
+            throw new Error("File upload failed");
+          }
 
           const result = await response.json();
-          resumeUrl = result.downloadUrl;
+          uploadedResumeUrl = result.downloadUrl;
         }
 
-        // Send form data along with the resume URL
-        await registerUser({ ...data }, resumeUrl);
+        // We replace the FileList object on the payload with the actual URL before submission
+        const finalData = {
+          ...data,
+          resumeUrl: uploadedResumeUrl || undefined,
+        };
+
+        await registerUser(finalData, uploadedResumeUrl);
       })(),
       {
         loading: "Submitting registration...",
@@ -239,72 +356,12 @@ export function RegistrationForm({
     router.refresh();
   };
 
-  // Calculate progress and check form validity
-  useEffect(() => {
-    const calculateProgress = () => {
-      console.log("Calculating progress...");
-      const values = form.getValues();
-
-      const requiredFields = Object.keys(
-        formSchema.shape,
-      ) as (keyof RegistrationData)[];
-
-      const dynamicRequiredFields = requiredFields.filter((key) =>
-        isFieldRequired(key),
-      );
-
-      const filledFields = dynamicRequiredFields.reduce((count, key) => {
-        const value = values[key];
-        // Special handling for boolean fields
-        if (typeof value === "boolean") {
-          return value ? count + 1 : count;
-        } else if (Array.isArray(value)) {
-          return value.length > 0 ? count + 1 : count;
-        } else {
-          return value !== undefined && value !== "" && value !== "Select..."
-            ? count + 1
-            : count;
-        }
-      }, 0);
-
-      const totalRequiredFields = dynamicRequiredFields.length;
-
-      let calculatedProgress = Math.round(
-        (filledFields / totalRequiredFields) * 100,
-      );
-      console.log(calculatedProgress, filledFields, totalRequiredFields);
-
-      if (form.formState.isValid) {
-        calculatedProgress = 100;
-      } else {
-        calculatedProgress = Math.min(calculatedProgress, 99); // Caps at 99% if not valid
-      }
-
-      setProgress(calculatedProgress);
-    };
-
-    calculateProgress(); // Initial calculation on mount
-    const subscription = form.watch(() => {
-      calculateProgress();
-    });
-
-    return () => subscription.unsubscribe();
-  }, [form, isFieldRequired]);
-
   return (
     <Card className="max-w-3xl mx-auto mt-2 border-none shadow-none">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-center text-xl py-4">
-            {constants.hackathonName} Registration
-          </CardTitle>
-
-          <span className="text-sm font-medium">
-            {progress}% Complete (Saved)
-          </span>
-        </div>
-        <Progress value={progress} className="w-full h-2 my-6" />
-
+      <CardHeader className="bg-white">
+        <CardTitle className="text-center text-xl py-4">
+          {constants.hackathonName} Registration
+        </CardTitle>
         <p className="pt-4 text-sm">
           {constants.hackathonName} will be held at {constants.location} from{" "}
           {constants.dates}, in-person. For more information, reach out to{" "}
@@ -312,25 +369,17 @@ export function RegistrationForm({
             {constants.supportEmail}
           </Link>
           .
-          {/*
-            or join our{" "}
-          <Link href={constants.discordInvite} className="underline">
-            Discord
-          </Link>{" "}
-          server for questions.
-          */}
         </p>
         <p className="pt-2 text-sm">
           <b>ALL</b> high schoolers under the age of 18 must have an adult
-          chaperone in attendance with them. Chaperones may accompany a single
-          student or a group of students.
+          chaperone in attendance with them.
         </p>
         <p className="pt-2 text-sm">
           You must be a student to attend, if you are a working professional and
-          would like to volunteer during the event, please contact us via{" "}
+          would like to volunteer, please contact us via{" "}
           <Link href={`mailto:${constants.supportEmail}`} className="underline">
             {constants.supportEmail}
-          </Link>{" "}
+          </Link>
           .
         </p>
         <p className="py-2 text-sm">
@@ -338,338 +387,19 @@ export function RegistrationForm({
         </p>
         <hr />
       </CardHeader>
+
       <CardContent>
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="space-y-6"
-          >
-            {/* Personal Information Section */}
-            <h2 className="text-lg font-semibold">Personal Information</h2>
-            <div className="flex space-x-4">
-              {personalInfoFields.slice(0, 2).map((field) => (
-                <FormInputField key={field.name} {...field} />
-              ))}
-            </div>
-            <div className="flex space-x-4">
-              {personalInfoFields.slice(2).map((field) => (
-                <FormInputField key={field.name} {...field} />
-              ))}
-            </div>
+        <GenericForm
+          schema={participantRegistrationSchema as never}
+          config={formConfig}
+          onSubmit={onSubmit}
+          defaultValues={prefillData ?? undefined}
+          localStorageKey={LOCAL_STORAGE_KEY}
+          submitLabel="Register!"
+        />
 
-            {/* Select Fields */}
-            <div className="flex space-x-4">
-              <ComboboxSelect
-                name="countryOfResidence"
-                label="Country of Residence"
-                required={isFieldRequired("countryOfResidence")}
-                placeholder="Country"
-                options={predefinedCountries} // TODO: Change these to use ISO 3166 country codes for values (retain labels for display)
-                allowCustomInput
-                closeOnSelect
-              />
-              <FormSelectField<GenderIdentity>
-                name="genderIdentity"
-                label="Gender Identity"
-                options={genderIdentityOptions}
-                required={isFieldRequired("genderIdentity")}
-              />
-            </div>
-            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <ComboboxSelect
-                name="race"
-                label="Race"
-                required={isFieldRequired("race")}
-                placeholder="Race"
-                options={raceOptions}
-                closeOnSelect
-                multiselect
-                allowCustomInput={false}
-              />
-
-              <FormSelectField<HispanicOrLatino>
-                name="hispanicOrLatino"
-                label="Hispanic or Latino?"
-                options={hispanicOrLatinoOptions}
-                required={isFieldRequired("hispanicOrLatino")}
-              />
-            </div>
-
-            {/* Education Information Section */}
-            <hr className="my-4" />
-            <h2 className="text-lg font-semibold">Education Information</h2>
-            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <ComboboxSelect
-                name="currentSchool"
-                label="Current School"
-                required={isFieldRequired("currentSchool")}
-                placeholder="Enter School"
-                options={predefinedSchools}
-                allowCustomInput
-                closeOnSelect
-              />
-              <FormSelectField<LevelOfStudy>
-                name="levelOfStudy"
-                label="Level of Study"
-                options={levelOfStudyOptions}
-                required={isFieldRequired("levelOfStudy")}
-                onChange={(value) => {
-                  form.setValue("levelOfStudy", value);
-                  setShowChaperoneFields(value === "High School");
-                }}
-              />
-            </div>
-            <div className="flex space-x-4">
-              {!showChaperoneFields && (
-                <>
-                  <ComboboxSelect
-                    name="major"
-                    label="Major(s)"
-                    required={isFieldRequired("major")}
-                    placeholder="Select your major(s)"
-                    options={predefinedMajors}
-                    allowCustomInput
-                    closeOnSelect
-                    multiselect
-                  />
-                </>
-              )}
-            </div>
-            {!showChaperoneFields && (
-              <ComboboxSelect
-                name="minor"
-                label="Minor(s) / Certificate(s)"
-                required={isFieldRequired("minor")}
-                placeholder="Select your minor(s)"
-                options={predefinedMinors}
-                allowCustomInput
-                multiselect
-                closeOnSelect
-              />
-            )}
-            <FormInputField
-              name="resume"
-              label="Upload Resume (PDF)"
-              type="file"
-              required={false}
-              inputRef={fileInputRef}
-            />
-
-            {/* Chaperone Information */}
-            {showChaperoneFields && (
-              <>
-                <hr className="my-4" />
-                <h2 className="text-lg font-semibold">Chaperone Information</h2>
-                <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
-                  <p className="font-bold">Note:</p>
-                  <p>
-                    A Chaperone is <u>required</u> for all high school students.
-                  </p>
-                </div>
-                <div className="flex space-x-4">
-                  <FormInputField
-                    name="chaperoneFirstName"
-                    label="Chaperone First Name"
-                    placeholder="Chaperone's first name"
-                    required={isFieldRequired("chaperoneFirstName")}
-                  />
-                  <FormInputField
-                    name="chaperoneLastName"
-                    label="Chaperone Last Name"
-                    placeholder="Chaperone's last name"
-                    required={isFieldRequired("chaperoneLastName")}
-                  />
-                </div>
-                <div className="flex space-x-4">
-                  <FormInputField
-                    name="chaperoneEmail"
-                    label="Chaperone Email"
-                    placeholder="Chaperone's email"
-                    required={isFieldRequired("chaperoneEmail")}
-                  />
-                  <FormInputField
-                    name="chaperonePhoneNumber"
-                    label="Chaperone Phone #"
-                    placeholder="Chaperone's phone number"
-                    required={isFieldRequired("chaperonePhoneNumber")}
-                  />
-                </div>
-              </>
-            )}
-
-            {/* Additional Information Section */}
-            <hr className="my-4" />
-            <h2 className="text-lg font-semibold">Additional Information</h2>
-
-            <div className="flex space-x-4">
-              <FormSelectField<TShirtSize>
-                name="tShirtSize"
-                label="T-Shirt Size"
-                options={tShirtSizeOptions}
-                required={isFieldRequired("tShirtSize")}
-              />
-
-              <FormInputField
-                name="previousHackathons"
-                label="Hackathons Attended"
-                placeholder="Enter the number of previous hackathons"
-                type="number"
-                required={isFieldRequired("previousHackathons")}
-              />
-            </div>
-            <FormInputField
-              name="dietaryRestrictions"
-              label="Dietary Restrictions"
-              placeholder="Enter any dietary restrictions"
-              required={isFieldRequired("dietaryRestrictions")}
-            />
-            <div>
-              <p className="mb-2 text-sm">
-                When planning {constants.hackathonName}, inclusivity is our top
-                priority! How can we best accommodate you for the best hackathon
-                experience possible?
-              </p>
-              <FormInputField
-                name="specialAccommodations"
-                label=""
-                placeholder="Enter any special accommodations"
-                required={isFieldRequired("specialAccommodations")}
-              />
-            </div>
-
-            {/* Agreements Section */}
-            <hr className="my-4" />
-            <h2 className="text-lg font-semibold mb-2">Agreements</h2>
-            <div className="space-y-4">
-              <FormCheckboxField
-                name="agreeHackKUCode"
-                label={
-                  <>
-                    I agree to the{" "}
-                    <Link
-                      href="/legal/code-of-conduct"
-                      className="underline"
-                      target="_blank"
-                    >
-                      HackKU Code of Conduct
-                    </Link>
-                    .
-                  </>
-                }
-                required={isFieldRequired("agreeHackKUCode")}
-              />
-              <FormCheckboxField
-                name="photoWaiver"
-                label={
-                  <>
-                    {form.getValues().levelOfStudy === "High School" ? (
-                      <>
-                        I certify that I am the parent or guardian of the
-                        participant and consent to the terms of the{" "}
-                        <Link
-                          href="/legal/waiver"
-                          className="underline"
-                          target="_blank"
-                        >
-                          HackKU Waiver / Photo Release Waiver
-                        </Link>{" "}
-                        on their behalf.{" "}
-                      </>
-                    ) : (
-                      <>
-                        I agree to the{" "}
-                        <Link
-                          href="/legal/waiver"
-                          className="underline"
-                          target="_blank"
-                        >
-                          HackKU Waiver / Photo Release
-                        </Link>
-                      </>
-                    )}
-                  </>
-                }
-                required={true}
-              />
-              <FormCheckboxField
-                name="agreeMLHCode"
-                label={
-                  <>
-                    I agree to the{" "}
-                    <Link
-                      href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-                      className="underline"
-                      target="_blank"
-                    >
-                      MLH Code of Conduct
-                    </Link>
-                    .
-                  </>
-                }
-                required={isFieldRequired("agreeMLHCode")}
-              />
-              <FormCheckboxField
-                name="shareWithMLH"
-                label={
-                  <>
-                    I authorize you to share my registration information with
-                    Major League Hacking for event administration, ranking, and
-                    MLH administration (including the creation of linked
-                    accounts on MLH and{" "}
-                    <Link
-                      href="https://dev.to"
-                      target="_blank"
-                      className="underline"
-                    >
-                      DEV
-                    </Link>
-                    ) in-line with the{" "}
-                    <Link
-                      href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
-                      target="_blank"
-                      className="underline"
-                    >
-                      MLH Privacy Policy
-                    </Link>
-                    . I agree to the{" "}
-                    <Link
-                      href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
-                      target="_blank"
-                      className="underline"
-                    >
-                      MLH Contest Terms
-                    </Link>
-                  </>
-                }
-                required={isFieldRequired("shareWithMLH")}
-              />
-              <FormCheckboxField
-                name="receiveEmails"
-                label="I authorize MLH and DEV to send me occasional emails about relevant events, career opportunities, and community announcements."
-                required={isFieldRequired("receiveEmails")}
-              />
-            </div>
-
-            {/* Submit Button */}
-            <div className="flex justify-between items-center mb-2 whitespace-nowrap">
-              <Progress value={progress} className="w-full h-2" />
-              <span className="text-sm font-medium ml-2">{progress}%</span>
-            </div>
-            <Button
-              type="submit"
-              disabled={form.formState.isSubmitting}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-            >
-              Register!
-            </Button>
-          </form>
-        </FormProvider>
-        <p className="text-xs text-center mt-4 text-gray-500">
-          Have questions? Join the{" "}
-          <Link href={constants.discordInvite} className="underline">
-            Discord Server
-          </Link>{" "}
-          or email us at{" "}
+        <p className="text-xs text-center mt-8 text-gray-500">
+          Have questions? Email us at{" "}
           <Link href={`mailto:${constants.supportEmail}`} className="underline">
             {constants.supportEmail}
           </Link>

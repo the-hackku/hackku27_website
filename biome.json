@@ -1,0 +1,158 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["**", "!prisma/generated"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "lineEnding": "lf",
+    "bracketSameLine": true,
+    "bracketSpacing": true,
+    "expand": "auto"
+  },
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "next": "recommended",
+      "react": "recommended"
+    },
+    "rules": {
+      "preset": "recommended",
+      "a11y": {
+        "noAmbiguousAnchorText": "off"
+      },
+      "complexity": {
+        "noForEach": "info",
+        "noImplicitCoercions": "warn",
+        "noRedundantDefaultExport": "warn",
+        "noUselessCatchBinding": "warn",
+        "noUselessReturn": "warn",
+        "noUselessStringConcat": "warn",
+        "noUselessUndefined": "warn",
+        "noVoid": "warn",
+        "useArrayFind": "error",
+        "useSimplifiedLogicExpression": "info",
+        "useWhile": "warn"
+      },
+      "correctness": {
+        "noNestedComponentDefinitions": "error",
+        "noNextAsyncClientComponent": "error",
+        "noReactPropAssignments": "warn",
+        "noUndeclaredDependencies": "error",
+        "noUndeclaredVariables": "error",
+        "noUnusedInstantiation": "warn",
+        "useUniqueElementIds": "warn"
+      },
+      "performance": {
+        "noNamespaceImport": "warn",
+        "useTopLevelRegex": "warn"
+      },
+      "security": {
+        "noSecrets": "error"
+      },
+      "style": {
+        "noCommonJs": "warn",
+        "noInferrableTypes": "info",
+        "noSubstr": "warn",
+        "noUnusedTemplateLiteral": "warn",
+        "noUselessElse": "info",
+        "useAsConstAssertion": "warn",
+        "useBlockStatements": "warn",
+        "useCollapsedElseIf": "info",
+        "useCollapsedIf": "info",
+        "useComponentExportOnlyModules": {
+          "level": "warn",
+          "options": {
+            "allowConstantExport": true,
+            "allowExportNames": ["metadata"]
+          }
+        },
+        "useConsistentArrayType": "info",
+        "useConsistentCurlyBraces": "info",
+        "useConsistentMemberAccessibility": {
+          "level": "warn",
+          "options": {
+            "accessibility": "explicit"
+          }
+        },
+        "useConsistentMethodSignatures": {
+          "level": "warn",
+          "options": {
+            "style": "method"
+          }
+        },
+        "useConsistentObjectDefinitions": {
+          "level": "warn",
+          "options": {
+            "syntax": "shorthand"
+          }
+        },
+        "useDestructuring": {
+          "level": "info",
+          "options": {
+            "assignmentExpression": {
+              "array": false,
+              "object": true
+            }
+          }
+        },
+        "useErrorCause": "warn",
+        "useExplicitLengthCheck": "warn",
+        "useExportsLast": "info",
+        "useForOf": "warn",
+        "useFragmentSyntax": "info",
+        "useNumberNamespace": "warn",
+        "useNumericSeparators": "info",
+        "useObjectSpread": "warn",
+        "useReactFunctionComponents": "warn",
+        "useSelfClosingElements": "info"
+      },
+      "suspicious": {
+        "noAlert": "warn",
+        "noConstantBinaryExpressions": "info",
+        "noDeprecatedImports": "warn",
+        "noDuplicatedSpreadProps": "warn",
+        "noEmptySource": "warn",
+        "noEqualsToNull": "warn",
+        "noEvolvingTypes": "warn",
+        "noForIn": "warn",
+        "noImportCycles": "warn",
+        "noLeakedRender": "warn",
+        "noReactForwardRef": "warn",
+        "noReturnAssign": "warn",
+        "noShadow": "warn",
+        "noUnassignedVariables": "warn",
+        "noUnknownAttribute": "warn",
+        "noUnnecessaryConditions": "warn",
+        "noUnusedExpressions": "warn",
+        "useArraySortCompare": "warn",
+        "useAwait": "warn",
+        "useErrorMessage": "warn",
+        "useGuardForIn": "warn",
+        "useStaticResponseMethods": "warn"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}

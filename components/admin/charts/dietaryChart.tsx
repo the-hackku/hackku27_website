@@ -1,18 +1,18 @@
 "use client";
 
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
+import { distance } from "fastest-levenshtein";
 import React, { useEffect, useState } from "react";
-import { getDietaryData } from "@/app/actions/analytics/getData";
 import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import levenshtein from "fast-levenshtein";
+import { getDietaryData } from "@/app/actions/analytics/getData";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CONFIDENCE_THRESHOLD = 0.3;
 
 function getSimilarityScore(input: string, target: string): number {
-  const distance = levenshtein.get(input, target);
-  return 1 - distance / Math.max(input.length, target.length);
+  const dist = distance(input, target);
+  return 1 - dist / Math.max(input.length, target.length);
 }
 
 // Fuzzy match with confidence scoring (for frontend processing)
@@ -30,7 +30,6 @@ export function fuzzyMatchWithConfidence(input: string, categories: string[]) {
 
   return { category: bestMatch, confidence: highestConfidence };
 }
-
 
 export default function DietaryChart() {
   const [categorizedData, setCategorizedData] = useState<
@@ -108,7 +107,7 @@ export default function DietaryChart() {
     setUncertainData(uncertain);
   }
 
-  if (!Object.keys(categorizedData).length) return <p>Loading...</p>;
+  if (Object.keys(categorizedData).length === 0) { return <p>Loading...</p>; }
 
   const chartData = {
     labels: Object.keys(categorizedData),

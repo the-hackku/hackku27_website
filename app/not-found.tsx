@@ -1,14 +1,17 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "motion/react";
 import { AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { motion } from "motion/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   const router = useRouter();
+  const handleGoBack = () => {
+    router.push("/");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center p-6 space-y-6 ">
@@ -40,7 +43,11 @@ export default function NotFound() {
       </Alert>
 
       {/* Button to go back to home */}
-      <Button variant="outline" size="lg" className="bg-white/75 hover:bg-gray-300/75" onClick={() => router.push("/")}>
+      <Button
+        variant="outline"
+        size="lg"
+        className="bg-white/75 hover:bg-gray-300/75"
+        onClick={handleGoBack}>
         Go Back to Home
       </Button>
     </div>
