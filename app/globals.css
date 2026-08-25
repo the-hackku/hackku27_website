@@ -94,11 +94,11 @@ body {
 
 @media (min-width: 640px) {
   .register-btn {
-    border-radius: 0.5rem 0.5rem 0.5rem 2rem;
+    border-radius: 0.5rem 0.5rem 0.5rem 1.75rem;
   }
 
   .learn-btn {
-    border-radius: 0.5rem 0.5rem 2rem 0.5rem;
+    border-radius: 0.5rem 0.5rem 1.75rem 0.5rem;
   }
 }
 
@@ -126,12 +126,12 @@ body {
 
 @media (min-width: 640px) {
   .page-card {
-    border-top-left-radius: 50% clamp(0.75rem, 2.7vw, 3.5rem);
-    border-top-right-radius: 50% clamp(0.5rem, 2.7vw, 3.5rem);
+    border-top-left-radius: 40% clamp(0.75rem, 2.7vw, 3.5rem);
+    border-top-right-radius: 40% clamp(0.5rem, 2.7vw, 3.5rem);
   }
 
   .about-card {
-    border-top-left-radius: 60% clamp(0.75rem, 2.7vw, 3.5rem);
-    border-top-right-radius: 60% clamp(0.5rem, 2.7vw, 3.5rem);
+    border-top-left-radius: 40% clamp(0.75rem, 2.7vw, 3.5rem);
+    border-top-right-radius: 40% clamp(0.5rem, 2.7vw, 3.5rem);
   }
 }
