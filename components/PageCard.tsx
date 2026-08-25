@@ -2,8 +2,8 @@ import { CSSProperties, ReactNode } from "react";
 
 export const pageCardStyle: CSSProperties = {
   borderWidth: "2px",
-  borderBottomLeftRadius: "clamp(0.75rem, 4vw, 1.5rem)",
-  borderBottomRightRadius: "clamp(0.75rem, 4vw, 1.5rem)",
+  borderBottomLeftRadius: "clamp(2.75rem, 4vw, 1.5rem)",
+  borderBottomRightRadius: "clamp(2.75rem, 4vw, 1.5rem)",
   boxShadow: `
     inset 0 1px 0 rgba(255,255,255,0.9),
     inset 0 -2px 4px rgba(0,0,0,0.08),

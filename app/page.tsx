@@ -38,14 +38,14 @@ export default function HomePage() {
                 gap: "2rem",
                 width: "100%",
                 maxWidth: "650px",
-                padding: "1.75rem",
-                paddingBottom: "1.25rem",
-                paddingTop: "3.0rem",
+                padding: ".6rem",
+                paddingBottom: ".6rem",
+                paddingTop: "3rem",
               }}
-              initial={{ x: "60vw", opacity: 0 }}
+              initial={{ x: 200, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "-60vw", opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 35 }}>
+              exit={{ x: -200, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 180, damping: 24 }}>
               <h1 className="font-bold text-center text-4xl">
                 Welcome to Hack
                 <span className="text-blue-500">K</span>
@@ -57,7 +57,7 @@ export default function HomePage() {
                 Thanks for stopping by.
               </h3>
 
-              <div className="flex flex-col sm:flex-row w-full gap-8">
+              <div className="flex flex-col sm:flex-row w-full gap-3">
                 {/* Register button */}
                 <Link
                   href={registerPage}
@@ -108,10 +108,10 @@ export default function HomePage() {
                 paddingTop: "2.25rem",
                 paddingBottom: "1rem",
               }}
-              initial={{ x: "30vw", opacity: 0 }}
+              initial={{ x: 200, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "-30vw", opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 35 }}>
+              exit={{ x: -200, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 180, damping: 24 }}>
               <div className="flex items-center justify-between">
                 <h2 className="font-bold text-gray-900 text-2xl">
                   About HackKU
