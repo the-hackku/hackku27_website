@@ -179,19 +179,25 @@ export function EventForm() {
                         className="flex space-x-4">
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value="2026-04-17" id="friday" />
-                          <FormLabel htmlFor="friday" className="text-sm font-normal cursor-pointer">
+                          <FormLabel
+                            htmlFor="friday"
+                            className="text-sm font-normal cursor-pointer">
                             Friday, 17th
                           </FormLabel>
                         </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value="2026-04-18" id="saturday" />
-                          <FormLabel htmlFor="saturday" className="text-sm font-normal cursor-pointer">
+                          <FormLabel
+                            htmlFor="saturday"
+                            className="text-sm font-normal cursor-pointer">
                             Saturday, 18th
                           </FormLabel>
                         </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value="2026-04-19" id="sunday" />
-                          <FormLabel htmlFor="sunday" className="text-sm font-normal cursor-pointer">
+                          <FormLabel
+                            htmlFor="sunday"
+                            className="text-sm font-normal cursor-pointer">
                             Sunday, 19th
                           </FormLabel>
                         </div>

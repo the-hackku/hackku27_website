@@ -373,7 +373,7 @@ const MobileEventDrawer = ({
           />
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-bold">{event.name}</h2>
-            <button onClick={onClose}>
+            <button type="button" onClick={onClose}>
               <IconX />
             </button>
           </div>
@@ -629,6 +629,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 />
                 {searchQuery && (
                   <button
+                    type="button"
                     onClick={() => setSearchQuery("")}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                     <IconX size={16} />
@@ -799,8 +800,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     <td
                       className={`relative border-r border-gray-300 overflow-visible text-xs ${
                         slotIndex % 2 === 0 ? "" : "border-b border-solid"
-                      }`}
-                    >
+                      }`}>
                       {slotIndex % 2 === 0
                         ? formatTime(slotIndex, baseHour, timezoneMode)
                         : ""}
@@ -817,8 +817,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                             }`}
                             style={{
                               borderRightStyle: "dashed",
-                            }}
-                          >
+                            }}>
                             {filteredGroupedEvents[day]
                               ?.filter(
                                 (event) =>
@@ -862,6 +861,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
                                 const gridItemContent = (
                                   <div
+                                    key={event.id}
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setSelectedEvent((currEvent) => {
@@ -890,8 +890,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                       height: `calc(${rowSpan * 3}rem - 4px)`,
                                       position: "absolute",
                                       opacity: isSelected ? "0.8" : "1",
-                                    }}
-                                  >
+                                    }}>
                                     {/* Event content */}
                                     <span
                                       className={`inline-flex flex-wrap items-start text-left ${
@@ -900,14 +899,12 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                         overlapInfo.groupSize > 1
                                           ? "flex-col"
                                           : "flex-row items-center"
-                                      }`}
-                                    >
+                                      }`}>
                                       <p className="text-sm font-bold whitespace-normal break-words mr-1">
                                         {event.eventType === "REQUIRED" && (
                                           <span
                                             className="text-red-500"
-                                            title="Required Event"
-                                          >
+                                            title="Required Event">
                                             *
                                           </span>
                                         )}
@@ -950,8 +947,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                               WebkitLineClamp:
                                                 descriptionLineClamp,
                                               WebkitBoxOrient: "vertical",
-                                            }}
-                                          >
+                                            }}>
                                             <em>{event.description}</em>
                                           </span>
                                         </div>
@@ -964,7 +960,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                     <TooltipTrigger>
                                       {gridItemContent}
                                     </TooltipTrigger>
-                                    <TooltipContent side="right" className="max-w-xs">
+                                    <TooltipContent
+                                      side="right"
+                                      className="max-w-xs">
                                       <p className="font-bold">{event.name}</p>
                                       <p className="text-xs text-muted-foreground">
                                         {formatTimeForSlot(
@@ -1150,6 +1148,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               {!isMobile && (
                 <div className="relative z-10 flex justify-between items-center mt-6 pt-4 border-t">
                   <button
+                    type="button"
                     onClick={() => {
                       if (getPreviousEvent(selectedEvent)) {
                         setSelectedEvent(getPreviousEvent(selectedEvent));
@@ -1164,6 +1163,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     &larr; Previous
                   </button>
                   <button
+                    type="button"
                     onClick={() => {
                       if (getNextEvent(selectedEvent)) {
                         setSelectedEvent(getNextEvent(selectedEvent));

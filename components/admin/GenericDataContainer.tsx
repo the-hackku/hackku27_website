@@ -2,7 +2,7 @@
 
 import { IconLoader, IconX } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -110,7 +110,7 @@ function useSearchablePaginatedData<T>({
 
   // Memoize `fetchFunction` so it doesn't change on each render
   // cannot use `useMemo` because it doesn't work with async functions
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // biome-ignore lint/correctness/useExhaustiveDependencies: n/a
   const memoizedFetchFunction = useCallback(fetchFunction, []);
 
   // Fetch data function
@@ -230,7 +230,7 @@ export function GenericDataContainer<T extends { id: string }>({
       prevPageRef.current = page;
       prevSearchQueryRef.current = searchQuery;
     }
-  }, [data, page, searchQuery, setItems, setEdited, title]);
+  }, [data, page, searchQuery, setItems, setEdited]);
 
   /** Handle Save All */
   async function saveAll() {
@@ -284,6 +284,7 @@ export function GenericDataContainer<T extends { id: string }>({
           />
           {searchQuery && !loading && (
             <button
+              type="button"
               onClick={() => setSearchQuery("")}
               className="absolute inset-y-0 right-0 flex items-center pr-3">
               <IconX className="h-5 w-5" />

@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export const pageCardStyle: CSSProperties = {
   borderWidth: "2px",
@@ -23,9 +23,18 @@ interface PageCardProps {
  * Shared card shell used across pages (home, register, etc.).
  * Matches the curved-top card aesthetic from the home page.
  */
-export function PageCard({ children, className = "", wrapperClassName = "", wrapperStyle, maxWidth = "650px", style }: PageCardProps) {
+export function PageCard({
+  children,
+  className = "",
+  wrapperClassName = "",
+  wrapperStyle,
+  maxWidth = "650px",
+  style,
+}: PageCardProps) {
   return (
-    <div className={`relative flex flex-col items-center justify-center w-full ${wrapperClassName}`} style={wrapperStyle}>
+    <div
+      className={`relative flex flex-col items-center justify-center w-full ${wrapperClassName}`}
+      style={wrapperStyle}>
       <div
         className={`border bg-white w-full flex flex-col page-card ${className}`}
         style={{
@@ -34,8 +43,7 @@ export function PageCard({ children, className = "", wrapperClassName = "", wrap
           padding: "clamp(1.25rem, 3vw, 2.5rem)",
           gap: "1rem",
           ...style,
-        }}
-      >
+        }}>
         {children}
       </div>
     </div>

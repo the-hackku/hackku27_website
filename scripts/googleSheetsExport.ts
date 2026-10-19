@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 import { google } from "googleapis";
 import { prisma } from "@/lib/prisma";
-// 1. Import Prisma types
 import type {
   ParticipantInfo as PrismaParticipantInfo,
   User as PrismaUser,
@@ -12,6 +8,7 @@ import type {
 } from "@/prisma/generated/client";
 
 // Replace with your own Google Sheet ID and desired range:
+// biome-ignore lint/security/noSecrets: sheet ID, not a secret, but this should be moved to an environment variable anyways
 const SHEET_ID = "1BHgfhH0E5Ro5FuzsFgvt-wtNWI9sQ4QPqdk7aNInUi0";
 
 const serviceAccountKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;

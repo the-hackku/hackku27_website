@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function proxy(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
@@ -9,12 +9,11 @@ export async function proxy(request: NextRequest) {
       return NextResponse.next();
     }
   } else if (
-    request.nextUrl.pathname === "/register" ||
-    request.nextUrl.pathname === "/profile"
+    (request.nextUrl.pathname === "/register" ||
+      request.nextUrl.pathname === "/profile") &&
+    !sessionCookie
   ) {
-    if (!sessionCookie) {
-      return NextResponse.redirect(new URL("/signin", request.url));
-    }
+    return NextResponse.redirect(new URL("/signin", request.url));
   }
   return NextResponse.next();
 }

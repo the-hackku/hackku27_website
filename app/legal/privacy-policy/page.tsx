@@ -142,8 +142,7 @@ export default function PrivacyPolicy() {
           on our interactive third-party platforms is strictly subject to the{" "}
           <Link
             href="INSERT_YOUR_COC_LINK_HERE"
-            className="text-blue-600 hover:underline"
-          >
+            className="text-blue-600 hover:underline">
             HackKU Code of Conduct
           </Link>
           .
@@ -161,8 +160,7 @@ export default function PrivacyPolicy() {
               href="https://devpost.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Devpost Privacy Policy
             </Link>{" "}
             and{" "}
@@ -170,8 +168,7 @@ export default function PrivacyPolicy() {
               href="https://devpost.com/legal/terms"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Devpost Terms of Service
             </Link>
             .
@@ -185,8 +182,7 @@ export default function PrivacyPolicy() {
               href="https://discord.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Discord Privacy Policy
             </Link>{" "}
             and{" "}
@@ -194,8 +190,7 @@ export default function PrivacyPolicy() {
               href="https://discord.com/terms"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Discord Terms of Service
             </Link>
             .
@@ -209,8 +204,7 @@ export default function PrivacyPolicy() {
               href="https://www.cloudflare.com/privacypolicy/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Cloudflare Privacy Policy
             </Link>{" "}
             and{" "}
@@ -218,8 +212,7 @@ export default function PrivacyPolicy() {
               href="https://www.cloudflare.com/terms/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Cloudflare Terms of Service
             </Link>
             . Our technical use of this service and its data collection
@@ -228,8 +221,7 @@ export default function PrivacyPolicy() {
               href="https://www.cloudflare.com/turnstile-privacy-policy/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Turnstile Privacy Addendum
             </Link>
             .
@@ -245,8 +237,7 @@ export default function PrivacyPolicy() {
               href="https://mlh.io/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               MLH Privacy Policy
             </Link>{" "}
             and{" "}
@@ -254,8 +245,7 @@ export default function PrivacyPolicy() {
               href="https://mlh.io/terms"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               MLH Terms of Service
             </Link>
             .
@@ -277,8 +267,7 @@ export default function PrivacyPolicy() {
               href="https://policies.google.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Google Privacy Policy
             </Link>{" "}
             and{" "}
@@ -286,8 +275,7 @@ export default function PrivacyPolicy() {
               href="https://policies.google.com/terms"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               Google Terms of Service
             </Link>
             .
@@ -298,8 +286,7 @@ export default function PrivacyPolicy() {
               href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               GitHub Privacy Statement
             </Link>{" "}
             and{" "}
@@ -307,8 +294,7 @@ export default function PrivacyPolicy() {
               href="https://docs.github.com/en/site-policy/github-terms/github-terms-of-service"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
+              className="text-blue-600 hover:underline">
               GitHub Terms of Service
             </Link>
             .
@@ -419,8 +405,7 @@ export default function PrivacyPolicy() {
           out to our team at:{" "}
           <a
             href="mailto:hack@ku.edu"
-            className="text-blue-600 hover:underline font-semibold"
-          >
+            className="text-blue-600 hover:underline font-semibold">
             hack@ku.edu
           </a>
         </p>

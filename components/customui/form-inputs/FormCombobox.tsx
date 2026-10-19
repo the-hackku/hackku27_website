@@ -63,11 +63,13 @@ export function ComboboxSelect({
         return (
           <div className="flex flex-col space-y-1.5">
             {label ? (
-            <FormLabel>
-              {label}
-              {required ? <span className="text-red-500 ml-0.5">*</span> : null}
-            </FormLabel>
-          ) : null}
+              <FormLabel>
+                {label}
+                {required ? (
+                  <span className="text-red-500 ml-0.5">*</span>
+                ) : null}
+              </FormLabel>
+            ) : null}
 
             <Combobox
               items={normalizedOptions}

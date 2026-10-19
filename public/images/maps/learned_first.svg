@@ -10,10 +10,10 @@
 		.s5 { fill: #fcd4f0;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2.9 } 
 		.s6 { fill: #c500ff;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2.9 } 
 		.s7 { fill: #c5c7fc;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 2.9 } 
-		.t8 { font-size: 7px;fill: #000000;font-family: "Arial" } 
-		.t9 { font-size: 7px;line-height: 0px;fill: #000000;font-family: "Arial" } 
-		.t10 { font-size: 7px;line-height: 4px;fill: #000000;font-family: "Arial" } 
-		.t11 { font-size: 7px;line-height: 2px;fill: #000000;font-family: "Arial" } 
+		.t8 { font-size: 7px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t9 { font-size: 7px;line-height: 0px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t10 { font-size: 7px;line-height: 4px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t11 { font-size: 7px;line-height: 2px;fill: #000000;font-family: "Arial" , sans-serif} 
 	</style>
 	<path id="Path 2" fill-rule="evenodd" class="s0" d="m1324 146.2v42.8h-55.2v-42.8z"/>
 	<path id="Path 3" fill-rule="evenodd" class="s0" d="m1324 146.2v-15.7h110.5v16.8 42.3h65.5v44.9l-231.2 0.5v-46h55.2z"/>

@@ -8,7 +8,10 @@ import { GenericForm } from "@/components/forms/GenericForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import constants from "@/constants";
 import type { FormConfig } from "@/types/form";
-import { participantRegistrationSchema, type RegistrationData } from "@/types/schemas/participant";
+import {
+  participantRegistrationSchema,
+  type RegistrationData,
+} from "@/types/schemas/participant";
 import {
   predefinedMajors,
   predefinedMinors,
@@ -342,8 +345,7 @@ export function RegistrationForm({
             Registration successful! Please join our discord{" "}
             <a
               className="text-blue-500 font-bold"
-              href={constants.discordInvite}
-            >
+              href={constants.discordInvite}>
               here
             </a>
             !

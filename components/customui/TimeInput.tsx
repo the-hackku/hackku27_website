@@ -19,7 +19,9 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
   const initialMinute = value ? value.split(":")[1] : "00";
   const initialAmPm = initialHour >= 12 ? "PM" : "AM";
   const [hours, setHours] = useState(() => {
-    if (!value) { return "12"; }
+    if (!value) {
+      return "12";
+    }
     const h = Number.parseInt(value.split(":")[0], 10);
     const hour12 = h % 12 === 0 ? 12 : h % 12;
     return hour12.toString();
@@ -75,8 +77,12 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
             onChange={(e) => {
               let newHours = e.target.value;
               const num = Number.parseInt(newHours, 10);
-              if (num > 12) { newHours = "12"; }
-              if (num < 1 || Number.isNaN(num)) { newHours = "1"; }
+              if (num > 12) {
+                newHours = "12";
+              }
+              if (num < 1 || Number.isNaN(num)) {
+                newHours = "1";
+              }
               setHours(newHours);
             }}
             onBlur={handleTimeChange}
@@ -93,8 +99,12 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
             onChange={(e) => {
               let newMinutes = e.target.value;
               const num = Number.parseInt(newMinutes, 10);
-              if (num > 59) { newMinutes = "59"; }
-              if (num < 0 || Number.isNaN(num)) { newMinutes = "00"; }
+              if (num > 59) {
+                newMinutes = "59";
+              }
+              if (num < 0 || Number.isNaN(num)) {
+                newMinutes = "00";
+              }
               setMinutes(newMinutes);
             }}
             onBlur={handleTimeChange}
@@ -115,7 +125,10 @@ export function TimeInput({ value = "", onChange }: TimeInputProps) {
             <option value="PM">PM</option>
           </select>
         </div>
-        <Button variant="outline" className="mt-2 w-full" onClick={handleTimeChange}>
+        <Button
+          variant="outline"
+          className="mt-2 w-full"
+          onClick={handleTimeChange}>
           Set Time
         </Button>
       </PopoverContent>

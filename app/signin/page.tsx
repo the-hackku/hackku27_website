@@ -207,7 +207,9 @@ const SignInPage = () => {
             Check Your Email
           </h2>
           <p className="text-center text-gray-600 text-sm">
-            We sent a one-time code to <strong>{emailWatch}</strong>. Enter it here or click the link in the email to sign in. The code will expire in 10 minutes.
+            We sent a one-time code to <strong>{emailWatch}</strong>. Enter it
+            here or click the link in the email to sign in. The code will expire
+            in 10 minutes.
           </p>
           <p className="text-center text-gray-600 text-sm p-3 bg-indigo-50 rounded-lg">
             Emails to <b>@ku.edu</b> or other institutional addresses may be
@@ -217,8 +219,7 @@ const SignInPage = () => {
 
           <form
             onSubmit={handleSubmitOTP(handleTokenVerification)}
-            className="w-full flex flex-col gap-3"
-          >
+            className="w-full flex flex-col gap-3">
             <Controller
               name="otp"
               control={controlOTP}

@@ -28,7 +28,11 @@
     "rules": {
       "preset": "recommended",
       "a11y": {
-        "noAmbiguousAnchorText": "off"
+        "noAmbiguousAnchorText": "off",
+        "noStaticElementInteractions": "warn",
+        "noSvgWithoutTitle": "off",
+        "useKeyWithClickEvents": "warn",
+        "useMediaCaption": "off"
       },
       "complexity": {
         "noForEach": "info",
@@ -57,7 +61,12 @@
         "useTopLevelRegex": "warn"
       },
       "security": {
-        "noSecrets": "error"
+        "noSecrets": {
+          "level": "error",
+          "options": {
+            "entropyThreshold": 50
+          }
+        }
       },
       "style": {
         "noCommonJs": "warn",
@@ -118,6 +127,7 @@
       },
       "suspicious": {
         "noAlert": "warn",
+        "noArrayIndexKey": "warn",
         "noConstantBinaryExpressions": "info",
         "noDeprecatedImports": "warn",
         "noDuplicatedSpreadProps": "warn",

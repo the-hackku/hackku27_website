@@ -41,8 +41,7 @@ export default function Footer() {
           target="_blank"
           rel="noopener noreferrer"
           className="text-gray-400 underline underline-offset-2 text-sm hover:text-gray-300 transition-colors sm:hidden whitespace-nowrap"
-          prefetch={false}
-        >
+          prefetch={false}>
           Legal
         </Link>
 
@@ -53,8 +52,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 underline underline-offset-2 text-sm hover:text-gray-300 transition-colors"
-            prefetch={false}
-          >
+            prefetch={false}>
             Code of Conduct
           </Link>
           <span className="text-gray-300 text-sm">·</span>
@@ -63,8 +61,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 underline underline-offset-2 text-sm hover:text-gray-300 transition-colors"
-            prefetch={false}
-          >
+            prefetch={false}>
             Privacy Policy
           </Link>
           <span className="text-gray-300 text-sm">·</span>
@@ -73,8 +70,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 underline underline-offset-2 text-sm hover:text-gray-300 transition-colors"
-            prefetch={false}
-          >
+            prefetch={false}>
             Photo Release & Waiver
           </Link>
         </div>

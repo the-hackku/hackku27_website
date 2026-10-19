@@ -160,7 +160,7 @@ export default function ScannerPage() {
 
   const handleEventChange = (eventId: string | null) => {
     selectedEventRef.current = eventId;
-  }
+  };
 
   /***************************************************/
   /***  MANUAL CHECK-IN LOGIC (SHARING EVENT REF)  ***/
@@ -229,8 +229,7 @@ export default function ScannerPage() {
       {/* Scanner Section with dynamic background */}
       {/** biome-ignore lint/a11y/noStaticElementInteractions: Covers the entire scanner component for interaction */}
       <div onClick={resetScreen} onKeyDown={resetScreen}>
-        <Select
-          onValueChange={handleEventChange}>
+        <Select onValueChange={handleEventChange}>
           <SelectTrigger
             className={
               selectedEventRef.current === null ? "bg-yellow-200" : ""
@@ -270,7 +269,7 @@ export default function ScannerPage() {
               />
             </div>
 
-            {(validationResult || loading) ? (
+            {validationResult || loading ? (
               <div
                 style={{
                   position: "absolute",
@@ -311,7 +310,9 @@ export default function ScannerPage() {
 
         {/* Search Input */}
         <div className="mb-6">
-          <label htmlFor="userSearch" className="block mb-1 font-semibold">Search for a user:</label>
+          <label htmlFor="userSearch" className="block mb-1 font-semibold">
+            Search for a user:
+          </label>
           <div className="flex items-center gap-2">
             {/** biome-ignore lint/correctness/useUniqueElementIds: Guaranteed to be unique by usage */}
             <input
@@ -322,7 +323,9 @@ export default function ScannerPage() {
               className="border p-2 rounded w-full"
               id="userSearch"
             />
-            {isSearching ? <IconLoader className="animate-spin" size={20} /> : null}
+            {isSearching ? (
+              <IconLoader className="animate-spin" size={20} />
+            ) : null}
           </div>
           <p className="text-xs text-gray-500 mt-1">
             Type at least 2 characters to start searching.
@@ -333,19 +336,21 @@ export default function ScannerPage() {
             <div className="mt-2 border rounded p-2 bg-gray-50">
               {searchResults.map((user) => {
                 const onRadioChange = () => setSelectedUserId(user.id);
-                return <label
-                  key={user.id}
-                  className="block py-1 cursor-pointer hover:bg-gray-100 rounded">
-                  <input
-                    type="radio"
-                    name="selectedUser"
-                    className="mr-2"
-                    value={user.id}
-                    onChange={onRadioChange}
-                    checked={selectedUserId === user.id}
-                  />
-                  {user.firstName} {user.lastName} ({user.email})
-                </label>
+                return (
+                  <label
+                    key={user.id}
+                    className="block py-1 cursor-pointer hover:bg-gray-100 rounded">
+                    <input
+                      type="radio"
+                      name="selectedUser"
+                      className="mr-2"
+                      value={user.id}
+                      onChange={onRadioChange}
+                      checked={selectedUserId === user.id}
+                    />
+                    {user.firstName} {user.lastName} ({user.email})
+                  </label>
+                );
               })}
             </div>
           ) : null}
@@ -361,7 +366,9 @@ export default function ScannerPage() {
         </button>
 
         {/* Message display (success or error) */}
-        {message ? <p className="mt-4 text-center font-medium">{message}</p> : null}
+        {message ? (
+          <p className="mt-4 text-center font-medium">{message}</p>
+        ) : null}
       </div>
 
       {/* Scan History Section */}

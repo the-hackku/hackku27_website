@@ -132,6 +132,5 @@ body {
   .about-card {
     border-top-left-radius: 60% clamp(0.75rem, 2.7vw, 3.5rem);
     border-top-right-radius: 60% clamp(0.5rem, 2.7vw, 3.5rem);
+  }
 }
-}
-

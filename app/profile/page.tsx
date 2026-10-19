@@ -20,9 +20,7 @@ import { Progress } from "@/components/ui/progress"; // Make sure this is at the
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { prisma } from "@/lib/prisma";
-import {
-  getUserWithReimbursement
-} from "../actions/reimbursement";
+import { getUserWithReimbursement } from "../actions/reimbursement";
 // import type { UserWithReimbursement } from "../actions/reimbursement";
 
 /**

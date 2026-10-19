@@ -137,6 +137,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        // biome-ignore lint/correctness/noNestedComponentDefinitions: written by Base UI
         Root: ({ className, rootRef, ...props }) => {
           return (
             <div
@@ -147,6 +148,7 @@ function Calendar({
             />
           );
         },
+        // biome-ignore lint/correctness/noNestedComponentDefinitions: written by Base UI
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === "left") {
             return (
@@ -167,9 +169,11 @@ function Calendar({
             <ChevronDownIcon className={cn("size-4", className)} {...props} />
           );
         },
+        // biome-ignore lint/correctness/noNestedComponentDefinitions: written by Base UI
         DayButton: ({ ...props }) => (
           <CalendarDayButton locale={locale} {...props} />
         ),
+        // biome-ignore lint/correctness/noNestedComponentDefinitions: written by Base UI
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>
@@ -197,7 +201,9 @@ function CalendarDayButton({
 
   const ref = React.useRef<HTMLButtonElement>(null);
   React.useEffect(() => {
-    if (modifiers.focused) { ref.current?.focus(); }
+    if (modifiers.focused) {
+      ref.current?.focus();
+    }
   }, [modifiers.focused]);
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { IconLoader, IconX } from "@tabler/icons-react";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   type AdminReservationRequest,
@@ -157,7 +157,10 @@ export function RoomReservationsTab() {
   }
 
   // ── Request handlers ──────────────────────────────────────────────────────
-  async function handleAssignRoom(requestId: string, themedRoomId: string | null) {
+  async function handleAssignRoom(
+    requestId: string,
+    themedRoomId: string | null,
+  ) {
     setAssigningId(requestId);
     try {
       await assignRoomToRequest(
@@ -227,8 +230,7 @@ export function RoomReservationsTab() {
                 <TableRow>
                   <TableCell
                     colSpan={3}
-                    className="text-center text-muted-foreground py-6"
-                  >
+                    className="text-center text-muted-foreground py-6">
                     No rooms yet. Add one to get started.
                   </TableCell>
                 </TableRow>
@@ -242,8 +244,7 @@ export function RoomReservationsTab() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => openEditRoom(room)}
-                      >
+                        onClick={() => openEditRoom(room)}>
                         Edit
                       </Button>
                       <Button
@@ -282,6 +283,7 @@ export function RoomReservationsTab() {
             />
             {requestsSearch && (
               <button
+                type="button"
                 onClick={() => setRequestsSearch("")}
                 className="absolute inset-y-0 right-2 flex items-center">
                 <IconX size={16} />
@@ -309,8 +311,7 @@ export function RoomReservationsTab() {
                 <TableRow>
                   <TableCell
                     colSpan={7}
-                    className="text-center text-muted-foreground py-6"
-                  >
+                    className="text-center text-muted-foreground py-6">
                     No reservation requests found.
                   </TableCell>
                 </TableRow>
@@ -404,8 +405,11 @@ export function RoomReservationsTab() {
 
           <div className="space-y-4 py-2">
             <div>
-              <label className="text-sm font-medium">Name</label>
+              <label htmlFor="room-name-input" className="text-sm font-medium">
+                Name
+              </label>
               <Input
+                id="room-name-input"
                 value={roomForm.name}
                 onChange={(e) =>
                   setRoomForm((f) => ({ ...f, name: e.target.value }))
@@ -416,8 +420,13 @@ export function RoomReservationsTab() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Location</label>
+              <label
+                htmlFor="room-location-input"
+                className="text-sm font-medium">
+                Location
+              </label>
               <Input
+                id="room-location-input"
                 value={roomForm.location}
                 onChange={(e) =>
                   setRoomForm((f) => ({ ...f, location: e.target.value }))

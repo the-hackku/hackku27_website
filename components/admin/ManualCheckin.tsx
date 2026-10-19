@@ -106,13 +106,16 @@ export default function ManualCheckin() {
         Manual Check-In
       </h2>
       <p className="text-sm mb-4">
-        Use this form to manually check a user in if they don’t have a QR code.
+        Use this form to manually check a user in if they don't have a QR code.
       </p>
 
       {/* Events Dropdown */}
       <div className="mb-6">
-        <label className="block mb-1 font-semibold">Select an event:</label>
+        <label htmlFor="event-select" className="block mb-1 font-semibold">
+          Select an event:
+        </label>
         <select
+          key="event-select"
           value={selectedEventId}
           onChange={(e) => setSelectedEventId(e.target.value)}
           className="border p-2 rounded w-full">
@@ -127,9 +130,12 @@ export default function ManualCheckin() {
 
       {/* Search Input */}
       <div className="mb-6">
-        <label className="block mb-1 font-semibold">Search for a user:</label>
+        <label htmlFor="search-input" className="block mb-1 font-semibold">
+          Search for a user:
+        </label>
         <div className="flex items-center gap-2">
           <input
+            id="search-input"
             type="text"
             placeholder="Search by name or email..."
             value={searchQuery}
@@ -165,6 +171,7 @@ export default function ManualCheckin() {
 
       {/* Check-in button */}
       <button
+        type="button"
         onClick={handleCheckIn}
         disabled={isPending}
         className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400">

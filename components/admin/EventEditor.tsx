@@ -151,9 +151,13 @@ export default function AdminEventEditor({ events }: Props) {
           </select>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex flex-col flex-1">
-              <label className="mb-1 text-sm">Start Date/Time</label>
+              <label htmlFor="start-date" className="mb-1 text-sm">
+                Start Date/Time
+              </label>
+              {/** biome-ignore lint/correctness/useUniqueElementIds: necessary */}
               <input
                 className="p-2 border rounded"
+                id="start-date"
                 type="datetime-local"
                 value={formData.startDate}
                 onChange={(e) =>
@@ -162,9 +166,13 @@ export default function AdminEventEditor({ events }: Props) {
               />
             </div>
             <div className="flex flex-col flex-1">
-              <label className="mb-1 text-sm">End Date/Time</label>
+              <label htmlFor="end-date" className="mb-1 text-sm">
+                End Date/Time
+              </label>
+              {/** biome-ignore lint/correctness/useUniqueElementIds: necessary */}
               <input
                 className="p-2 border rounded"
+                id="end-date"
                 type="datetime-local"
                 value={formData.endDate}
                 onChange={(e) =>

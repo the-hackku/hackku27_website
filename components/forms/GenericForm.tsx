@@ -52,7 +52,9 @@ export function GenericForm<TValues extends FieldValues>({
   const currentValues = watch();
 
   useEffect(() => {
-    if (!localStorageKey) { return; }
+    if (!localStorageKey) {
+      return;
+    }
 
     const saved = localStorage.getItem(localStorageKey);
     if (saved) {
@@ -146,7 +148,7 @@ export function GenericForm<TValues extends FieldValues>({
       required: isRequired,
     };
 
-    // Removed the `key` prop from the individual components here, 
+    // Removed the `key` prop from the individual components here,
     // as it is now being handled by the wrapper <div> in the render loop below.
     switch (fieldConfig.type) {
       case "text":
@@ -210,15 +212,17 @@ export function GenericForm<TValues extends FieldValues>({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {fields.map((field) => {
                   const fieldComponent = renderField(field.key, field);
-                  if (!fieldComponent) { return null; }
-                  
-                  const isFullWidth = ("fullWidth" in field && Boolean(field.fullWidth));
+                  if (!fieldComponent) {
+                    return null;
+                  }
+
+                  const isFullWidth =
+                    "fullWidth" in field && Boolean(field.fullWidth);
 
                   return (
-                    <div 
-                      key={field.key} 
-                      className={isFullWidth ? "md:col-span-2" : ""}
-                    >
+                    <div
+                      key={field.key}
+                      className={isFullWidth ? "md:col-span-2" : ""}>
                       {fieldComponent}
                     </div>
                   );
@@ -233,7 +237,10 @@ export function GenericForm<TValues extends FieldValues>({
             <Progress value={progress} className="flex-1 mr-4" />
             <span className="text-sm font-medium">{progress}%</span>
           </div>
-          <Button type="submit" disabled={isSubmitting} className="w-full bg-blue-500 text-white hover:bg-blue-600 transition">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-blue-500 text-white hover:bg-blue-600 transition">
             {/** biome-ignore lint/suspicious/noLeakedRender: submitLabel is meant to be displayed */}
             {isSubmitting ? "Submitting..." : submitLabel}
           </Button>

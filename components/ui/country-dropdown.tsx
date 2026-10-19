@@ -50,7 +50,6 @@ export function CountryDropdown({
   slim = false,
   className,
 }: CountryDropdownProps) {
-  
   // Format the country data so Combobox uses the FULL NAME as its internal value.
   const countryItems = useMemo(() => {
     return options.map((c) => ({
@@ -80,7 +79,6 @@ export function CountryDropdown({
 
   return (
     <div className={cn("relative w-full", slim && "w-20", className)}>
-      
       {/* Absolute Flag/Globe overlay - top-0 & bottom-0 perfectly centers it vertically */}
       <div className="pointer-events-none absolute bottom-0 left-3 top-0 z-10 flex w-5 items-center justify-center">
         {selectedCountry ? (
@@ -95,13 +93,12 @@ export function CountryDropdown({
       <Combobox
         items={countryItems}
         value={comboboxValue}
-        onValueChange={handleValueChange}
-      >
+        onValueChange={handleValueChange}>
         <ComboboxInput
           placeholder={slim ? "" : placeholder}
           disabled={disabled}
           // The left padding ensures the typing cursor starts after the absolute flag overlay
-          className={cn("w-full pl-10", slim && "pl-8 text-transparent")} 
+          className={cn("w-full pl-10", slim && "pl-8 text-transparent")}
         />
 
         <ComboboxContent>

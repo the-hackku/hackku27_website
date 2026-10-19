@@ -41,9 +41,7 @@ export function OTPVerify() {
   }
 
   if (!(token && email)) {
-    return (
-      <p className="text-red-500 mb-6">Invalid verification link.</p>
-    );
+    return <p className="text-red-500 mb-6">Invalid verification link.</p>;
   }
 
   return (
@@ -54,8 +52,7 @@ export function OTPVerify() {
           <button
             type="button"
             onClick={handleReturnToSignIn}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition"
-          >
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition">
             Return to Sign In
           </button>
         </div>
@@ -64,17 +61,17 @@ export function OTPVerify() {
       ) : (
         <div>
           <p className="text-gray-600 mb-6">
-            Click the button below to confirm your login for <span className="font-semibold">{email}</span>.
+            Click the button below to confirm your login for{" "}
+            <span className="font-semibold">{email}</span>.
           </p>
           <button
             type="button"
             onClick={handleTokenVerification}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition"
-          >
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition">
             Confirm & Sign In
           </button>
         </div>
       )}
     </>
-  )
+  );
 }

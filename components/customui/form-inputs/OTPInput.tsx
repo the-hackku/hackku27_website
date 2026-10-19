@@ -5,7 +5,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-export function OTPInput( props: {
+export function OTPInput(props: {
   value: string;
   onChange(value: string): void;
 }) {
@@ -20,5 +20,5 @@ export function OTPInput( props: {
         <InputOTPSlot index={5} />
       </InputOTPGroup>
     </InputOTP>
-  )
+  );
 }

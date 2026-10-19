@@ -41,10 +41,10 @@ export const EditableCell = ({
           setIsEditing(false);
         }
       }}
-      autoFocus
       className={` px-2 py-1 border rounded ${isEdited ? "bg-yellow-300" : ""}`}
     />
   ) : (
+    // biome-ignore lint/a11y/noStaticElementInteractions: Should be converted to a button in the future
     <div
       onClick={(e) => {
         e.stopPropagation(); // Prevent parent handlers from blocking the event

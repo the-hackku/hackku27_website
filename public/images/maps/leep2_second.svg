@@ -8,9 +8,9 @@
 		.s3 { fill: #e1e1e1;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
 		.s4 { fill: #b6fcba;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
 		.s5 { fill: #fcd4f0;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
-		.t6 { font-size: 9px;fill: #000000;font-family: "Arial" } 
-		.t7 { font-size: 9px;line-height: 4px;fill: #000000;font-family: "Arial" } 
-		.t8 { font-size: 9px;line-height: 10px;fill: #000000;font-family: "Arial" } 
+		.t6 { font-size: 9px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t7 { font-size: 9px;line-height: 4px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t8 { font-size: 9px;line-height: 10px;fill: #000000;font-family: "Arial", sans-serif } 
 	</style>
 	<path id="Path 2" fill-rule="evenodd" class="s0" d="m0.3 310.5v-103.2h66.2v95.6h-33.1v7.6z"/>
 	<path id="Path 3" fill-rule="evenodd" class="s0" d="m102.9 207.3v62.5h-36.4v-62.5z"/>

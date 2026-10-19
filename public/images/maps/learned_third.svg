@@ -9,13 +9,13 @@
 		.s4 { fill: #ffaa00;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
 		.s5 { fill: #b6fcba;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
 		.s6 { fill: #fcd4f0;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
-		.t7 { font-size: 9px;fill: #000000;font-family: "Arial" } 
-		.t8 { font-size: 9px;line-height: 14px;fill: #000000;font-family: "Arial" } 
-		.t9 { font-size: 9px;line-height: 0px;fill: #000000;font-family: "Arial" } 
-		.t10 { font-size: 9px;line-height: 4px;fill: #000000;font-family: "Arial" } 
-		.t11 { font-size: 9px;line-height: 7px;fill: #000000;font-family: "Arial" } 
-		.t12 { font-size: 9px;line-height: 8px;fill: #000000;font-family: "Arial" } 
-		.t13 { font-size: 9px;line-height: 6px;fill: #000000;font-family: "Arial" } 
+		.t7 { font-size: 9px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t8 { font-size: 9px;line-height: 14px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t9 { font-size: 9px;line-height: 0px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t10 { font-size: 9px;line-height: 4px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t11 { font-size: 9px;line-height: 7px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t12 { font-size: 9px;line-height: 8px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t13 { font-size: 9px;line-height: 6px;fill: #000000;font-family: "Arial", sans-serif } 
 	</style>
 	<path id="Path 2" fill-rule="evenodd" class="s0" d="m44.8 252.6v98.9h-44.8v-98.9z"/>
 	<path id="Path 3" fill-rule="evenodd" class="s1" d="m44.8 252.6h52.9v-4.3h31.1v95.7h-28v7.5h-56z"/>

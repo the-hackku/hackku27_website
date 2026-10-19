@@ -2,7 +2,7 @@
 
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { distance } from "fastest-levenshtein";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { getDietaryData } from "@/app/actions/analytics/getData";
 
@@ -37,6 +37,7 @@ export default function DietaryChart() {
   >({});
   const [uncertainData, setUncertainData] = useState<string[]>([]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: n/a
   useEffect(() => {
     async function fetchData() {
       try {
@@ -107,7 +108,9 @@ export default function DietaryChart() {
     setUncertainData(uncertain);
   }
 
-  if (Object.keys(categorizedData).length === 0) { return <p>Loading...</p>; }
+  if (Object.keys(categorizedData).length === 0) {
+    return <p>Loading...</p>;
+  }
 
   const chartData = {
     labels: Object.keys(categorizedData),

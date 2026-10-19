@@ -10,7 +10,8 @@ export default function LocalDateTime({
   dateString,
   showTime = false,
 }: LocalDateTimeProps) {
-  const date = typeof dateString === "string" ? new Date(dateString) : dateString;
+  const date =
+    typeof dateString === "string" ? new Date(dateString) : dateString;
 
   const formattedDate = date.toLocaleDateString(undefined, {
     year: "numeric",

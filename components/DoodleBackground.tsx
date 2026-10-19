@@ -22,7 +22,9 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 function generateDoodles(images: string[]): Doodle[] {
-  if (images.length === 0) { return []; }
+  if (images.length === 0) {
+    return [];
+  }
 
   // Shuffle and take at most one of each image
   const pool = shuffle(images);
@@ -60,7 +62,9 @@ export default function DoodleBackground({ images }: { images: string[] }) {
     setDoodles(generateDoodles(images));
   }, [images]);
 
-  if (doodles.length === 0) { return null; }
+  if (doodles.length === 0) {
+    return null;
+  }
 
   return (
     <div

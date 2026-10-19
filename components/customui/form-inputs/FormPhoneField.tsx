@@ -23,7 +23,7 @@ export function FormPhoneField({
   required = false,
   placeholder,
   disabled,
-  onChange
+  onChange,
 }: FormPhoneFieldProps) {
   const { control } = useFormContext();
 

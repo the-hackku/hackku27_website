@@ -10,10 +10,10 @@
 		.s5 { fill: #c5c7fc;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
 		.s6 { fill: #cdcd66;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
 		.s7 { fill: #0070ff;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
-		.t8 { font-size: 9px;fill: #000000;font-family: "Arial" } 
-		.t9 { font-size: 9px;line-height: 10px;fill: #000000;font-family: "Arial" } 
-		.t10 { font-size: 9px;line-height: 14px;fill: #000000;font-family: "Arial" } 
-		.t11 { font-size: 9px;line-height: 9px;fill: #000000;font-family: "Arial" } 
+		.t8 { font-size: 9px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t9 { font-size: 9px;line-height: 10px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t10 { font-size: 9px;line-height: 14px;fill: #000000;font-family: "Arial", sans-serif } 
+		.t11 { font-size: 9px;line-height: 9px;fill: #000000;font-family: "Arial", sans-serif } 
 		.s12 { fill: none;stroke: #000000;stroke-linecap: round;stroke-linejoin: round;stroke-width: 1.9 } 
 	</style>
 	<path id="Path 2" fill-rule="evenodd" class="s0" d="m106.6 291.6v37.9h-36.2v-37.9z"/>

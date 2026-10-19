@@ -48,7 +48,9 @@ export function FormSelectField<T extends string>({
             <Select
               onValueChange={(value) => {
                 field.onChange(value);
-                if (onChange) { onChange(value as T); }
+                if (onChange) {
+                  onChange(value as T);
+                }
               }}
               value={field.value || ""}>
               <SelectTrigger className="w-full bg-white">
@@ -56,7 +58,10 @@ export function FormSelectField<T extends string>({
               </SelectTrigger>
               <SelectContent className="bg-white">
                 {options.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="bg-white">
+                  <SelectItem
+                    key={option.value}
+                    value={option.value}
+                    className="bg-white">
                     {option.label}
                   </SelectItem>
                 ))}
