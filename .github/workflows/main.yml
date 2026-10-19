@@ -53,6 +53,9 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+        
+      - name: Generate Next.js environment types
+        run: bunx next typegen
 
       - name: Run Bun Typecheck
         run: bun check

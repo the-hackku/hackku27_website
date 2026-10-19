@@ -34,24 +34,17 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for instructions on setting up a developm
 ```ts
 const constants = {
   hackathonName: "HackKU27",
-  dates: "April 17th - 19th, 2027",
+  dates: "April 2nd - 4th, 2027",
   location: "The University of Kansas",
   discordInvite: "https://discord.gg/...",
   instagramUrl: "https://instagram.com/hackku",
   supportEmail: "hack@ku.edu",
-  cutoffDate: "2026-04-17T00:00:00.000Z", // registration closes
-  startDate: "2026-04-17T22:00:00.000Z", // check-in opens (5 PM CDT Friday)
-  endDate: "2026-04-19T20:00:00.000Z", // closing ceremony ends (3 PM CDT Sunday)
+  cutoffDate: "2026-04-02T00:00:00.000Z", // registration closes
+  startDate: "2026-04-02T22:00:00.000Z", // check-in opens (5 PM CDT Friday)
+  endDate: "2026-04-04T20:00:00.000Z", // closing ceremony ends (3 PM CDT Sunday)
 };
 ```
 
 ### `prisma/schema.prisma`
 
 Database schema. After edits, run `npx prisma migrate dev` to apply changes and regenerate the client.
-
-### `app/actions/`
-
-Server actions called directly from client components. Key actions:
-
-- `register.ts` — creates `ParticipantInfo`, exports row to Google Sheets
-- `checkin.ts` — validates QR codes and records `Scan` / `Checkin` entries
