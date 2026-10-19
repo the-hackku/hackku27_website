@@ -120,7 +120,6 @@ export const auth = betterAuth({
           clientSecret: process.env.AUTH_MYMLH_SECRET,
           authorizationUrl: "https://my.mlh.io/oauth/authorize",
           tokenUrl: "https://my.mlh.io/oauth/token",
-          // biome-ignore lint/security/noSecrets: Just a URL, not a secret
           userInfoUrl: "https://api.mlh.com/v4/users/me?expand[]=education",
           mapProfileToUser: (profile) => {
             let school_name: string | null = null;
