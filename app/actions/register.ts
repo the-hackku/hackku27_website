@@ -21,6 +21,10 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
     throw new Error("User not found");
   }
 
+  if (user.isRegistered) {
+    throw new Error("User is already registered");
+  }
+
   await prisma.$transaction([
     prisma.participantInfo.create({
       data: {

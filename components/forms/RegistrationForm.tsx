@@ -342,13 +342,14 @@ export function RegistrationForm({
         loading: "Submitting registration...",
         success: (
           <div>
-            Registration successful! Please join our discord{" "}
+            Registration successful! 
+            {/* Please join our discord{" "}
             <a
               className="text-blue-500 font-bold"
               href={constants.discordInvite}>
               here
             </a>
-            !
+            ! */}
           </div>
         ),
         error: "Registration failed. Please try again.",
