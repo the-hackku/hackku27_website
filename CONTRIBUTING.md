@@ -33,7 +33,15 @@ Required variables:
 | `NEXT_PUBLIC_GOOGLE_API_KEY`                  | Google API key (public, used client-side)                            |
 | `BLOB_READ_WRITE_TOKEN`                       | Vercel Blob token for resume uploads                                 |
 
-## 3. Start the database
+## 3. Install packages
+
+Install packages using Bun:
+
+```bash
+bun i
+```
+
+## 4. Start the database
 
 A Docker Compose file is included for local Postgres:
 
@@ -51,7 +59,7 @@ Set `DATABASE_URL` accordingly:
 DATABASE_URL="postgresql://hackku:hackku@localhost:5432/hackku_dev"
 ```
 
-## 4. Run database migrations
+## 5. Run database migrations
 
 ```bash
 bunx prisma migrate dev
@@ -59,7 +67,7 @@ bunx prisma migrate dev
 
 This applies all migrations and regenerates the Prisma client. Re-run this after any schema changes.
 
-## 5. Start the development server
+## 6. Start the development server
 
 ```bash
 bun run dev
