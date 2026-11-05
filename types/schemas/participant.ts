@@ -26,6 +26,7 @@ export const participantRegistrationSchema = z
     dietaryRestrictions: z.string().optional(),
     specialAccommodations: z.string().optional(),
     currentSchool: z.string(),
+    otherSchool: z.string().optional(),
     levelOfStudy: z.enum(["High School", "Undergraduate", "Graduate", "Other"]),
     major: z.array(z.string()).optional(),
     minor: z.array(z.string()).optional(),
@@ -44,8 +45,9 @@ export const participantRegistrationSchema = z
       message: "You must agree to share your data with MLH and DEV.",
     }),
     receiveEmails: z.boolean().optional(),
+    shareEmailWithSponsors: z.boolean().optional(),
     photoWaiver: z.boolean().refine((value) => value === true, {
-      message: "You must agree to the waiver.",
+      message: "You must agree to the photo waiver.",
     }),
   })
   .superRefine((data, ctx) => {
@@ -79,6 +81,13 @@ export const participantRegistrationSchema = z
             "Chaperone phone number is required for high school students.",
         });
       }
+    }
+    if (data.currentSchool === "Other" && !data.otherSchool?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["otherSchool"],
+        message: "Please specify your school.",
+      });
     }
   });
 

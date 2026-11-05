@@ -258,6 +258,7 @@ export const ParticipantInfoScalarFieldEnum = {
   agreeMLHCode: 'agreeMLHCode',
   shareWithMLH: 'shareWithMLH',
   receiveEmails: 'receiveEmails',
+  shareEmailWithSponsors: 'shareEmailWithSponsors',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   resumeUrl: 'resumeUrl'

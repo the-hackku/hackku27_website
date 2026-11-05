@@ -112,6 +112,7 @@ export function ComboboxSelect({
 
               <ComboboxContent anchor={anchor} className="bg-white">
                 <ComboboxEmpty>No items found.</ComboboxEmpty>
+                {/* Filtered list: contains only the actual university options */}
                 <ComboboxList>
                   {(item) => (
                     <ComboboxItem
@@ -122,6 +123,15 @@ export function ComboboxSelect({
                     </ComboboxItem>
                   )}
                 </ComboboxList>
+
+                {/* Persistent sticky footer: always visible even while filtering */}
+                <div className="border-t border-slate-100 p-1">
+                  <ComboboxItem
+                    value="Other"
+                    className="cursor-pointer font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+                    Other / Not Listed
+                  </ComboboxItem>
+                </div>
               </ComboboxContent>
             </Combobox>
 

@@ -176,37 +176,38 @@ model Checkin {
 }
 
 model ParticipantInfo {
-  id                    String   @id @default(cuid())
-  userId                String   @unique
-  firstName             String
-  lastName              String
-  phoneNumber           String
-  age                   Int
-  genderIdentity        String
-  race                  String
-  hispanicOrLatino      String
-  countryOfResidence    String
-  isHighSchoolStudent   Boolean
-  currentSchool         String?
-  levelOfStudy          String?
-  major                 String?
-  minor                 String?
-  previousHackathons    Int?
-  tShirtSize            String
-  dietaryRestrictions   String?
-  specialAccommodations String?
-  chaperoneFirstName    String?
-  chaperoneLastName     String?
-  chaperoneEmail        String?
-  chaperonePhoneNumber  String?
-  agreeHackKUCode       Boolean
-  agreeMLHCode          Boolean
-  shareWithMLH          Boolean
-  receiveEmails         Boolean
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  resumeUrl             String?
-  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                     String   @id @default(cuid())
+  userId                 String   @unique
+  firstName              String
+  lastName               String
+  phoneNumber            String
+  age                    Int
+  genderIdentity         String
+  race                   String
+  hispanicOrLatino       String
+  countryOfResidence     String
+  isHighSchoolStudent    Boolean
+  currentSchool          String?
+  levelOfStudy           String?
+  major                  String?
+  minor                  String?
+  previousHackathons     Int?
+  tShirtSize             String
+  dietaryRestrictions    String?
+  specialAccommodations  String?
+  chaperoneFirstName     String?
+  chaperoneLastName      String?
+  chaperoneEmail         String?
+  chaperonePhoneNumber   String?
+  agreeHackKUCode        Boolean
+  agreeMLHCode           Boolean
+  shareWithMLH           Boolean
+  receiveEmails          Boolean  @default(false)
+  shareEmailWithSponsors Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  resumeUrl              String?
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Organization {

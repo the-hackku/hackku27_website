@@ -19,7 +19,7 @@ import {
   raceOptions,
 } from "./predefinedOptions";
 
-const LOCAL_STORAGE_KEY = "hackku27_registration_form";
+const LOCAL_STORAGE_KEY = "hackku_registration_form";
 
 export function RegistrationForm({
   prefillData,
@@ -107,6 +107,14 @@ export function RegistrationForm({
       options: predefinedSchools,
       required: true,
       group: "Education Information",
+    },
+    otherSchool: {
+      type: "text",
+      label: "Specify School Name",
+      placeholder: "e.g., University of Kansas",
+      group: "Education Information",
+      required: (v) => v.currentSchool === "Other",
+      renderIf: (v) => v.currentSchool === "Other",
     },
     levelOfStudy: {
       type: "select",
@@ -298,6 +306,14 @@ export function RegistrationForm({
       fullWidth: true,
       group: "Agreements",
     },
+    shareEmailWithSponsors: {
+      type: "checkbox",
+      label:
+        "I authorize HackKU to share my email with HackKU sponsors for marketing and promotional purposes.",
+      required: false,
+      fullWidth: true,
+      group: "Agreements",
+    },
   };
 
   const onSubmit = (data: RegistrationData) => {
@@ -333,6 +349,8 @@ export function RegistrationForm({
         // We replace the FileList object on the payload with the actual URL before submission
         const finalData = {
           ...data,
+          currentSchool: data.currentSchool === "Other" && data.otherSchool ? data.otherSchool.trim() : data.currentSchool,
+          otherSchool: undefined,
           resumeUrl: uploadedResumeUrl || undefined,
         };
 
@@ -355,8 +373,7 @@ export function RegistrationForm({
         error: "Registration failed. Please try again.",
       },
     );
-
-    router.refresh();
+    window.location.replace('/')
   };
 
   return (

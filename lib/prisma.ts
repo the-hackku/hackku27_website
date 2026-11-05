@@ -5,7 +5,7 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prismaClientSingleton = () => {
   return new PrismaClient({
     adapter,
-    log: ["query", "info", "warn", "error"],
+    log: ["info", "warn", "error"],
   });
 };
 

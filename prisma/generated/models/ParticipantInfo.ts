@@ -64,6 +64,7 @@ export type ParticipantInfoMinAggregateOutputType = {
   agreeMLHCode: boolean | null
   shareWithMLH: boolean | null
   receiveEmails: boolean | null
+  shareEmailWithSponsors: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   resumeUrl: string | null
@@ -97,6 +98,7 @@ export type ParticipantInfoMaxAggregateOutputType = {
   agreeMLHCode: boolean | null
   shareWithMLH: boolean | null
   receiveEmails: boolean | null
+  shareEmailWithSponsors: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   resumeUrl: string | null
@@ -130,6 +132,7 @@ export type ParticipantInfoCountAggregateOutputType = {
   agreeMLHCode: number
   shareWithMLH: number
   receiveEmails: number
+  shareEmailWithSponsors: number
   createdAt: number
   updatedAt: number
   resumeUrl: number
@@ -175,6 +178,7 @@ export type ParticipantInfoMinAggregateInputType = {
   agreeMLHCode?: true
   shareWithMLH?: true
   receiveEmails?: true
+  shareEmailWithSponsors?: true
   createdAt?: true
   updatedAt?: true
   resumeUrl?: true
@@ -208,6 +212,7 @@ export type ParticipantInfoMaxAggregateInputType = {
   agreeMLHCode?: true
   shareWithMLH?: true
   receiveEmails?: true
+  shareEmailWithSponsors?: true
   createdAt?: true
   updatedAt?: true
   resumeUrl?: true
@@ -241,6 +246,7 @@ export type ParticipantInfoCountAggregateInputType = {
   agreeMLHCode?: true
   shareWithMLH?: true
   receiveEmails?: true
+  shareEmailWithSponsors?: true
   createdAt?: true
   updatedAt?: true
   resumeUrl?: true
@@ -361,6 +367,7 @@ export type ParticipantInfoGroupByOutputType = {
   agreeMLHCode: boolean
   shareWithMLH: boolean
   receiveEmails: boolean
+  shareEmailWithSponsors: boolean
   createdAt: Date
   updatedAt: Date
   resumeUrl: string | null
@@ -417,6 +424,7 @@ export type ParticipantInfoWhereInput = {
   agreeMLHCode?: Prisma.BoolFilter<"ParticipantInfo"> | boolean
   shareWithMLH?: Prisma.BoolFilter<"ParticipantInfo"> | boolean
   receiveEmails?: Prisma.BoolFilter<"ParticipantInfo"> | boolean
+  shareEmailWithSponsors?: Prisma.BoolFilter<"ParticipantInfo"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ParticipantInfo"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ParticipantInfo"> | Date | string
   resumeUrl?: Prisma.StringNullableFilter<"ParticipantInfo"> | string | null
@@ -451,6 +459,7 @@ export type ParticipantInfoOrderByWithRelationInput = {
   agreeMLHCode?: Prisma.SortOrder
   shareWithMLH?: Prisma.SortOrder
   receiveEmails?: Prisma.SortOrder
+  shareEmailWithSponsors?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -488,6 +497,7 @@ export type ParticipantInfoWhereUniqueInput = Prisma.AtLeast<{
   agreeMLHCode?: Prisma.BoolFilter<"ParticipantInfo"> | boolean
   shareWithMLH?: Prisma.BoolFilter<"ParticipantInfo"> | boolean
   receiveEmails?: Prisma.BoolFilter<"ParticipantInfo"> | boolean
+  shareEmailWithSponsors?: Prisma.BoolFilter<"ParticipantInfo"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ParticipantInfo"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ParticipantInfo"> | Date | string
   resumeUrl?: Prisma.StringNullableFilter<"ParticipantInfo"> | string | null
@@ -522,6 +532,7 @@ export type ParticipantInfoOrderByWithAggregationInput = {
   agreeMLHCode?: Prisma.SortOrder
   shareWithMLH?: Prisma.SortOrder
   receiveEmails?: Prisma.SortOrder
+  shareEmailWithSponsors?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -563,6 +574,7 @@ export type ParticipantInfoScalarWhereWithAggregatesInput = {
   agreeMLHCode?: Prisma.BoolWithAggregatesFilter<"ParticipantInfo"> | boolean
   shareWithMLH?: Prisma.BoolWithAggregatesFilter<"ParticipantInfo"> | boolean
   receiveEmails?: Prisma.BoolWithAggregatesFilter<"ParticipantInfo"> | boolean
+  shareEmailWithSponsors?: Prisma.BoolWithAggregatesFilter<"ParticipantInfo"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ParticipantInfo"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ParticipantInfo"> | Date | string
   resumeUrl?: Prisma.StringNullableWithAggregatesFilter<"ParticipantInfo"> | string | null
@@ -594,7 +606,8 @@ export type ParticipantInfoCreateInput = {
   agreeHackKUCode: boolean
   agreeMLHCode: boolean
   shareWithMLH: boolean
-  receiveEmails: boolean
+  receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   resumeUrl?: string | null
@@ -628,7 +641,8 @@ export type ParticipantInfoUncheckedCreateInput = {
   agreeHackKUCode: boolean
   agreeMLHCode: boolean
   shareWithMLH: boolean
-  receiveEmails: boolean
+  receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   resumeUrl?: string | null
@@ -661,6 +675,7 @@ export type ParticipantInfoUpdateInput = {
   agreeMLHCode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   shareWithMLH?: Prisma.BoolFieldUpdateOperationsInput | boolean
   receiveEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  shareEmailWithSponsors?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -695,6 +710,7 @@ export type ParticipantInfoUncheckedUpdateInput = {
   agreeMLHCode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   shareWithMLH?: Prisma.BoolFieldUpdateOperationsInput | boolean
   receiveEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  shareEmailWithSponsors?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -727,7 +743,8 @@ export type ParticipantInfoCreateManyInput = {
   agreeHackKUCode: boolean
   agreeMLHCode: boolean
   shareWithMLH: boolean
-  receiveEmails: boolean
+  receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   resumeUrl?: string | null
@@ -760,6 +777,7 @@ export type ParticipantInfoUpdateManyMutationInput = {
   agreeMLHCode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   shareWithMLH?: Prisma.BoolFieldUpdateOperationsInput | boolean
   receiveEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  shareEmailWithSponsors?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -793,6 +811,7 @@ export type ParticipantInfoUncheckedUpdateManyInput = {
   agreeMLHCode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   shareWithMLH?: Prisma.BoolFieldUpdateOperationsInput | boolean
   receiveEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  shareEmailWithSponsors?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -831,6 +850,7 @@ export type ParticipantInfoCountOrderByAggregateInput = {
   agreeMLHCode?: Prisma.SortOrder
   shareWithMLH?: Prisma.SortOrder
   receiveEmails?: Prisma.SortOrder
+  shareEmailWithSponsors?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrder
@@ -869,6 +889,7 @@ export type ParticipantInfoMaxOrderByAggregateInput = {
   agreeMLHCode?: Prisma.SortOrder
   shareWithMLH?: Prisma.SortOrder
   receiveEmails?: Prisma.SortOrder
+  shareEmailWithSponsors?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrder
@@ -902,6 +923,7 @@ export type ParticipantInfoMinOrderByAggregateInput = {
   agreeMLHCode?: Prisma.SortOrder
   shareWithMLH?: Prisma.SortOrder
   receiveEmails?: Prisma.SortOrder
+  shareEmailWithSponsors?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   resumeUrl?: Prisma.SortOrder
@@ -978,7 +1000,8 @@ export type ParticipantInfoCreateWithoutUserInput = {
   agreeHackKUCode: boolean
   agreeMLHCode: boolean
   shareWithMLH: boolean
-  receiveEmails: boolean
+  receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   resumeUrl?: string | null
@@ -1010,7 +1033,8 @@ export type ParticipantInfoUncheckedCreateWithoutUserInput = {
   agreeHackKUCode: boolean
   agreeMLHCode: boolean
   shareWithMLH: boolean
-  receiveEmails: boolean
+  receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   resumeUrl?: string | null
@@ -1059,6 +1083,7 @@ export type ParticipantInfoUpdateWithoutUserInput = {
   agreeMLHCode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   shareWithMLH?: Prisma.BoolFieldUpdateOperationsInput | boolean
   receiveEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  shareEmailWithSponsors?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1091,6 +1116,7 @@ export type ParticipantInfoUncheckedUpdateWithoutUserInput = {
   agreeMLHCode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   shareWithMLH?: Prisma.BoolFieldUpdateOperationsInput | boolean
   receiveEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  shareEmailWithSponsors?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1126,6 +1152,7 @@ export type ParticipantInfoSelect<ExtArgs extends runtime.Types.Extensions.Inter
   agreeMLHCode?: boolean
   shareWithMLH?: boolean
   receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   resumeUrl?: boolean
@@ -1160,6 +1187,7 @@ export type ParticipantInfoSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   agreeMLHCode?: boolean
   shareWithMLH?: boolean
   receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   resumeUrl?: boolean
@@ -1194,6 +1222,7 @@ export type ParticipantInfoSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   agreeMLHCode?: boolean
   shareWithMLH?: boolean
   receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   resumeUrl?: boolean
@@ -1228,12 +1257,13 @@ export type ParticipantInfoSelectScalar = {
   agreeMLHCode?: boolean
   shareWithMLH?: boolean
   receiveEmails?: boolean
+  shareEmailWithSponsors?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   resumeUrl?: boolean
 }
 
-export type ParticipantInfoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "firstName" | "lastName" | "phoneNumber" | "age" | "genderIdentity" | "race" | "hispanicOrLatino" | "countryOfResidence" | "isHighSchoolStudent" | "currentSchool" | "levelOfStudy" | "major" | "minor" | "previousHackathons" | "tShirtSize" | "dietaryRestrictions" | "specialAccommodations" | "chaperoneFirstName" | "chaperoneLastName" | "chaperoneEmail" | "chaperonePhoneNumber" | "agreeHackKUCode" | "agreeMLHCode" | "shareWithMLH" | "receiveEmails" | "createdAt" | "updatedAt" | "resumeUrl", ExtArgs["result"]["participantInfo"]>
+export type ParticipantInfoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "firstName" | "lastName" | "phoneNumber" | "age" | "genderIdentity" | "race" | "hispanicOrLatino" | "countryOfResidence" | "isHighSchoolStudent" | "currentSchool" | "levelOfStudy" | "major" | "minor" | "previousHackathons" | "tShirtSize" | "dietaryRestrictions" | "specialAccommodations" | "chaperoneFirstName" | "chaperoneLastName" | "chaperoneEmail" | "chaperonePhoneNumber" | "agreeHackKUCode" | "agreeMLHCode" | "shareWithMLH" | "receiveEmails" | "shareEmailWithSponsors" | "createdAt" | "updatedAt" | "resumeUrl", ExtArgs["result"]["participantInfo"]>
 export type ParticipantInfoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -1277,6 +1307,7 @@ export type $ParticipantInfoPayload<ExtArgs extends runtime.Types.Extensions.Int
     agreeMLHCode: boolean
     shareWithMLH: boolean
     receiveEmails: boolean
+    shareEmailWithSponsors: boolean
     createdAt: Date
     updatedAt: Date
     resumeUrl: string | null
@@ -1731,6 +1762,7 @@ export interface ParticipantInfoFieldRefs {
   readonly agreeMLHCode: Prisma.FieldRef<"ParticipantInfo", 'Boolean'>
   readonly shareWithMLH: Prisma.FieldRef<"ParticipantInfo", 'Boolean'>
   readonly receiveEmails: Prisma.FieldRef<"ParticipantInfo", 'Boolean'>
+  readonly shareEmailWithSponsors: Prisma.FieldRef<"ParticipantInfo", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"ParticipantInfo", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ParticipantInfo", 'DateTime'>
   readonly resumeUrl: Prisma.FieldRef<"ParticipantInfo", 'String'>

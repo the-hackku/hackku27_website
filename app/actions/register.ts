@@ -54,6 +54,7 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
         agreeMLHCode: data.agreeMLHCode,
         shareWithMLH: data.shareWithMLH ?? false,
         receiveEmails: data.receiveEmails ?? false,
+        shareEmailWithSponsors: data.shareEmailWithSponsors ?? false,
         isHighSchoolStudent: data.levelOfStudy === "High School",
       },
     }),
