@@ -349,7 +349,10 @@ export function RegistrationForm({
         // We replace the FileList object on the payload with the actual URL before submission
         const finalData = {
           ...data,
-          currentSchool: data.currentSchool === "Other" && data.otherSchool ? data.otherSchool.trim() : data.currentSchool,
+          currentSchool:
+            data.currentSchool === "Other" && data.otherSchool
+              ? data.otherSchool.trim()
+              : data.currentSchool,
           otherSchool: undefined,
           resumeUrl: uploadedResumeUrl || undefined,
         };
@@ -360,7 +363,7 @@ export function RegistrationForm({
         loading: "Submitting registration...",
         success: (
           <div>
-            Registration successful! 
+            Registration successful!
             {/* Please join our discord{" "}
             <a
               className="text-blue-500 font-bold"
@@ -373,7 +376,7 @@ export function RegistrationForm({
         error: "Registration failed. Please try again.",
       },
     );
-    window.location.replace('/')
+    window.location.replace("/");
   };
 
   return (

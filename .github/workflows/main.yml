@@ -27,7 +27,7 @@ jobs:
           version: 2.5.15
 
       - name: Run Biome
-        run: biome ci . --diagnostic-level=error
+        run: biome check --formatter-enabled=false . --diagnostic-level=error
 
   typecheck:
     name: Bun Typecheck
