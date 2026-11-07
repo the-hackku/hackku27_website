@@ -1,61 +1,63 @@
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import ScheduleGrid from "@/components/ScheduleGrid";
 // import BeginnerWorkshops from "@/components/BeginnerWorkshops";
 import { prisma } from "@/lib/prisma";
 
 export default async function SchedulePage() {
-  "use cache";
-  const events = await prisma.event.findMany({
-    select: {
-      id: true,
-      name: true,
-      location: true,
-      startDate: true,
-      endDate: true,
-      createdAt: true,
-      updatedAt: true,
-      description: true,
-      eventType: true,
-    },
-  });
+  return redirect("/");
+  // "use cache";
+  // const events = await prisma.event.findMany({
+  //   select: {
+  //     id: true,
+  //     name: true,
+  //     location: true,
+  //     startDate: true,
+  //     endDate: true,
+  //     createdAt: true,
+  //     updatedAt: true,
+  //     description: true,
+  //     eventType: true,
+  //   },
+  // });
 
-  // Convert date fields to ISO strings (so that they are serializable on the client)
-  const mainScheduleEvents = events.map((event) => ({
-    ...event,
-    startDate: event.startDate.toISOString(),
-    endDate: event.endDate.toISOString(),
-    createdAt: event.createdAt.toISOString(),
-    updatedAt: event.updatedAt.toISOString(),
-  }));
+  // // Convert date fields to ISO strings (so that they are serializable on the client)
+  // const mainScheduleEvents = events.map((event) => ({
+  //   ...event,
+  //   startDate: event.startDate.toISOString(),
+  //   endDate: event.endDate.toISOString(),
+  //   createdAt: event.createdAt.toISOString(),
+  //   updatedAt: event.updatedAt.toISOString(),
+  // }));
 
-  // Decide how to identify "beginner workshops" vs. "normal" events.
-  // const cutoffDate = new Date(constants.cutoffDate);
+  // // Decide how to identify "beginner workshops" vs. "normal" events.
+  // // const cutoffDate = new Date(constants.cutoffDate);
 
-  // Filter out beginner workshops
-  // const beginnerWorkshops = formattedEvents.filter(
-  //   (ev) => new Date(ev.startDate) < cutoffDate
+  // // Filter out beginner workshops
+  // // const beginnerWorkshops = formattedEvents.filter(
+  // //   (ev) => new Date(ev.startDate) < cutoffDate
+  // // );
+
+  // // Filter out the rest (main schedule)
+  // // const mainScheduleEvents = formattedEvents.filter(
+  // //   (ev) => new Date(ev.startDate) >= cutoffDate,
+  // // );
+
+  // // You could also filter by eventType, for instance:
+  // // const beginnerWorkshops = formattedEvents.filter(
+  // //   (ev) =>
+  // //     new Date(ev.startDate) < cutoffDate && ev.eventType === "WORKSHOPS"
+  // // );
+
+  // return (
+  //   <div className="container mx-auto py-4">
+  //     {/* Pass only the main schedule events to the big schedule */}
+  //     {/* <BeginnerWorkshops schedule={beginnerWorkshops} /> */}
+  //     {/* <hr className="my-8" /> */}
+  //     <Suspense fallback={<div>Loading schedule...</div>}>
+  //       <ScheduleGrid schedule={mainScheduleEvents} />
+  //     </Suspense>
+  //     {/* Pass only the "beginner" events to the simpler layout */}
+  //   </div>
   // );
-
-  // Filter out the rest (main schedule)
-  // const mainScheduleEvents = formattedEvents.filter(
-  //   (ev) => new Date(ev.startDate) >= cutoffDate,
-  // );
-
-  // You could also filter by eventType, for instance:
-  // const beginnerWorkshops = formattedEvents.filter(
-  //   (ev) =>
-  //     new Date(ev.startDate) < cutoffDate && ev.eventType === "WORKSHOPS"
-  // );
-
-  return (
-    <div className="container mx-auto py-4">
-      {/* Pass only the main schedule events to the big schedule */}
-      {/* <BeginnerWorkshops schedule={beginnerWorkshops} /> */}
-      {/* <hr className="my-8" /> */}
-      <Suspense fallback={<div>Loading schedule...</div>}>
-        <ScheduleGrid schedule={mainScheduleEvents} />
-      </Suspense>
-      {/* Pass only the "beginner" events to the simpler layout */}
-    </div>
-  );
 }
