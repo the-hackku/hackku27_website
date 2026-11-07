@@ -1,0 +1,1 @@
+git diff --quiet HEAD^ HEAD -- app components lib prisma providers public types bun.lock constants.ts env.ts next.config.ts package.json postcss.config.mjs prisma.config.ts proxy.ts tailwind.config.ts tsconfig.json vercel.json
