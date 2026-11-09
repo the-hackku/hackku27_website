@@ -1,7 +1,7 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CompressionLevel, createArchive } from "zip-bun";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/db";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

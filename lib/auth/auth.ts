@@ -1,5 +1,5 @@
+import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import { passkey } from "@better-auth/passkey";
-import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError } from "better-auth/api";
 import { betterAuth } from "better-auth/minimal";
 import {
@@ -10,21 +10,31 @@ import {
   organization,
   twoFactor,
 } from "better-auth/plugins";
+import { eq } from "drizzle-orm";
 import { forbidden, unauthorized } from "next/navigation";
 import { jsx } from "react/jsx-runtime";
 import MagicLink from "@/components/email/MagicLink";
+import { account } from "@/db/schema";
 import { ac, roles } from "@/lib/auth/permissions";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/db";
 import { resend } from "@/lib/resend";
+import type { MLHUserProfile } from "@/types/oauth/mymlh";
 
 type PermissionMap = {
   [Resource in keyof typeof ac.statements]?: (typeof ac.statements)[Resource][number][];
 };
 
+const PHONE_NUMBER_PREFIX_REGEX = /^\+/;
+
 export const auth = betterAuth({
   appName: "HackKU",
-  database: prismaAdapter(prisma, {
-    provider: "postgresql",
+  advanced: {
+    database: {
+      joins: true,
+    },
+  },
+  database: drizzleAdapter(db, {
+    provider: "pg",
   }),
   user: {
     additionalFields: {
@@ -121,32 +131,24 @@ export const auth = betterAuth({
           authorizationUrl: "https://my.mlh.io/oauth/authorize",
           tokenUrl: "https://my.mlh.io/oauth/token",
           userInfoUrl: "https://api.mlh.com/v4/users/me?expand[]=education",
+          // Explicitly type the profile argument using the interface:
           mapProfileToUser: (profile) => {
-            let school_name: string | null = null;
-            let major: string | null = null;
-            if (profile.education?.length > 0) {
-              const currentEducation = profile.education.find(
-                (edu: { current: boolean }) => edu.current,
-              );
-              if (currentEducation) {
-                school_name = currentEducation.school_name || null;
-                major = currentEducation.major || null;
-              }
-            }
+            const p = profile as unknown as MLHUserProfile;
+            const currentEducation = p.education?.find((edu) => edu.current);
+
             return {
-              name: `${profile.first_name} ${profile.last_name}`,
-              email: profile.email,
-              prefillData: {
-                firstName: profile.first_name,
-                lastName: profile.last_name,
-                phoneNumber: profile.phone_number.slice(1) ?? null,
-                age: profile.profile?.age ?? null,
-                genderIdentity: profile.profile?.gender ?? null,
-                countryOfResidence:
-                  profile.profile?.country_of_residence ?? null,
-                currentSchool: school_name,
-                major,
-              },
+              name: `${p.first_name} ${p.last_name}`.trim(),
+              email: p.email,
+              emailVerified: true,
+              firstName: p.first_name,
+              lastName: p.last_name,
+              phoneNumber:
+                p.phone_number?.replace(PHONE_NUMBER_PREFIX_REGEX, "") ?? null,
+              age: p.profile?.age ?? null,
+              genderIdentity: p.profile?.gender ?? null,
+              countryOfResidence: p.profile?.country_of_residence ?? null,
+              currentSchool: currentEducation?.school_name ?? null,
+              major: currentEducation?.major ?? null,
             };
           },
         },
@@ -209,22 +211,23 @@ export const auth = betterAuth({
   databaseHooks: {
     account: {
       create: {
-        before: async (account, ctx) => {
+        before: async (acc, ctx) => {
           // This is a temporary hook to allow orphaned User records to be linked to a new account, but still block normal implicit linking.
           if (ctx?.context.session) {
             return {
               data: {
-                ...account,
+                ...acc,
               },
             };
           }
-          const existingAccounts = await prisma.account.count({
-            where: { userId: account.userId },
-          });
+          const existingAccounts = await db.$count(
+            account,
+            eq(account.userId, acc.userId),
+          );
           if (existingAccounts === 0) {
             return {
               data: {
-                ...account,
+                ...acc,
               },
             };
           }

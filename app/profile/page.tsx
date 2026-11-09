@@ -19,7 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress"; // Make sure this is at the top
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import { getUserWithReimbursement } from "../actions/reimbursement";
 // import type { UserWithReimbursement } from "../actions/reimbursement";
 

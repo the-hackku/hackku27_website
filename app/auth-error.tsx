@@ -33,7 +33,7 @@ export default async function NotFound({
   } else if (error === "email_not_found") {
     message =
       "We didn't receive an email from your provider, please try with a different provider or account.";
-  } else if (error === "email_doesn't_match") {
+  } else if (error === "email_does_not_match") {
     message =
       "The email from your provider doesn't match the email you used to sign up, please try with a different provider or account.";
   } else if (error === "unable_to_link_account") {

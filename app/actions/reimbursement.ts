@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth/auth";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import type {
   ParticipantInfo,
   ReimbursementInvite,

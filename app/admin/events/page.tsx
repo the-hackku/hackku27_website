@@ -4,7 +4,7 @@ import AdminEventEditor from "@/components/admin/EventEditor";
 import { EventForm } from "@/components/forms/eventForm";
 import ScheduleGrid from "@/components/ScheduleGrid";
 import constants from "@/constants";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 
 export default async function SchedulePage() {
   await connection();

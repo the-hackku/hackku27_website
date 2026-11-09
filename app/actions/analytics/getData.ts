@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 
 const IGNORE_PHRASES = ["none", "no special accommodations", "n/a", "na", "no"];
 

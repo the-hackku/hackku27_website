@@ -7,7 +7,7 @@ import {
   startOfDay,
   startOfHour,
 } from "date-fns";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 
 export async function getAnalyticsData(
   startDate: Date,

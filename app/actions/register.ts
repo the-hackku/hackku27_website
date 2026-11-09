@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth/auth";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import type { RegistrationData } from "@/types/schemas/participant";
 
 export async function registerUser(data: RegistrationData, resumeUrl?: string) {

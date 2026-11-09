@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { auth, hasPermissions } from "@/lib/auth/auth";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 
 export type InfoPageData = {
   id: string;

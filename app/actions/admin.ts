@@ -1,15 +1,14 @@
 "use server";
 
-import { auth, hasPermissions } from "@/lib/auth/auth";
-import { prisma } from "@/lib/prisma";
 import type {
-  Checkin,
-  EventType,
-  ParticipantInfo,
-  Prisma,
-  TravelReimbursement,
-  User,
-} from "@/prisma/generated/client";
+  checkin as Checkin,
+  eventType as EventType,
+  participantInfo as ParticipantInfo,
+  travelReimbursement as TravelReimbursement,
+  user as User,
+} from "@/db/schema";
+import { auth, hasPermissions } from "@/lib/auth/auth";
+import { db } from "@/lib/db";
 
 type AdminThemedRoom = {
   id: string;
@@ -40,7 +39,7 @@ interface EventData {
   name: string;
   location: string;
   description: string;
-  eventType: EventType;
+  eventType: typeof EventType;
 }
 
 type ValidateQrCodeResult =
@@ -64,7 +63,6 @@ type ValidateQrCodeResult =
 // CRUD operations for the admin dashboard
 
 // Fetch all users and return their names and emails
-// app/actions/admin.ts
 export async function getUsers(page = 1, pageSize = 20, searchQuery = "") {
   const session = await auth.api.getSession({
     headers: await headers(),

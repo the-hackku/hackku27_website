@@ -2,7 +2,7 @@ import { writeFileSync } from "fs";
 import { parse } from "json2csv";
 import { resolve } from "path";
 // import { prisma } from "../lib/prisma.ts"; // use this when running standalone
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/db";
 
 async function main() {
   const MAIN_EVENT_ID = "cm6vgqdwr0000l703iuxogwcy";

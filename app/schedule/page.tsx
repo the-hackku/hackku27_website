@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import ScheduleGrid from "@/components/ScheduleGrid";
 // import BeginnerWorkshops from "@/components/BeginnerWorkshops";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 
 export default async function SchedulePage() {
   return redirect("/");

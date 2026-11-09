@@ -1,0 +1,5382 @@
+{
+  "type": "base",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "030f985a-633b-4b05-a718-aa7ec8bcec3f",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "EventType"
+      ],
+      "writes": [
+        "s|enum|public.EventType",
+        "n|enum|public.EventType",
+        "e|enum|public.EventType",
+        "n|type|public.EventType"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "ReimbursementInviteStatus"
+      ],
+      "writes": [
+        "s|enum|public.ReimbursementInviteStatus",
+        "n|enum|public.ReimbursementInviteStatus",
+        "e|enum|public.ReimbursementInviteStatus",
+        "n|type|public.ReimbursementInviteStatus"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "RoomTheme"
+      ],
+      "writes": [
+        "s|enum|public.RoomTheme",
+        "n|enum|public.RoomTheme",
+        "e|enum|public.RoomTheme",
+        "n|type|public.RoomTheme"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "TicketStatus"
+      ],
+      "writes": [
+        "s|enum|public.TicketStatus",
+        "n|enum|public.TicketStatus",
+        "e|enum|public.TicketStatus",
+        "n|type|public.TicketStatus"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "TicketType"
+      ],
+      "writes": [
+        "s|enum|public.TicketType",
+        "n|enum|public.TicketType",
+        "e|enum|public.TicketType",
+        "n|type|public.TicketType"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "TimeSlot"
+      ],
+      "writes": [
+        "s|enum|public.TimeSlot",
+        "n|enum|public.TimeSlot",
+        "e|enum|public.TimeSlot",
+        "n|type|public.TimeSlot"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "account"
+      ],
+      "writes": [
+        "s|tbl|public.account",
+        "n|tbl|public.account",
+        "e|tbl|public.account",
+        "n|rel|public.account",
+        "n|type|public.account",
+        "n|rel|public.account_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "Checkin"
+      ],
+      "writes": [
+        "s|tbl|public.Checkin",
+        "n|tbl|public.Checkin",
+        "e|tbl|public.Checkin",
+        "n|rel|public.Checkin",
+        "n|type|public.Checkin",
+        "n|rel|public.Checkin_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "Event"
+      ],
+      "writes": [
+        "s|tbl|public.Event",
+        "n|tbl|public.Event",
+        "e|tbl|public.Event",
+        "n|rel|public.Event",
+        "n|type|public.Event",
+        "n|rel|public.Event_pkey"
+      ],
+      "reads": [
+        "n|sch|public",
+        "n|enum|public.EventType"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "InfoPageContent"
+      ],
+      "writes": [
+        "s|tbl|public.InfoPageContent",
+        "n|tbl|public.InfoPageContent",
+        "e|tbl|public.InfoPageContent",
+        "n|rel|public.InfoPageContent",
+        "n|type|public.InfoPageContent",
+        "n|rel|public.InfoPageContent_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "invitation"
+      ],
+      "writes": [
+        "s|tbl|public.invitation",
+        "n|tbl|public.invitation",
+        "e|tbl|public.invitation",
+        "n|rel|public.invitation",
+        "n|type|public.invitation",
+        "n|rel|public.invitation_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "member"
+      ],
+      "writes": [
+        "s|tbl|public.member",
+        "n|tbl|public.member",
+        "e|tbl|public.member",
+        "n|rel|public.member",
+        "n|type|public.member",
+        "n|rel|public.member_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "organization"
+      ],
+      "writes": [
+        "s|tbl|public.organization",
+        "n|tbl|public.organization",
+        "e|tbl|public.organization",
+        "n|rel|public.organization",
+        "n|type|public.organization",
+        "n|rel|public.organization_pkey",
+        "n|rel|public.organization_slug_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "ParticipantInfo"
+      ],
+      "writes": [
+        "s|tbl|public.ParticipantInfo",
+        "n|tbl|public.ParticipantInfo",
+        "e|tbl|public.ParticipantInfo",
+        "n|rel|public.ParticipantInfo",
+        "n|type|public.ParticipantInfo",
+        "n|rel|public.ParticipantInfo_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "passkey"
+      ],
+      "writes": [
+        "s|tbl|public.passkey",
+        "n|tbl|public.passkey",
+        "e|tbl|public.passkey",
+        "n|rel|public.passkey",
+        "n|type|public.passkey",
+        "n|rel|public.passkey_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "Project"
+      ],
+      "writes": [
+        "s|tbl|public.Project",
+        "n|tbl|public.Project",
+        "e|tbl|public.Project",
+        "n|rel|public.Project",
+        "n|type|public.Project",
+        "n|rel|public.Project_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "ReimbursementInvite"
+      ],
+      "writes": [
+        "s|tbl|public.ReimbursementInvite",
+        "n|tbl|public.ReimbursementInvite",
+        "e|tbl|public.ReimbursementInvite",
+        "n|rel|public.ReimbursementInvite",
+        "n|type|public.ReimbursementInvite",
+        "n|rel|public.ReimbursementInvite_pkey"
+      ],
+      "reads": [
+        "n|sch|public",
+        "n|enum|public.ReimbursementInviteStatus"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "ReservationRequest"
+      ],
+      "writes": [
+        "s|tbl|public.ReservationRequest",
+        "n|tbl|public.ReservationRequest",
+        "e|tbl|public.ReservationRequest",
+        "n|rel|public.ReservationRequest",
+        "n|type|public.ReservationRequest",
+        "n|rel|public.ReservationRequest_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "ScanAttempt"
+      ],
+      "writes": [
+        "s|tbl|public.ScanAttempt",
+        "n|tbl|public.ScanAttempt",
+        "e|tbl|public.ScanAttempt",
+        "n|rel|public.ScanAttempt",
+        "n|type|public.ScanAttempt",
+        "n|rel|public.ScanAttempt_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "session"
+      ],
+      "writes": [
+        "s|tbl|public.session",
+        "n|tbl|public.session",
+        "e|tbl|public.session",
+        "n|rel|public.session",
+        "n|type|public.session",
+        "n|rel|public.session_pkey",
+        "n|rel|public.session_token_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "ThemedRoom"
+      ],
+      "writes": [
+        "s|tbl|public.ThemedRoom",
+        "n|tbl|public.ThemedRoom",
+        "e|tbl|public.ThemedRoom",
+        "n|rel|public.ThemedRoom",
+        "n|type|public.ThemedRoom",
+        "n|rel|public.ThemedRoom_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "ThemedRoomReservation"
+      ],
+      "writes": [
+        "s|tbl|public.ThemedRoomReservation",
+        "n|tbl|public.ThemedRoomReservation",
+        "e|tbl|public.ThemedRoomReservation",
+        "n|rel|public.ThemedRoomReservation",
+        "n|type|public.ThemedRoomReservation",
+        "n|rel|public.ThemedRoomReservation_pkey"
+      ],
+      "reads": [
+        "n|sch|public",
+        "n|enum|public.TimeSlot",
+        "n|enum|public.RoomTheme"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "Ticket"
+      ],
+      "writes": [
+        "s|tbl|public.Ticket",
+        "n|tbl|public.Ticket",
+        "e|tbl|public.Ticket",
+        "n|rel|public.Ticket",
+        "n|type|public.Ticket",
+        "n|rel|public.Ticket_pkey"
+      ],
+      "reads": [
+        "n|sch|public",
+        "n|enum|public.TicketType",
+        "n|enum|public.TicketStatus"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "TravelReimbursement"
+      ],
+      "writes": [
+        "s|tbl|public.TravelReimbursement",
+        "n|tbl|public.TravelReimbursement",
+        "e|tbl|public.TravelReimbursement",
+        "n|rel|public.TravelReimbursement",
+        "n|type|public.TravelReimbursement",
+        "n|rel|public.TravelReimbursement_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "two_factor"
+      ],
+      "writes": [
+        "s|tbl|public.two_factor",
+        "n|tbl|public.two_factor",
+        "e|tbl|public.two_factor",
+        "n|rel|public.two_factor",
+        "n|type|public.two_factor",
+        "n|rel|public.two_factor_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "user"
+      ],
+      "writes": [
+        "s|tbl|public.user",
+        "n|tbl|public.user",
+        "e|tbl|public.user",
+        "n|rel|public.user",
+        "n|type|public.user",
+        "n|rel|public.user_pkey",
+        "n|rel|public.user_email_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "verification"
+      ],
+      "writes": [
+        "s|tbl|public.verification",
+        "n|tbl|public.verification",
+        "e|tbl|public.verification",
+        "n|rel|public.verification",
+        "n|type|public.verification",
+        "n|rel|public.verification_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "account",
+        "account_userId_idx"
+      ],
+      "writes": [
+        "s|idx|public.account_userId_idx",
+        "n|idx|public.account_userId_idx",
+        "e|idx|public.account_userId_idx",
+        "n|rel|public.account_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|public.account",
+        "n|sch|public",
+        "n|col|public.account.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "account",
+        "account_providerId_accountId_key"
+      ],
+      "writes": [
+        "s|idx|public.account_providerId_accountId_key",
+        "n|idx|public.account_providerId_accountId_key",
+        "e|idx|public.account_providerId_accountId_key",
+        "n|rel|public.account_providerId_accountId_key"
+      ],
+      "reads": [
+        "n|tbl|public.account",
+        "n|sch|public",
+        "n|col|public.account.provider_id",
+        "n|col|public.account.account_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "invitation",
+        "invitation_organizationId_idx"
+      ],
+      "writes": [
+        "s|idx|public.invitation_organizationId_idx",
+        "n|idx|public.invitation_organizationId_idx",
+        "e|idx|public.invitation_organizationId_idx",
+        "n|rel|public.invitation_organizationId_idx"
+      ],
+      "reads": [
+        "n|tbl|public.invitation",
+        "n|sch|public",
+        "n|col|public.invitation.organization_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "invitation",
+        "invitation_email_idx"
+      ],
+      "writes": [
+        "s|idx|public.invitation_email_idx",
+        "n|idx|public.invitation_email_idx",
+        "e|idx|public.invitation_email_idx",
+        "n|rel|public.invitation_email_idx"
+      ],
+      "reads": [
+        "n|tbl|public.invitation",
+        "n|sch|public",
+        "n|col|public.invitation.email"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "member",
+        "member_organizationId_idx"
+      ],
+      "writes": [
+        "s|idx|public.member_organizationId_idx",
+        "n|idx|public.member_organizationId_idx",
+        "e|idx|public.member_organizationId_idx",
+        "n|rel|public.member_organizationId_idx"
+      ],
+      "reads": [
+        "n|tbl|public.member",
+        "n|sch|public",
+        "n|col|public.member.organization_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "member",
+        "member_userId_idx"
+      ],
+      "writes": [
+        "s|idx|public.member_userId_idx",
+        "n|idx|public.member_userId_idx",
+        "e|idx|public.member_userId_idx",
+        "n|rel|public.member_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|public.member",
+        "n|sch|public",
+        "n|col|public.member.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "organization",
+        "organization_creatorId_key"
+      ],
+      "writes": [
+        "s|idx|public.organization_creatorId_key",
+        "n|idx|public.organization_creatorId_key",
+        "e|idx|public.organization_creatorId_key",
+        "n|rel|public.organization_creatorId_key"
+      ],
+      "reads": [
+        "n|tbl|public.organization",
+        "n|sch|public",
+        "n|col|public.organization.creator_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "ParticipantInfo",
+        "ParticipantInfo_userId_key"
+      ],
+      "writes": [
+        "s|idx|public.ParticipantInfo_userId_key",
+        "n|idx|public.ParticipantInfo_userId_key",
+        "e|idx|public.ParticipantInfo_userId_key",
+        "n|rel|public.ParticipantInfo_userId_key"
+      ],
+      "reads": [
+        "n|tbl|public.ParticipantInfo",
+        "n|sch|public",
+        "n|col|public.ParticipantInfo.userId"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "passkey",
+        "passkey_userId_idx"
+      ],
+      "writes": [
+        "s|idx|public.passkey_userId_idx",
+        "n|idx|public.passkey_userId_idx",
+        "e|idx|public.passkey_userId_idx",
+        "n|rel|public.passkey_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|public.passkey",
+        "n|sch|public",
+        "n|col|public.passkey.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "passkey",
+        "passkey_credentialID_idx"
+      ],
+      "writes": [
+        "s|idx|public.passkey_credentialID_idx",
+        "n|idx|public.passkey_credentialID_idx",
+        "e|idx|public.passkey_credentialID_idx",
+        "n|rel|public.passkey_credentialID_idx"
+      ],
+      "reads": [
+        "n|tbl|public.passkey",
+        "n|sch|public",
+        "n|col|public.passkey.credential_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "Project",
+        "Project_creatorId_key"
+      ],
+      "writes": [
+        "s|idx|public.Project_creatorId_key",
+        "n|idx|public.Project_creatorId_key",
+        "e|idx|public.Project_creatorId_key",
+        "n|rel|public.Project_creatorId_key"
+      ],
+      "reads": [
+        "n|tbl|public.Project",
+        "n|sch|public",
+        "n|col|public.Project.creatorId"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "Project",
+        "Project_teamId_key"
+      ],
+      "writes": [
+        "s|idx|public.Project_teamId_key",
+        "n|idx|public.Project_teamId_key",
+        "e|idx|public.Project_teamId_key",
+        "n|rel|public.Project_teamId_key"
+      ],
+      "reads": [
+        "n|tbl|public.Project",
+        "n|sch|public",
+        "n|col|public.Project.teamId"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "ReimbursementInvite",
+        "ReimbursementInvite_userId_reimbursementId_key"
+      ],
+      "writes": [
+        "s|idx|public.ReimbursementInvite_userId_reimbursementId_key",
+        "n|idx|public.ReimbursementInvite_userId_reimbursementId_key",
+        "e|idx|public.ReimbursementInvite_userId_reimbursementId_key",
+        "n|rel|public.ReimbursementInvite_userId_reimbursementId_key"
+      ],
+      "reads": [
+        "n|tbl|public.ReimbursementInvite",
+        "n|sch|public",
+        "n|col|public.ReimbursementInvite.userId",
+        "n|col|public.ReimbursementInvite.reimbursementId"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "ReservationRequest",
+        "ReservationRequest_userId_key"
+      ],
+      "writes": [
+        "s|idx|public.ReservationRequest_userId_key",
+        "n|idx|public.ReservationRequest_userId_key",
+        "e|idx|public.ReservationRequest_userId_key",
+        "n|rel|public.ReservationRequest_userId_key"
+      ],
+      "reads": [
+        "n|tbl|public.ReservationRequest",
+        "n|sch|public",
+        "n|col|public.ReservationRequest.userId"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "session",
+        "session_userId_idx"
+      ],
+      "writes": [
+        "s|idx|public.session_userId_idx",
+        "n|idx|public.session_userId_idx",
+        "e|idx|public.session_userId_idx",
+        "n|rel|public.session_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|public.session",
+        "n|sch|public",
+        "n|col|public.session.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "ThemedRoomReservation",
+        "ThemedRoomReservation_theme_timeSlot_key"
+      ],
+      "writes": [
+        "s|idx|public.ThemedRoomReservation_theme_timeSlot_key",
+        "n|idx|public.ThemedRoomReservation_theme_timeSlot_key",
+        "e|idx|public.ThemedRoomReservation_theme_timeSlot_key",
+        "n|rel|public.ThemedRoomReservation_theme_timeSlot_key"
+      ],
+      "reads": [
+        "n|tbl|public.ThemedRoomReservation",
+        "n|sch|public",
+        "n|col|public.ThemedRoomReservation.theme",
+        "n|col|public.ThemedRoomReservation.timeSlot"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "ThemedRoomReservation",
+        "ThemedRoomReservation_userId_key"
+      ],
+      "writes": [
+        "s|idx|public.ThemedRoomReservation_userId_key",
+        "n|idx|public.ThemedRoomReservation_userId_key",
+        "e|idx|public.ThemedRoomReservation_userId_key",
+        "n|rel|public.ThemedRoomReservation_userId_key"
+      ],
+      "reads": [
+        "n|tbl|public.ThemedRoomReservation",
+        "n|sch|public",
+        "n|col|public.ThemedRoomReservation.userId"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "TravelReimbursement",
+        "TravelReimbursement_userId_key"
+      ],
+      "writes": [
+        "s|idx|public.TravelReimbursement_userId_key",
+        "n|idx|public.TravelReimbursement_userId_key",
+        "e|idx|public.TravelReimbursement_userId_key",
+        "n|rel|public.TravelReimbursement_userId_key"
+      ],
+      "reads": [
+        "n|tbl|public.TravelReimbursement",
+        "n|sch|public",
+        "n|col|public.TravelReimbursement.userId"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "two_factor",
+        "twoFactor_secret_idx"
+      ],
+      "writes": [
+        "s|idx|public.twoFactor_secret_idx",
+        "n|idx|public.twoFactor_secret_idx",
+        "e|idx|public.twoFactor_secret_idx",
+        "n|rel|public.twoFactor_secret_idx"
+      ],
+      "reads": [
+        "n|tbl|public.two_factor",
+        "n|sch|public",
+        "n|col|public.two_factor.secret"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "two_factor",
+        "twoFactor_userId_idx"
+      ],
+      "writes": [
+        "s|idx|public.twoFactor_userId_idx",
+        "n|idx|public.twoFactor_userId_idx",
+        "e|idx|public.twoFactor_userId_idx",
+        "n|rel|public.twoFactor_userId_idx"
+      ],
+      "reads": [
+        "n|tbl|public.two_factor",
+        "n|sch|public",
+        "n|col|public.two_factor.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "verification",
+        "verification_identifier_idx"
+      ],
+      "writes": [
+        "s|idx|public.verification_identifier_idx",
+        "n|idx|public.verification_identifier_idx",
+        "e|idx|public.verification_identifier_idx",
+        "n|rel|public.verification_identifier_idx"
+      ],
+      "reads": [
+        "n|tbl|public.verification",
+        "n|sch|public",
+        "n|col|public.verification.identifier"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "account"
+      ],
+      "writes": [
+        "s|fk|public.account.account_user_id_user_id_fkey",
+        "n|fk|public.account.account_user_id_user_id_fkey",
+        "e|fk|public.account.account_user_id_user_id_fkey",
+        "n|con|public.account.account_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.account",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.account.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Checkin"
+      ],
+      "writes": [
+        "s|fk|public.Checkin.Checkin_adminId_fkey",
+        "n|fk|public.Checkin.Checkin_adminId_fkey",
+        "e|fk|public.Checkin.Checkin_adminId_fkey",
+        "n|con|public.Checkin.Checkin_adminId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Checkin",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.Checkin.adminId",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Checkin"
+      ],
+      "writes": [
+        "s|fk|public.Checkin.Checkin_eventId_fkey",
+        "n|fk|public.Checkin.Checkin_eventId_fkey",
+        "e|fk|public.Checkin.Checkin_eventId_fkey",
+        "n|con|public.Checkin.Checkin_eventId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Checkin",
+        "n|sch|public",
+        "n|tbl|public.Event",
+        "n|sch|public",
+        "n|col|public.Checkin.eventId",
+        "n|col|public.Event.id",
+        "e|uniqueness|public.Event.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Checkin"
+      ],
+      "writes": [
+        "s|fk|public.Checkin.Checkin_userId_fkey",
+        "n|fk|public.Checkin.Checkin_userId_fkey",
+        "e|fk|public.Checkin.Checkin_userId_fkey",
+        "n|con|public.Checkin.Checkin_userId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Checkin",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.Checkin.userId",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "invitation"
+      ],
+      "writes": [
+        "s|fk|public.invitation.invitation_organization_id_organization_id_fkey",
+        "n|fk|public.invitation.invitation_organization_id_organization_id_fkey",
+        "e|fk|public.invitation.invitation_organization_id_organization_id_fkey",
+        "n|con|public.invitation.invitation_organization_id_organization_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.invitation",
+        "n|sch|public",
+        "n|tbl|public.organization",
+        "n|sch|public",
+        "n|col|public.invitation.organization_id",
+        "n|col|public.organization.id",
+        "e|uniqueness|public.organization.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "invitation"
+      ],
+      "writes": [
+        "s|fk|public.invitation.invitation_inviter_id_user_id_fkey",
+        "n|fk|public.invitation.invitation_inviter_id_user_id_fkey",
+        "e|fk|public.invitation.invitation_inviter_id_user_id_fkey",
+        "n|con|public.invitation.invitation_inviter_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.invitation",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.invitation.inviter_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "member"
+      ],
+      "writes": [
+        "s|fk|public.member.member_organization_id_organization_id_fkey",
+        "n|fk|public.member.member_organization_id_organization_id_fkey",
+        "e|fk|public.member.member_organization_id_organization_id_fkey",
+        "n|con|public.member.member_organization_id_organization_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.member",
+        "n|sch|public",
+        "n|tbl|public.organization",
+        "n|sch|public",
+        "n|col|public.member.organization_id",
+        "n|col|public.organization.id",
+        "e|uniqueness|public.organization.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "member"
+      ],
+      "writes": [
+        "s|fk|public.member.member_user_id_user_id_fkey",
+        "n|fk|public.member.member_user_id_user_id_fkey",
+        "e|fk|public.member.member_user_id_user_id_fkey",
+        "n|con|public.member.member_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.member",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.member.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "organization"
+      ],
+      "writes": [
+        "s|fk|public.organization.organization_creator_id_user_id_fkey",
+        "n|fk|public.organization.organization_creator_id_user_id_fkey",
+        "e|fk|public.organization.organization_creator_id_user_id_fkey",
+        "n|con|public.organization.organization_creator_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.organization",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.organization.creator_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "ParticipantInfo"
+      ],
+      "writes": [
+        "s|fk|public.ParticipantInfo.ParticipantInfo_userId_fkey",
+        "n|fk|public.ParticipantInfo.ParticipantInfo_userId_fkey",
+        "e|fk|public.ParticipantInfo.ParticipantInfo_userId_fkey",
+        "n|con|public.ParticipantInfo.ParticipantInfo_userId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ParticipantInfo",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.ParticipantInfo.userId",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "passkey"
+      ],
+      "writes": [
+        "s|fk|public.passkey.passkey_user_id_user_id_fkey",
+        "n|fk|public.passkey.passkey_user_id_user_id_fkey",
+        "e|fk|public.passkey.passkey_user_id_user_id_fkey",
+        "n|con|public.passkey.passkey_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.passkey",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.passkey.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Project"
+      ],
+      "writes": [
+        "s|fk|public.Project.Project_creatorId_fkey",
+        "n|fk|public.Project.Project_creatorId_fkey",
+        "e|fk|public.Project.Project_creatorId_fkey",
+        "n|con|public.Project.Project_creatorId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Project",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.Project.creatorId",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Project"
+      ],
+      "writes": [
+        "s|fk|public.Project.Project_teamId_fkey",
+        "n|fk|public.Project.Project_teamId_fkey",
+        "e|fk|public.Project.Project_teamId_fkey",
+        "n|con|public.Project.Project_teamId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Project",
+        "n|sch|public",
+        "n|tbl|public.organization",
+        "n|sch|public",
+        "n|col|public.Project.teamId",
+        "n|col|public.organization.id",
+        "e|uniqueness|public.organization.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "ReimbursementInvite"
+      ],
+      "writes": [
+        "s|fk|public.ReimbursementInvite.ReimbursementInvite_reimbursementId_fkey",
+        "n|fk|public.ReimbursementInvite.ReimbursementInvite_reimbursementId_fkey",
+        "e|fk|public.ReimbursementInvite.ReimbursementInvite_reimbursementId_fkey",
+        "n|con|public.ReimbursementInvite.ReimbursementInvite_reimbursementId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ReimbursementInvite",
+        "n|sch|public",
+        "n|tbl|public.TravelReimbursement",
+        "n|sch|public",
+        "n|col|public.ReimbursementInvite.reimbursementId",
+        "n|col|public.TravelReimbursement.id",
+        "e|uniqueness|public.TravelReimbursement.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "ReimbursementInvite"
+      ],
+      "writes": [
+        "s|fk|public.ReimbursementInvite.ReimbursementInvite_userId_fkey",
+        "n|fk|public.ReimbursementInvite.ReimbursementInvite_userId_fkey",
+        "e|fk|public.ReimbursementInvite.ReimbursementInvite_userId_fkey",
+        "n|con|public.ReimbursementInvite.ReimbursementInvite_userId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ReimbursementInvite",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.ReimbursementInvite.userId",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "ReservationRequest"
+      ],
+      "writes": [
+        "s|fk|public.ReservationRequest.ReservationRequest_themedRoomId_fkey",
+        "n|fk|public.ReservationRequest.ReservationRequest_themedRoomId_fkey",
+        "e|fk|public.ReservationRequest.ReservationRequest_themedRoomId_fkey",
+        "n|con|public.ReservationRequest.ReservationRequest_themedRoomId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ReservationRequest",
+        "n|sch|public",
+        "n|tbl|public.ThemedRoom",
+        "n|sch|public",
+        "n|col|public.ReservationRequest.themedRoomId",
+        "n|col|public.ThemedRoom.id",
+        "e|uniqueness|public.ThemedRoom.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "ScanAttempt"
+      ],
+      "writes": [
+        "s|fk|public.ScanAttempt.ScanAttempt_adminId_fkey",
+        "n|fk|public.ScanAttempt.ScanAttempt_adminId_fkey",
+        "e|fk|public.ScanAttempt.ScanAttempt_adminId_fkey",
+        "n|con|public.ScanAttempt.ScanAttempt_adminId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ScanAttempt",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.ScanAttempt.adminId",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "ScanAttempt"
+      ],
+      "writes": [
+        "s|fk|public.ScanAttempt.ScanAttempt_checkinId_fkey",
+        "n|fk|public.ScanAttempt.ScanAttempt_checkinId_fkey",
+        "e|fk|public.ScanAttempt.ScanAttempt_checkinId_fkey",
+        "n|con|public.ScanAttempt.ScanAttempt_checkinId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ScanAttempt",
+        "n|sch|public",
+        "n|tbl|public.Checkin",
+        "n|sch|public",
+        "n|col|public.ScanAttempt.checkinId",
+        "n|col|public.Checkin.id",
+        "e|uniqueness|public.Checkin.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "ScanAttempt"
+      ],
+      "writes": [
+        "s|fk|public.ScanAttempt.ScanAttempt_eventId_fkey",
+        "n|fk|public.ScanAttempt.ScanAttempt_eventId_fkey",
+        "e|fk|public.ScanAttempt.ScanAttempt_eventId_fkey",
+        "n|con|public.ScanAttempt.ScanAttempt_eventId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ScanAttempt",
+        "n|sch|public",
+        "n|tbl|public.Event",
+        "n|sch|public",
+        "n|col|public.ScanAttempt.eventId",
+        "n|col|public.Event.id",
+        "e|uniqueness|public.Event.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "ScanAttempt"
+      ],
+      "writes": [
+        "s|fk|public.ScanAttempt.ScanAttempt_userId_fkey",
+        "n|fk|public.ScanAttempt.ScanAttempt_userId_fkey",
+        "e|fk|public.ScanAttempt.ScanAttempt_userId_fkey",
+        "n|con|public.ScanAttempt.ScanAttempt_userId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.ScanAttempt",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.ScanAttempt.userId",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "session"
+      ],
+      "writes": [
+        "s|fk|public.session.session_user_id_user_id_fkey",
+        "n|fk|public.session.session_user_id_user_id_fkey",
+        "e|fk|public.session.session_user_id_user_id_fkey",
+        "n|con|public.session.session_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.session",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.session.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Ticket"
+      ],
+      "writes": [
+        "s|fk|public.Ticket.Ticket_claimedById_fkey",
+        "n|fk|public.Ticket.Ticket_claimedById_fkey",
+        "e|fk|public.Ticket.Ticket_claimedById_fkey",
+        "n|con|public.Ticket.Ticket_claimedById_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Ticket",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.Ticket.claimedById",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "Ticket"
+      ],
+      "writes": [
+        "s|fk|public.Ticket.Ticket_createdById_fkey",
+        "n|fk|public.Ticket.Ticket_createdById_fkey",
+        "e|fk|public.Ticket.Ticket_createdById_fkey",
+        "n|con|public.Ticket.Ticket_createdById_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.Ticket",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.Ticket.createdById",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "TravelReimbursement"
+      ],
+      "writes": [
+        "s|fk|public.TravelReimbursement.TravelReimbursement_userId_fkey",
+        "n|fk|public.TravelReimbursement.TravelReimbursement_userId_fkey",
+        "e|fk|public.TravelReimbursement.TravelReimbursement_userId_fkey",
+        "n|con|public.TravelReimbursement.TravelReimbursement_userId_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.TravelReimbursement",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.TravelReimbursement.userId",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "two_factor"
+      ],
+      "writes": [
+        "s|fk|public.two_factor.two_factor_user_id_user_id_fkey",
+        "n|fk|public.two_factor.two_factor_user_id_user_id_fkey",
+        "e|fk|public.two_factor.two_factor_user_id_user_id_fkey",
+        "n|con|public.two_factor.two_factor_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.two_factor",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.two_factor.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    }
+  ],
+  "ddl": [
+    {
+      "schema": "public",
+      "name": "account",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "Checkin",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "Event",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "InfoPageContent",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "invitation",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "member",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "organization",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "ParticipantInfo",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "passkey",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "Project",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "ReimbursementInvite",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "ReservationRequest",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "ScanAttempt",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "session",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "ThemedRoom",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "ThemedRoomReservation",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "Ticket",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "TravelReimbursement",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "two_factor",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "user",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "verification",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "EventType",
+      "values": [
+        "FOOD",
+        "REQUIRED",
+        "WORKSHOPS",
+        "SPONSOR",
+        "ACTIVITIES"
+      ],
+      "entityType": "enums"
+    },
+    {
+      "schema": "public",
+      "name": "ReimbursementInviteStatus",
+      "values": [
+        "PENDING",
+        "ACCEPTED",
+        "DECLINED"
+      ],
+      "entityType": "enums"
+    },
+    {
+      "schema": "public",
+      "name": "RoomTheme",
+      "values": [
+        "THEME_1",
+        "THEME_2",
+        "THEME_3"
+      ],
+      "entityType": "enums"
+    },
+    {
+      "schema": "public",
+      "name": "TicketStatus",
+      "values": [
+        "OPEN",
+        "CLAIMED",
+        "RESOLVED"
+      ],
+      "entityType": "enums"
+    },
+    {
+      "schema": "public",
+      "name": "TicketType",
+      "values": [
+        "MENTOR_HELP",
+        "INCIDENT_REPORT"
+      ],
+      "entityType": "enums"
+    },
+    {
+      "schema": "public",
+      "name": "TimeSlot",
+      "values": [
+        "FRI_8_11PM",
+        "FRI_11PM_2AM",
+        "SAT_2_5AM",
+        "SAT_5_8AM",
+        "SAT_8_11AM",
+        "SAT_11AM_2PM",
+        "SAT_2_5PM",
+        "SAT_5_8PM",
+        "SAT_8_11PM",
+        "SAT_11PM_2AM",
+        "SUN_2_5AM",
+        "SUN_5_8AM"
+      ],
+      "entityType": "enums"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "account_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "provider_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "user_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "access_token",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "refresh_token",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "id_token",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "access_token_expires_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "refresh_token_expires_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "scope",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "password",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "updated_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "userId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "eventId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "adminId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "startDate",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "endDate",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "location",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "description",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "eventType",
+      "type": "EventType",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'REQUIRED'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "InfoPageContent",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'singleton'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "InfoPageContent",
+      "name": "title",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'HackKU Hacker Doc'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "InfoPageContent",
+      "name": "content",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "''",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "InfoPageContent",
+      "name": "titleImageUrl",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "InfoPageContent",
+      "name": "logoUrl",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "InfoPageContent",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "organization_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "email",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "role",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "status",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'pending'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "expires_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "inviter_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "team_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "organization_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "user_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "role",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'member'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "slug",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "logo",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "metadata",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "creator_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "userId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "firstName",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "lastName",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "phoneNumber",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "age",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "genderIdentity",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "race",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "hispanicOrLatino",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "countryOfResidence",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "isHighSchoolStudent",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "currentSchool",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "levelOfStudy",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "major",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "minor",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "previousHackathons",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "tShirtSize",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "dietaryRestrictions",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "specialAccommodations",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "chaperoneFirstName",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "chaperoneLastName",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "chaperoneEmail",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "chaperonePhoneNumber",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "agreeHackKUCode",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "agreeMLHCode",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "shareWithMLH",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "receiveEmails",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "resumeUrl",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "shareEmailWithSponsors",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "public_key",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "user_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "credential_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "counter",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "device_type",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "backed_up",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "transports",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "aaguid",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "teamId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "creatorId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "description",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "devpostURL",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "reimbursementId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "userId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "status",
+      "type": "ReimbursementInviteStatus",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'PENDING'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "userId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "teamName",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "memberEmails",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "outOfState",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "themedRoomId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "userId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "eventId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "adminId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "checkinId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "successful",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "expires_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "token",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "updated_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "ip_address",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "user_agent",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "user_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "impersonated_by",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "active_organization_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "active_team_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoom",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoom",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoom",
+      "name": "location",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "userId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "teamName",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "memberEmails",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "timeSlot",
+      "type": "TimeSlot",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "theme",
+      "type": "RoomTheme",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "type",
+      "type": "TicketType",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "createdById",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "claimedById",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "status",
+      "type": "TicketStatus",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'OPEN'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "location",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "category",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "description",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "userId",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "transportationMethod",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "address",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "reason",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "distance",
+      "type": "double precision",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "estimatedCost",
+      "type": "double precision",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "createdAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "updatedAt",
+      "type": "timestamp(3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "secret",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "backup_codes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "user_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "verified",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "true",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "failed_verification_count",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "locked_until",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "email",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "email_verified",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "image",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "updated_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "two_factor_enabled",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "role",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'HACKER'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "banned",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "ban_reason",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "ban_expires",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "prefill_data",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "is_registered",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "totp_secret",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "totp_backup_codes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 1,
+      "default": "ARRAY[]",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "name": "id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "name": "identifier",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "name": "value",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "name": "expires_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "name": "created_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "name": "updated_at",
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "account_userId_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "account_providerId_accountId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "provider_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "account_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "invitation_organizationId_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "organization_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "invitation_email_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "email",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "member_organizationId_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "organization_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "member_userId_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "organization_creatorId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "creator_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "ParticipantInfo_userId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "userId",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "passkey_userId_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "passkey_credentialID_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "credential_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "Project_creatorId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "creatorId",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "Project_teamId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "teamId",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "ReimbursementInvite_userId_reimbursementId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "userId",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "reimbursementId",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "ReservationRequest_userId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "userId",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "session_userId_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "ThemedRoomReservation_theme_timeSlot_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "theme",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "timeSlot",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "ThemedRoomReservation_userId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "userId",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "TravelReimbursement_userId_key",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "userId",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "twoFactor_secret_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "secret",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "twoFactor_userId_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "name": "verification_identifier_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "identifier",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "account_user_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "Checkin_adminId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "adminId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "RESTRICT",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "Checkin_eventId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "eventId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "Event",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "RESTRICT",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "Checkin_userId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "userId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "RESTRICT",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "invitation_organization_id_organization_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "organization_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "organization",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "invitation_inviter_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "inviter_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "member_organization_id_organization_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "organization_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "organization",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "member_user_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "organization_creator_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "creator_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "ParticipantInfo_userId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "userId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "passkey_user_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "Project_creatorId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "creatorId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "Project_teamId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "teamId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "organization",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "ReimbursementInvite_reimbursementId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "reimbursementId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "TravelReimbursement",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "ReimbursementInvite_userId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "userId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "ReservationRequest_themedRoomId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "themedRoomId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "ThemedRoom",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "SET NULL",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "ScanAttempt_adminId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "adminId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "RESTRICT",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "ScanAttempt_checkinId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "checkinId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "Checkin",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "SET NULL",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "ScanAttempt_eventId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "eventId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "Event",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "RESTRICT",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "ScanAttempt_userId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "userId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "RESTRICT",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "session_user_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "Ticket_claimedById_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "claimedById"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "SET NULL",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "Ticket_createdById_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "createdById"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "TravelReimbursement_userId_fkey",
+      "nameExplicit": true,
+      "columns": [
+        "userId"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "two_factor_user_id_user_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "name": "account_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "Checkin",
+      "name": "Checkin_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "Event",
+      "name": "Event_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "InfoPageContent",
+      "name": "InfoPageContent_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "invitation",
+      "name": "invitation_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "member",
+      "name": "member_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "organization_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "ParticipantInfo",
+      "name": "ParticipantInfo_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "passkey",
+      "name": "passkey_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "Project",
+      "name": "Project_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "ReimbursementInvite",
+      "name": "ReimbursementInvite_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "ReservationRequest",
+      "name": "ReservationRequest_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "ScanAttempt",
+      "name": "ScanAttempt_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "session_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoom",
+      "name": "ThemedRoom_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "ThemedRoomReservation",
+      "name": "ThemedRoomReservation_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "Ticket",
+      "name": "Ticket_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "TravelReimbursement",
+      "name": "TravelReimbursement_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "two_factor",
+      "name": "two_factor_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "user_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "name": "verification_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "organization",
+      "name": "organization_slug_key",
+      "nameExplicit": false,
+      "columns": [
+        "slug"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "name": "session_token_key",
+      "nameExplicit": false,
+      "columns": [
+        "token"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "name": "user_email_key",
+      "nameExplicit": false,
+      "columns": [
+        "email"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    }
+  ]
+}

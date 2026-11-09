@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import type {
   ParticipantInfo as PrismaParticipantInfo,
   User as PrismaUser,

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
 import constants from "@/constants";
 import { auth } from "@/lib/auth/auth";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import type { RegistrationData } from "@/types/schemas/participant";
 
 export async function Register() {
