@@ -73,7 +73,7 @@ export const relations = defineRelations(schema, (r) => ({
     organizationsCreatorId: r.one.organization({
       alias: "organization_creatorId_user_id",
     }),
-    participantInfos: r.one.participantInfo(),
+    participantInfo: r.one.participantInfo(),
     passkeys: r.many.passkey(),
     organizationsViaProject: r.many.organization({
       from: r.user.id.through(r.project.creatorId),
@@ -104,7 +104,7 @@ export const relations = defineRelations(schema, (r) => ({
     twoFactors: r.many.twoFactor(),
   },
   checkin: {
-    userAdminId: r.one.user({
+    userAdmin: r.one.user({
       from: r.checkin.adminId,
       to: r.user.id,
       alias: "checkin_adminId_user_id",
@@ -113,7 +113,7 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.checkin.eventId,
       to: r.event.id,
     }),
-    userUserId: r.one.user({
+    userUser: r.one.user({
       from: r.checkin.userId,
       to: r.user.id,
       alias: "checkin_userId_user_id",

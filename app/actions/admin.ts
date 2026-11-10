@@ -7,6 +7,11 @@ import type {
   travelReimbursement as TravelReimbursement,
   user as User,
 } from "@/db/schema";
+import {
+  checkin as checkinTable,
+  event as eventTable,
+  user as userTable,
+} from "@/db/schema";
 import { auth, hasPermissions } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 
@@ -28,6 +33,7 @@ type AdminReservationRequest = {
   createdAt: Date;
 };
 
+import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
 
@@ -69,51 +75,28 @@ export async function getUsers(page = 1, pageSize = 20, searchQuery = "") {
   });
   await hasPermissions(session, { user_data: ["view"] });
 
-  const skip = (page - 1) * pageSize;
-
-  const users = await prisma.user.findMany({
+  // const skip = (page - 1) * pageSize;
+  const users = await db.query.user.findMany({
     where: {
       OR: [
-        { email: { contains: searchQuery, mode: "insensitive" } },
+        { email: { ilike: searchQuery } },
         {
-          ParticipantInfo: {
+          participantInfo: {
             OR: [
-              { firstName: { contains: searchQuery, mode: "insensitive" } },
-              { lastName: { contains: searchQuery, mode: "insensitive" } },
+              { firstName: { ilike: searchQuery } },
+              { lastName: { ilike: searchQuery } },
             ],
           },
         },
       ],
     },
-    include: {
-      ParticipantInfo: true,
-      _count: {
-        select: { checkins: true },
-      },
+    with: {
+      participantInfo: true,
     },
-    skip,
-    take: pageSize,
     orderBy: { createdAt: "desc" },
   });
 
-  const totalUsers = await prisma.user.count({
-    where: {
-      OR: [
-        { email: { contains: searchQuery, mode: "insensitive" } },
-        { name: { contains: searchQuery, mode: "insensitive" } },
-        {
-          ParticipantInfo: {
-            OR: [
-              { firstName: { contains: searchQuery, mode: "insensitive" } },
-              { lastName: { contains: searchQuery, mode: "insensitive" } },
-            ],
-          },
-        },
-      ],
-    },
-  });
-
-  return { users, totalUsers };
+  return { users, totalUsers: users.length };
 }
 
 // Fetch all check-ins and return user names, event names, and check-in time
@@ -123,77 +106,56 @@ export async function getCheckins(page = 1, pageSize = 20, searchQuery = "") {
   });
   await hasPermissions(session, { checkins: ["view"] });
 
-  const skip = (page - 1) * pageSize;
+  //const skip = (page - 1) * pageSize;
 
-  const checkins = await prisma.checkin.findMany({
-    include: {
-      user: {
-        include: {
-          ParticipantInfo: true,
+  const checkins = await db.query.checkin.findMany({
+    with: {
+      userUser: {
+        where: {
+          OR: [
+            { email: { ilike: searchQuery } },
+            {
+              participantInfo: {
+                OR: [
+                  { firstName: { ilike: searchQuery } },
+                  { lastName: { ilike: searchQuery } },
+                ],
+              },
+            },
+          ],
+        },
+        with: {
+          participantInfo: true,
         },
       },
       event: {
-        select: {
+        columns: {
           name: true,
         },
       },
     },
-    skip,
-    take: pageSize,
     orderBy: { createdAt: "desc" },
   });
 
-  const totalCheckins = await prisma.checkin.count({
-    where: {
-      OR: [
-        { user: { name: { contains: searchQuery, mode: "insensitive" } } },
-        { user: { email: { contains: searchQuery, mode: "insensitive" } } },
-        { event: { name: { contains: searchQuery, mode: "insensitive" } } },
-      ],
-    },
-  });
-
-  const transformedCheckins = checkins.map((checkin) => ({
-    id: checkin.id,
-    userId: checkin.userId,
-    eventId: checkin.eventId,
-    createdAt: checkin.createdAt,
-    user: {
-      name: checkin.user.name,
-      email: checkin.user.email,
-      participantInfo: checkin.user.ParticipantInfo
-        ? {
-            firstName: checkin.user.ParticipantInfo.firstName,
-            lastName: checkin.user.ParticipantInfo.lastName,
-          }
-        : null,
-    },
-    event: {
-      name: checkin.event.name,
-    },
-  }));
-
-  return { checkins: transformedCheckins, totalCheckins };
+  return { checkins, totalCheckins: checkins.length };
 }
 /**
  * Batch update check-ins
  */
 export async function batchUpdateCheckins(
-  changes: Record<string, Partial<Checkin>>,
+  changes: Record<string, Partial<typeof checkinTable._.columns>>,
 ) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { checkins: ["manage"] });
 
-  const updatePromises = Object.entries(changes).map(([checkinId, fields]) =>
-    prisma.checkin.update({
-      where: { id: checkinId },
-      data: fields,
-    }),
-  );
-
-  const updatedCheckins = await prisma.$transaction(updatePromises);
+  const updatedCheckins = await db.transaction(async (tx) => {
+    const updatePromises = Object.entries(changes).map(([checkinId, fields]) =>
+      tx.update(checkinTable).set(fields).where(eq(checkinTable.id, checkinId)),
+    );
+    return await Promise.all(updatePromises);
+  });
   return updatedCheckins;
 }
 
@@ -204,25 +166,34 @@ export async function createEvent(data: EventData) {
   });
   await hasPermissions(session, { events: ["create"] });
 
-  return await prisma.event.create({
-    data: {
-      name: data.name,
-      startDate: new Date(data.startDate),
-      endDate: new Date(data.endDate),
-      location: data.location || null,
-      description: data.description,
-      eventType: data.eventType,
-    },
-    select: {
-      id: true,
-      name: true,
-      startDate: true,
-      endDate: true,
-      location: true,
-      description: true,
-      eventType: true,
-    },
+  return await db.insert(eventTable).values({
+    name: data.name,
+    startDate: new Date(data.startDate),
+    endDate: new Date(data.endDate),
+    location: data.location || null,
+    description: data.description,
+    eventType: data.eventType,
   });
+
+  // return await prisma.event.create({
+  //   data: {
+  //     name: data.name,
+  //     startDate: new Date(data.startDate),
+  //     endDate: new Date(data.endDate),
+  //     location: data.location || null,
+  //     description: data.description,
+  //     eventType: data.eventType,
+  //   },
+  //   select: {
+  //     id: true,
+  //     name: true,
+  //     startDate: true,
+  //     endDate: true,
+  //     location: true,
+  //     description: true,
+  //     eventType: true,
+  //   },
+  // });
 }
 
 export async function updateEvent(eventId: string, data: EventData) {

@@ -218,7 +218,9 @@ export const event = pgTable("Event", {
   createdAt: timestamp({ precision: 3 })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp({ precision: 3 }).notNull(),
+  updatedAt: timestamp({ precision: 3 })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
 });
 
 export const checkin = pgTable(
