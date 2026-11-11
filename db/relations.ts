@@ -54,10 +54,10 @@ export const relations = defineRelations(schema, (r) => ({
   },
   user: {
     accounts: r.many.account(),
-    checkinsAdminId: r.many.checkin({
+    checkinsPerformed: r.many.checkin({
       alias: "checkin_adminId_user_id",
     }),
-    checkinsUserId: r.many.checkin({
+    checkins: r.many.checkin({
       alias: "checkin_userId_user_id",
     }),
     organizationsViaInvitation: r.many.organization({
@@ -85,20 +85,20 @@ export const relations = defineRelations(schema, (r) => ({
       alias: "travelReimbursement_id_user_id_via_reimbursementInvite",
     }),
     reimbursementInvites: r.many.reimbursementInvite(),
-    scanAttemptsAdminId: r.many.scanAttempt({
+    scanAttemptsPerformed: r.many.scanAttempt({
       alias: "scanAttempt_adminId_user_id",
     }),
-    scanAttemptsUserId: r.many.scanAttempt({
+    scanAttempts: r.many.scanAttempt({
       alias: "scanAttempt_userId_user_id",
     }),
     sessions: r.many.session(),
-    ticketsClaimedById: r.many.ticket({
+    ticketsClaimed: r.many.ticket({
       alias: "ticket_claimedById_user_id",
     }),
-    ticketsCreatedById: r.many.ticket({
+    ticketsCreated: r.many.ticket({
       alias: "ticket_createdById_user_id",
     }),
-    travelReimbursementsUserId: r.one.travelReimbursement({
+    travelReimbursement: r.one.travelReimbursement({
       alias: "travelReimbursement_userId_user_id",
     }),
     twoFactors: r.many.twoFactor(),
@@ -222,7 +222,7 @@ export const relations = defineRelations(schema, (r) => ({
     reservationRequests: r.many.reservationRequest(),
   },
   scanAttempt: {
-    userAdminId: r.one.user({
+    userAdmin: r.one.user({
       from: r.scanAttempt.adminId,
       to: r.user.id,
       alias: "scanAttempt_adminId_user_id",
@@ -235,7 +235,7 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.scanAttempt.eventId,
       to: r.event.id,
     }),
-    userUserId: r.one.user({
+    userUser: r.one.user({
       from: r.scanAttempt.userId,
       to: r.user.id,
       alias: "scanAttempt_userId_user_id",

@@ -11,7 +11,7 @@ import {
   batchUpdateReimbursements,
   batchUpdateUsers,
   getCheckins,
-  getHackathonCheckinCount,
+  getEventCheckinCount,
   getReimbursements,
   getTotalRegistrationNumber,
   getUsers,
@@ -139,7 +139,7 @@ export default function AdminTabsPage() {
   useEffect(() => {
     const fetchCheckinCount = async () => {
       try {
-        const count = await getHackathonCheckinCount(constants.checkinEventId);
+        const count = await getEventCheckinCount(constants.checkinEventId);
         setHackathonCheckinCount(count);
       } catch (error) {
         console.error("Failed to fetch check-in count:", error);

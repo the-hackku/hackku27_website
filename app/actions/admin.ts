@@ -1,19 +1,17 @@
 "use server";
 
-import type {
-  checkin as Checkin,
-  eventType as EventType,
-  participantInfo as ParticipantInfo,
-  travelReimbursement as TravelReimbursement,
-  user as User,
-} from "@/db/schema";
+import { and, eq, ilike, type SQL } from "drizzle-orm";
+import { headers } from "next/headers";
 import {
   checkin as checkinTable,
   event as eventTable,
+  participantInfo as participantInfoTable,
+  scanAttempt as scanAttemptTable,
   user as userTable,
 } from "@/db/schema";
 import { auth, hasPermissions } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
+import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
 
 type AdminThemedRoom = {
   id: string;
@@ -32,21 +30,6 @@ type AdminReservationRequest = {
   themedRoomLocation: string | null;
   createdAt: Date;
 };
-
-import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
-import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
-
-// Type for the Event data used in creating or updating events// Type for the Event data used in creating or updating events
-
-interface EventData {
-  startDate: string;
-  endDate: string;
-  name: string;
-  location: string;
-  description: string;
-  eventType: typeof EventType;
-}
 
 type ValidateQrCodeResult =
   | {
@@ -160,68 +143,62 @@ export async function batchUpdateCheckins(
 }
 
 // Create a new event
-export async function createEvent(data: EventData) {
+export async function createEvent(data: typeof eventTable.$inferInsert) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { events: ["create"] });
 
-  return await db.insert(eventTable).values({
-    name: data.name,
-    startDate: new Date(data.startDate),
-    endDate: new Date(data.endDate),
-    location: data.location || null,
-    description: data.description,
-    eventType: data.eventType,
-  });
-
-  // return await prisma.event.create({
-  //   data: {
-  //     name: data.name,
-  //     startDate: new Date(data.startDate),
-  //     endDate: new Date(data.endDate),
-  //     location: data.location || null,
-  //     description: data.description,
-  //     eventType: data.eventType,
-  //   },
-  //   select: {
-  //     id: true,
-  //     name: true,
-  //     startDate: true,
-  //     endDate: true,
-  //     location: true,
-  //     description: true,
-  //     eventType: true,
-  //   },
-  // });
-}
-
-export async function updateEvent(eventId: string, data: EventData) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  await hasPermissions(session, { events: ["manage"] });
-
-  return await prisma.event.update({
-    where: { id: eventId },
-    data: {
+  return await db
+    .insert(eventTable)
+    .values({
       name: data.name,
       startDate: new Date(data.startDate),
       endDate: new Date(data.endDate),
       location: data.location || null,
       description: data.description,
-      eventType: data.eventType,
-    },
-    select: {
-      id: true,
-      name: true,
-      startDate: true,
-      endDate: true,
-      location: true,
-      description: true,
-      eventType: true, // Include eventType
-    },
+      type: data.type,
+    })
+    .returning({
+      id: eventTable.id,
+      name: eventTable.name,
+      startDate: eventTable.startDate,
+      endDate: eventTable.endDate,
+      location: eventTable.location,
+      description: eventTable.description,
+      type: eventTable.type,
+    });
+}
+
+export async function updateEvent(
+  eventId: string,
+  data: typeof eventTable.$inferInsert,
+) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
   });
+  await hasPermissions(session, { events: ["manage"] });
+
+  return await db
+    .update(eventTable)
+    .set({
+      name: data.name,
+      startDate: new Date(data.startDate),
+      endDate: new Date(data.endDate),
+      location: data.location || null,
+      description: data.description,
+      type: data.type,
+    })
+    .where(eq(eventTable.id, eventId))
+    .returning({
+      id: eventTable.id,
+      name: eventTable.name,
+      startDate: eventTable.startDate,
+      endDate: eventTable.endDate,
+      location: eventTable.location,
+      description: eventTable.description,
+      type: eventTable.type,
+    });
 }
 
 // Delete an event
@@ -231,29 +208,27 @@ export async function deleteEvent(eventId: string) {
   });
   await hasPermissions(session, { events: ["delete"] });
 
-  return await prisma.event.delete({
-    where: { id: eventId },
-    select: {
-      id: true, // Include id for frontend reference
-      name: true, // Return the name of the deleted event
-    },
-  });
+  return await db
+    .delete(eventTable)
+    .where(eq(eventTable.id, eventId))
+    .returning({
+      id: eventTable.id,
+      name: eventTable.name,
+    });
 }
 
 export async function validateQrCode(
   scannedCode: string,
   eventId: string,
 ): Promise<ValidateQrCodeResult> {
-  // Ensure the user is an admin or volunteer
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { checkins: ["perform"] });
 
-  // Fetch the admin user
-  const admin = await prisma.user.findUnique({
+  const admin = await db.query.user.findFirst({
     where: { id: session?.session.userId },
-    select: { id: true },
+    columns: { id: true },
   });
 
   if (!admin) {
@@ -264,12 +239,11 @@ export async function validateQrCode(
   }
 
   // Fetch the user associated with the scanned QR code
-  const user = await prisma.user.findUnique({
+  const user = await db.query.user.findFirst({
     where: { id: scannedCode },
-    select: {
-      id: true,
-      ParticipantInfo: {
-        select: {
+    with: {
+      participantInfo: {
+        columns: {
           firstName: true,
           lastName: true,
           isHighSchoolStudent: true,
@@ -280,14 +254,10 @@ export async function validateQrCode(
         },
       },
     },
+    columns: { id: true },
   });
 
-  /*************************************************************
-   *   IF NO USER, JUST RETURN A FAILURE (NO 'Scan' INSERT).   *
-   *************************************************************/
   if (!user) {
-    // We skip prisma.scan.create({ userId: scannedCode, ... })
-    // because that would reference a non-existent user and violate FK constraints.
     return {
       success: false,
       message: "Invalid QR code. No matching user found.",
@@ -295,19 +265,17 @@ export async function validateQrCode(
   }
 
   // Check if the user has already checked in for this event
-  const existingCheckin = await prisma.checkin.findFirst({
+  const existingCheckin = await db.query.checkin.findFirst({
     where: { userId: user.id, eventId },
   });
 
   if (existingCheckin) {
     // Create a 'failed' Scan record if you still want to log the attempt with the real user.id
-    await prisma.scanAttempt.create({
-      data: {
-        userId: user.id,
-        adminId: admin.id,
-        eventId,
-        successful: false,
-      },
+    await db.insert(scanAttemptTable).values({
+      userId: user.id,
+      adminId: admin.id,
+      eventId,
+      successful: false,
     });
     return {
       success: false,
@@ -316,38 +284,34 @@ export async function validateQrCode(
   }
 
   // If user exists and hasn't checked in, create a check-in + successful scan
-  await prisma.$transaction([
-    prisma.checkin.create({
-      data: {
-        userId: user.id,
-        adminId: admin.id,
-        eventId,
-      },
-    }),
-    prisma.scanAttempt.create({
-      data: {
-        userId: user.id,
-        adminId: admin.id,
-        eventId,
-        successful: true,
-      },
-    }),
-  ]);
+  await db.transaction(async (tx) => {
+    await tx.insert(checkinTable).values({
+      userId: user.id,
+      adminId: admin.id,
+      eventId,
+    });
+    await tx.insert(scanAttemptTable).values({
+      userId: user.id,
+      adminId: admin.id,
+      eventId,
+      successful: true,
+    });
+  });
 
-  const fullName = user.ParticipantInfo
-    ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
+  const fullName = user.participantInfo
+    ? `${user.participantInfo.firstName} ${user.participantInfo.lastName}`
     : "Participant";
 
   const isHighSchoolStudent = Boolean(
-    user.ParticipantInfo?.isHighSchoolStudent,
+    user.participantInfo?.isHighSchoolStudent,
   );
   const chaperoneInfo = isHighSchoolStudent
     ? {
-        chaperoneName: `${user.ParticipantInfo?.chaperoneFirstName || ""} ${
-          user.ParticipantInfo?.chaperoneLastName || ""
+        chaperoneName: `${user.participantInfo?.chaperoneFirstName || ""} ${
+          user.participantInfo?.chaperoneLastName || ""
         }`.trim(),
-        chaperoneEmail: user.ParticipantInfo?.chaperoneEmail || "N/A",
-        chaperonePhone: user.ParticipantInfo?.chaperonePhoneNumber || "N/A",
+        chaperoneEmail: user.participantInfo?.chaperoneEmail || "N/A",
+        chaperonePhone: user.participantInfo?.chaperonePhoneNumber || "N/A",
       }
     : undefined;
 
@@ -361,11 +325,6 @@ export async function validateQrCode(
   };
 }
 
-// app/actions/admin.ts
-
-/**
- * Manually check in a user by userId and eventId.
- */
 export async function manualCheckIn(
   userId: string,
   eventId: string,
@@ -380,16 +339,14 @@ export async function manualCheckIn(
     chaperonePhone: string;
   };
 }> {
-  // Ensure the user performing this action is either admin or volunteer
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { checkins: ["perform"] });
 
-  // Find the admin user (the staff or volunteer performing the check)
-  const admin = await prisma.user.findUnique({
+  const admin = await db.query.user.findFirst({
     where: { id: session?.session.userId },
-    select: { id: true },
+    columns: { id: true },
   });
 
   if (!admin) {
@@ -400,12 +357,14 @@ export async function manualCheckIn(
   }
 
   // Fetch the user by userId
-  const user = await prisma.user.findUnique({
+  const user = await db.query.user.findFirst({
     where: { id: userId },
-    select: {
+    columns: {
       id: true,
-      ParticipantInfo: {
-        select: {
+    },
+    with: {
+      participantInfo: {
+        columns: {
           firstName: true,
           lastName: true,
           isHighSchoolStudent: true,
@@ -419,7 +378,6 @@ export async function manualCheckIn(
   });
 
   if (!user) {
-    // Could optionally create a failed 'scan' record or 'manualCheckIn' record
     return {
       success: false,
       message: "No matching user found for the given userId.",
@@ -427,7 +385,7 @@ export async function manualCheckIn(
   }
 
   // Check if the user is already checked in for this event
-  const existingCheckin = await prisma.checkin.findFirst({
+  const existingCheckin = await db.query.checkin.findFirst({
     where: { userId: user.id, eventId },
   });
 
@@ -439,30 +397,25 @@ export async function manualCheckIn(
   }
 
   // If not checked in yet, proceed with a check-in
-  await prisma.$transaction([
-    prisma.checkin.create({
-      data: {
-        userId: user.id,
-        adminId: admin.id,
-        eventId,
-      },
-    }),
-    prisma.scanAttempt.create({
-      data: {
-        userId: user.id,
-        adminId: admin.id,
-        eventId,
-        successful: true,
-      },
-    }),
-  ]);
+  await db.transaction(async (tx) => {
+    await tx.insert(checkinTable).values({
+      userId: user.id,
+      adminId: admin.id,
+      eventId,
+    });
+    await tx.insert(checkinTable).values({
+      userId: user.id,
+      adminId: admin.id,
+      eventId,
+    });
+  });
 
-  const fullName = user.ParticipantInfo
-    ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`.trim()
+  const fullName = user.participantInfo
+    ? `${user.participantInfo.firstName} ${user.participantInfo.lastName}`.trim()
     : "Participant";
 
   const isHighSchoolStudent = Boolean(
-    user.ParticipantInfo?.isHighSchoolStudent,
+    user.participantInfo?.isHighSchoolStudent,
   );
 
   let chaperoneInfo:
@@ -474,11 +427,11 @@ export async function manualCheckIn(
     | undefined;
   if (isHighSchoolStudent) {
     chaperoneInfo = {
-      chaperoneName: `${user.ParticipantInfo?.chaperoneFirstName ?? ""} ${
-        user.ParticipantInfo?.chaperoneLastName ?? ""
+      chaperoneName: `${user.participantInfo?.chaperoneFirstName ?? ""} ${
+        user.participantInfo?.chaperoneLastName ?? ""
       }`.trim(),
-      chaperoneEmail: user.ParticipantInfo?.chaperoneEmail ?? "N/A",
-      chaperonePhone: user.ParticipantInfo?.chaperonePhoneNumber ?? "N/A",
+      chaperoneEmail: user.participantInfo?.chaperoneEmail ?? "N/A",
+      chaperonePhone: user.participantInfo?.chaperonePhoneNumber ?? "N/A",
     };
   }
 
@@ -497,32 +450,31 @@ export async function fetchScanHistory() {
   });
   await hasPermissions(session, { checkins: ["view"] });
 
-  const history = await prisma.scanAttempt.findMany({
-    include: {
-      user: {
-        include: {
-          ParticipantInfo: true, // Include ParticipantInfo to access firstName and lastName
+  const history = await db.query.scanAttempt.findMany({
+    with: {
+      userUser: {
+        with: {
+          participantInfo: true,
         },
       },
-      event: true, // Include event details
+      event: true,
     },
-    orderBy: { createdAt: "desc" }, // Order by most recent
+    orderBy: { createdAt: "desc" },
   });
 
   return history.map((scan) => ({
     id: scan.id,
     name:
-      scan.user.ParticipantInfo?.firstName &&
-      scan.user.ParticipantInfo?.lastName
-        ? `${scan.user.ParticipantInfo.firstName} ${scan.user.ParticipantInfo.lastName}`
-        : scan.user.name || "Unknown User", // Ensure `name` is always a string
-    eventName: scan.event.name, // Include event name
-    successful: scan.successful, // Whether the scan was successful
-    timestamp: scan.createdAt.toISOString(), // Ensure the timestamp is in ISO string format
+      scan.userUser?.participantInfo?.firstName &&
+      scan.userUser?.participantInfo?.lastName
+        ? `${scan.userUser.participantInfo.firstName} ${scan.userUser.participantInfo.lastName}`
+        : scan.userUser?.name || "Unknown User",
+    eventName: scan.event?.name,
+    successful: scan.successful,
+    timestamp: scan.createdAt.toISOString(),
   }));
 }
 
-// Update user field
 export async function updateUserField(
   userId: string,
   field: string,
@@ -532,10 +484,11 @@ export async function updateUserField(
     headers: await headers(),
   });
   await hasPermissions(session, { user_data: ["manage"] });
-  await prisma.user.update({
-    where: { id: userId },
-    data: { [field]: value },
-  });
+  return await db
+    .update(userTable)
+    .set({ [field]: value })
+    .where(eq(userTable.id, userId))
+    .returning({ id: userTable.id });
 }
 
 // Update participant field
@@ -548,58 +501,51 @@ export async function updateParticipantField(
     headers: await headers(),
   });
   await hasPermissions(session, { user_data: ["manage"] });
-  await prisma.participantInfo.update({
-    where: { id: participantId },
-    data: { [field]: value },
-  });
+  return await db
+    .update(participantInfoTable)
+    .set({ [field]: value })
+    .where(eq(participantInfoTable.id, participantId))
+    .returning({ id: participantInfoTable.id });
 }
 
-export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
+export async function batchUpdateUsers(
+  changes: Record<string, Partial<typeof userTable.$inferInsert>>,
+) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { user_data: ["manage"] });
 
-  const updatePromises = Object.entries(changes).map(([userId, fields]) =>
-    prisma.user.update({
-      where: { id: userId },
-      data: fields as Prisma.UserUpdateInput,
-    }),
-  );
-
-  const updatedUsers = await prisma.$transaction(updatePromises);
+  const updatedUsers = await db.transaction(async (tx) => {
+    const updatePromises = Object.entries(changes).map(([userId, fields]) =>
+      tx
+        .update(userTable)
+        .set(fields)
+        .where(eq(userTable.id, userId))
+        .returning({ id: userTable.id }),
+    );
+    return await Promise.all(updatePromises);
+  });
   return updatedUsers;
 }
 
-// app/actions/admin.ts
 export async function getEventById(eventId: string) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { events: ["manage"] });
-  try {
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
-      select: {
-        id: true,
-        name: true,
-        startDate: true,
-        endDate: true,
-        location: true,
-        description: true,
-        eventType: true,
-      },
-    });
-
-    if (!event) {
-      throw new Error("Event not found");
-    }
-
-    return event;
-  } catch (error) {
-    console.error("Failed to fetch event:", error);
-    throw new Error("Failed to fetch event details", { cause: error });
-  }
+  return await db.query.event.findFirst({
+    where: { id: eventId },
+    columns: {
+      id: true,
+      name: true,
+      startDate: true,
+      endDate: true,
+      location: true,
+      description: true,
+      type: true,
+    },
+  });
 }
 
 export async function getUserById(userId: string) {
@@ -607,158 +553,41 @@ export async function getUserById(userId: string) {
     headers: await headers(),
   });
   await hasPermissions(session, { user_data: ["view"] });
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        ParticipantInfo: true,
-        checkins: {
-          include: {
-            event: true,
-          },
-          orderBy: { createdAt: "desc" },
+  return await db.query.user.findFirst({
+    where: { id: userId },
+    with: {
+      participantInfo: true,
+      checkins: {
+        with: {
+          event: true,
         },
-        travelReimbursement: true, // Include reimbursements
+        orderBy: { createdAt: "desc" },
       },
-    });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    return user;
-  } catch (error) {
-    console.error("Failed to fetch user:", error);
-    throw new Error("Failed to fetch user details", { cause: error });
-  }
+      travelReimbursement: true,
+    },
+  });
 }
 
-// Batch update participant info
 export async function batchUpdateParticipants(
-  changes: Record<string, Partial<ParticipantInfo>>,
+  changes: Record<string, Partial<typeof participantInfoTable.$inferInsert>>,
 ) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { user_data: ["manage"] });
 
-  const updatePromises = Object.entries(changes).map(
-    ([participantId, fields]) =>
-      prisma.participantInfo.update({
-        where: { id: participantId },
-        data: fields,
-      }),
-  );
-
-  await prisma.$transaction(updatePromises);
-}
-
-export async function getReimbursements(
-  page = 1,
-  pageSize = 20,
-  searchQuery = "",
-) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
+  const updatedParticipants = await db.transaction(async (tx) => {
+    const updatePromises = Object.entries(changes).map(
+      ([participantId, fields]) =>
+        tx
+          .update(participantInfoTable)
+          .set(fields)
+          .where(eq(participantInfoTable.id, participantId))
+          .returning({ id: participantInfoTable.id }),
+    );
+    return await Promise.all(updatePromises);
   });
-  await hasPermissions(session, { travel_reimbursements: ["view"] });
-
-  const skip = (page - 1) * pageSize;
-
-  const reimbursements = await prisma.travelReimbursement.findMany({
-    where: {
-      OR: [
-        {
-          transportationMethod: { contains: searchQuery, mode: "insensitive" },
-        },
-        { address: { contains: searchQuery, mode: "insensitive" } },
-        {
-          creator: {
-            ParticipantInfo: {
-              OR: [
-                { firstName: { contains: searchQuery, mode: "insensitive" } },
-                { lastName: { contains: searchQuery, mode: "insensitive" } },
-              ],
-            },
-          },
-        },
-      ],
-    },
-    include: {
-      creator: {
-        include: {
-          ParticipantInfo: true,
-        },
-      },
-      invites: {
-        include: {
-          user: {
-            select: { email: true, travelReimbursementId: true },
-          },
-        },
-      },
-    },
-    skip,
-    take: pageSize,
-    orderBy: { createdAt: "desc" },
-  });
-
-  const totalReimbursements = await prisma.travelReimbursement.count({
-    where: {
-      OR: [
-        {
-          transportationMethod: { contains: searchQuery, mode: "insensitive" },
-        },
-        { address: { contains: searchQuery, mode: "insensitive" } },
-        {
-          creator: {
-            ParticipantInfo: {
-              OR: [
-                { firstName: { contains: searchQuery, mode: "insensitive" } },
-                { lastName: { contains: searchQuery, mode: "insensitive" } },
-              ],
-            },
-          },
-        },
-      ],
-    },
-  });
-
-  return { reimbursements, totalReimbursements };
-}
-
-export async function batchUpdateReimbursements(
-  changes: Record<string, Partial<TravelReimbursement>>,
-) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  await hasPermissions(session, { travel_reimbursements: ["manage"] });
-
-  const updatePromises = Object.entries(changes).map(
-    ([reimbursementId, fields]) =>
-      prisma.travelReimbursement.update({
-        where: { id: reimbursementId },
-        data: fields,
-      }),
-  );
-
-  const updatedReimbursements = await prisma.$transaction(updatePromises);
-  return updatedReimbursements;
-}
-
-export async function backupRegistrationScript() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  await hasPermissions(session, { user_data: ["view"] });
-  try {
-    await batchBackupRegistration();
-    return { success: true, message: "Backup completed successfully!" };
-  } catch (error) {
-    console.error("Backup failed:", error);
-    return { success: false, message: "Backup failed!" };
-  }
+  return updatedParticipants;
 }
 
 export async function getTotalRegistrationNumber() {
@@ -766,21 +595,15 @@ export async function getTotalRegistrationNumber() {
     headers: await headers(),
   });
   await hasPermissions(session, { user_data: ["view"] });
-  const totalRegistrations = await prisma.participantInfo.count();
-  return totalRegistrations;
+  return await db.$count(participantInfoTable);
 }
 
-export async function getHackathonCheckinCount(eventId: string) {
+export async function getEventCheckinCount(eventId: string) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { checkins: ["view"] });
-
-  const count = await prisma.checkin.count({
-    where: { eventId },
-  });
-
-  return count;
+  return await db.$count(checkinTable, eq(checkinTable.eventId, eventId));
 }
 
 export async function searchUsers(searchQuery: string) {
@@ -789,44 +612,34 @@ export async function searchUsers(searchQuery: string) {
   });
   await hasPermissions(session, { user_data: ["view"] });
   const trimmed = searchQuery.trim();
+  const [first, last] = trimmed.split(" ", 2);
 
-  // Basic conditions for email and individual name fields.
-  const conditions: Prisma.UserWhereInput[] = [
-    { email: { contains: trimmed, mode: "insensitive" } },
-    {
-      ParticipantInfo: {
-        firstName: { contains: trimmed, mode: "insensitive" },
-      },
-    },
-    {
-      ParticipantInfo: { lastName: { contains: trimmed, mode: "insensitive" } },
-    },
-  ];
-
-  // If query contains a space, assume it's "firstName lastName" and add an AND condition.
-  if (trimmed.includes(" ")) {
-    const [first, last] = trimmed.split(" ", 2);
-    conditions.push({
-      ParticipantInfo: {
-        AND: [
-          { firstName: { contains: first, mode: "insensitive" } },
-          { lastName: { contains: last, mode: "insensitive" } },
+  const users = await db.query.user.findMany({
+    where: {
+      participantInfo: {
+        OR: [
+          { firstName: { ilike: `%${trimmed}%` } },
+          { lastName: { ilike: `%${trimmed}%` } },
+          {
+            AND: [
+              { firstName: { ilike: `%${first}%` } },
+              { lastName: { ilike: `%${last}%` } },
+            ],
+          },
         ],
       },
-    });
-  }
-
-  const users = await prisma.user.findMany({
-    where: { OR: conditions },
-    include: { ParticipantInfo: true },
-    take: 50,
+    },
+    with: {
+      participantInfo: true,
+    },
+    limit: 50,
   });
 
   return users.map((user) => ({
     id: user.id,
     email: user.email,
-    firstName: user.ParticipantInfo?.firstName ?? "",
-    lastName: user.ParticipantInfo?.lastName ?? "",
+    firstName: user.participantInfo?.firstName ?? "",
+    lastName: user.participantInfo?.lastName ?? "",
   }));
 }
 
