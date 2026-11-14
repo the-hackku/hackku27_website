@@ -32,14 +32,18 @@ export const timeSlot = pgEnum("TimeSlot", [
   "SUN_2_5AM",
   "SUN_5_8AM",
 ]);
+export type TimeSlot = (typeof timeSlot.enumValues)[number];
 
 export const roomTheme = pgEnum("RoomTheme", ["THEME_1", "THEME_2", "THEME_3"]);
+export type RoomTheme = (typeof roomTheme.enumValues)[number];
 
 export const reimbursementInviteStatus = pgEnum("ReimbursementInviteStatus", [
   "PENDING",
   "ACCEPTED",
   "DECLINED",
 ]);
+export type ReimbursementInviteStatus =
+  (typeof reimbursementInviteStatus.enumValues)[number];
 
 export const eventType = pgEnum("EventType", [
   "FOOD",
@@ -48,17 +52,20 @@ export const eventType = pgEnum("EventType", [
   "SPONSOR",
   "ACTIVITIES",
 ]);
+export type EventType = (typeof eventType.enumValues)[number];
 
 export const ticketType = pgEnum("TicketType", [
   "MENTOR_HELP",
   "INCIDENT_REPORT",
 ]);
+export type TicketType = (typeof ticketType.enumValues)[number];
 
 export const ticketStatus = pgEnum("TicketStatus", [
   "OPEN",
   "CLAIMED",
   "RESOLVED",
 ]);
+export type TicketStatus = (typeof ticketStatus.enumValues)[number];
 
 // ==========================================
 // Better Auth Core Tables
@@ -343,7 +350,9 @@ export const participantInfo = pgTable(
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp({ precision: 3 }).notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
     resumeUrl: text(),
     shareEmailWithSponsors: boolean().default(false).notNull(),
   },
@@ -442,7 +451,9 @@ export const project = pgTable(
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp({ precision: 3 }).notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
   },
   (table) => [
     foreignKey({
@@ -485,7 +496,9 @@ export const travelReimbursement = pgTable(
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp({ precision: 3 }).notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
   },
   (table) => [
     foreignKey({
@@ -514,7 +527,9 @@ export const reimbursementInvite = pgTable(
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp({ precision: 3 }).notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
   },
   (table) => [
     foreignKey({
@@ -561,7 +576,9 @@ export const reservationRequest = pgTable(
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp({ precision: 3 }).notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
   },
   (table) => [
     foreignKey({
@@ -592,7 +609,9 @@ export const themedRoomReservation = pgTable(
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp({ precision: 3 }).notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
   },
   (table) => [
     uniqueIndex("ThemedRoomReservation_theme_timeSlot_key").using(
@@ -613,7 +632,9 @@ export const infoPageContent = pgTable("InfoPageContent", {
   content: text().default("").notNull(),
   titleImageUrl: text(),
   logoUrl: text(),
-  updatedAt: timestamp({ precision: 3 }).notNull(),
+  updatedAt: timestamp({ precision: 3 })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
 });
 
 export const ticket = pgTable(
@@ -632,7 +653,9 @@ export const ticket = pgTable(
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp({ precision: 3 }).notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
   },
   (table) => [
     foreignKey({

@@ -1,15 +1,19 @@
 "use server";
 
 import { headers } from "next/headers";
-import { auth } from "@/lib/auth/auth";
-import { prisma } from "@/lib/db";
-import type { RoomTheme, TimeSlot } from "@/prisma/generated/client";
-
-// 1) Import your Google Sheets export function
 import {
-  exportReservationRequestToGoogleSheet,
-  exportThemedRoomReservationToGoogleSheet,
-} from "@/scripts/googleSheetsExport";
+  type RoomTheme,
+  reservationRequest as reservationRequestTable,
+  type TimeSlot,
+  themedRoomReservation as themedRoomReservationTable,
+} from "@/db/schema";
+import { auth } from "@/lib/auth/auth";
+import { db } from "@/lib/db";
+
+// import {
+//   exportReservationRequestToGoogleSheet,
+//   exportThemedRoomReservationToGoogleSheet,
+// } from "@/scripts/googleSheetsExport";
 
 export async function createReservationRequest(input: {
   teamName: string;
@@ -18,14 +22,13 @@ export async function createReservationRequest(input: {
   outOfState: boolean;
 }) {
   try {
-    // 1) Get the current user from session
     const session = await auth.api.getSession({
       headers: await headers(),
     });
     if (!session?.session.userId) {
       throw new Error("Not authenticated! Please sign in first.");
     }
-    const user = await prisma.user.findUnique({
+    const user = await db.query.user.findFirst({
       where: { id: session.session.userId },
     });
 
@@ -33,21 +36,15 @@ export async function createReservationRequest(input: {
       throw new Error("User not found.");
     }
 
-    // 2) Create the reservation request record
-
-    const aggEmails = `${user.email}, ${input.memberEmails}`;
-    const reservation = await prisma.reservationRequest.create({
-      data: {
-        userId: session.session.userId,
-        teamName: input.teamName,
-        memberEmails: aggEmails,
-        outOfState: input.outOfState,
-      },
+    const reservation = await db.insert(reservationRequestTable).values({
+      userId: session.session.userId,
+      teamName: input.teamName,
+      memberEmails: `${user.email}, ${input.memberEmails}`,
+      outOfState: input.outOfState,
     });
 
-    await exportReservationRequestToGoogleSheet(reservation);
+    // await exportReservationRequestToGoogleSheet(reservation);
 
-    // 4) Return the reservation record
     return reservation;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -74,40 +71,36 @@ export async function createThemedRoomReservation(data: {
     throw new Error("Not authenticated. Please sign in.");
   }
 
-  const existing = await prisma.themedRoomReservation.findUnique({
+  const existing = await db.query.themedRoomReservation.findFirst({
     where: {
-      theme_timeSlot: {
-        theme: data.theme,
-        timeSlot: data.timeSlot,
-      },
+      theme: data.theme,
+      timeSlot: data.timeSlot,
     },
   });
 
   if (existing) {
     throw new Error("That theme and time slot is already taken.");
   }
-  const user = await prisma.user.findUnique({
+  const user = await db.query.user.findFirst({
     where: { id: session.session.userId },
   });
   if (!user) {
     throw new Error("User not found.");
   }
   const aggEmails = `${user.email}, ${data.memberEmails}`;
-  const reservation = await prisma.themedRoomReservation.create({
-    data: {
-      teamName: data.teamName,
-      memberEmails: aggEmails,
-      timeSlot: data.timeSlot,
-      theme: data.theme,
-      userId: session.session.userId,
-    },
+  const reservation = await db.insert(themedRoomReservationTable).values({
+    teamName: data.teamName,
+    memberEmails: aggEmails,
+    timeSlot: data.timeSlot,
+    theme: data.theme,
+    userId: session.session.userId,
   });
-  await exportThemedRoomReservationToGoogleSheet(reservation);
+  //await exportThemedRoomReservationToGoogleSheet(reservation);
 }
 
 export async function getTakenThemeTimeCombos() {
-  const reservations = await prisma.themedRoomReservation.findMany({
-    select: {
+  const reservations = await db.query.themedRoomReservation.findMany({
+    columns: {
       theme: true,
       timeSlot: true,
     },

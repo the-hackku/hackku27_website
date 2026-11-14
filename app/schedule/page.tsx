@@ -2,13 +2,13 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import ScheduleGrid from "@/components/ScheduleGrid";
 // import BeginnerWorkshops from "@/components/BeginnerWorkshops";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 
 export default async function SchedulePage() {
   return redirect("/");
   // "use cache";
-  // const events = await prisma.event.findMany({
-  //   select: {
+  // const events = await db.query.event.findMany({
+  //   columns: {
   //     id: true,
   //     name: true,
   //     location: true,

@@ -4,12 +4,12 @@ import AdminEventEditor from "@/components/admin/EventEditor";
 import { EventForm } from "@/components/forms/eventForm";
 import ScheduleGrid from "@/components/ScheduleGrid";
 import constants from "@/constants";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 
 export default async function SchedulePage() {
   await connection();
-  const events = await prisma.event.findMany({
-    select: {
+  const events = await db.query.event.findMany({
+    columns: {
       id: true,
       name: true,
       location: true,
@@ -18,7 +18,7 @@ export default async function SchedulePage() {
       createdAt: true,
       updatedAt: true,
       description: true,
-      eventType: true,
+      type: true,
     },
   });
 
@@ -49,10 +49,10 @@ export default async function SchedulePage() {
       <h1 className="text-2xl font-bold mb-4">Events</h1>
       <div className="flex flex-col md:flex-row gap-2">
         <EventForm />
-        <AdminEventEditor events={events} />
+        {/* <AdminEventEditor events={events} /> */}
       </div>
       {/* Render the Schedule Grid */}
-      <ScheduleGrid schedule={mainScheduleEvents} />
+      {/* <ScheduleGrid schedule={mainScheduleEvents} /> */}
     </>
   );
 }

@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 
 const IGNORE_PHRASES = ["none", "no special accommodations", "n/a", "na", "no"];
 
@@ -11,19 +11,19 @@ function cleanText(text: string) {
     .replace(/[^a-z0-9\s]/g, "");
 }
 
-// Fetch raw dietary restrictions (NO PROCESSING)
+// Fetch raw dietary restrictions
 export async function getDietaryData() {
-  const participants = await prisma.participantInfo.findMany({
-    select: { dietaryRestrictions: true },
+  const participants = await db.query.participantInfo.findMany({
+    columns: { dietaryRestrictions: true },
   });
 
   return participants.map((p) => cleanText(p.dietaryRestrictions || ""));
 }
 
-/** 🔹 Fetch raw accessibility accommodations */
+// Fetch raw accessibility accommodations
 export async function getAccessibilityData() {
-  const participants = await prisma.participantInfo.findMany({
-    select: { specialAccommodations: true },
+  const participants = await db.query.participantInfo.findMany({
+    columns: { specialAccommodations: true },
   });
 
   return participants
@@ -32,5 +32,5 @@ export async function getAccessibilityData() {
         .trim()
         .toLowerCase(),
     )
-    .filter((entry) => entry && !IGNORE_PHRASES.includes(entry)); // ✅ Removes irrelevant data
+    .filter((entry) => entry && !IGNORE_PHRASES.includes(entry));
 }

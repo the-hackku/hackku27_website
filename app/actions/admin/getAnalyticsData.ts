@@ -7,25 +7,25 @@ import {
   startOfDay,
   startOfHour,
 } from "date-fns";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
 
 export async function getAnalyticsData(
   startDate: Date,
   endDate: Date,
   aggregation: "hourly" | "daily",
 ) {
-  const users = await prisma.participantInfo.findMany({
+  const users = await db.query.participantInfo.findMany({
     where: {
       createdAt: { gte: startOfDay(startDate), lte: endOfDay(endDate) },
     },
-    select: { createdAt: true },
+    columns: { createdAt: true },
   });
 
-  const checkins = await prisma.checkin.findMany({
+  const checkins = await db.query.checkin.findMany({
     where: {
       createdAt: { gte: startOfDay(startDate), lte: endOfDay(endDate) },
     },
-    select: { createdAt: true },
+    columns: { createdAt: true },
   });
 
   if (aggregation === "hourly") {
@@ -95,21 +95,25 @@ export async function getAnalyticsData(
 }
 
 export async function getEventCheckinCounts() {
-  const eventsWithCheckins = await prisma.event.findMany({
-    orderBy: { startDate: "asc" }, // ✅ Correct field name
-    select: {
+  const eventsWithCheckins = await db.query.event.findMany({
+    orderBy: { startDate: "asc" },
+    columns: {
       id: true,
       name: true,
-      startDate: true, // ✅ Correct field name
+      startDate: true,
+    },
+    with: {
       checkins: {
-        select: { id: true },
+        columns: {
+          id: true,
+        },
       },
     },
   });
 
   return eventsWithCheckins.map((event) => ({
     name: event.name,
-    startTime: event.startDate, // You can keep using `startTime` as the output key
+    startTime: event.startDate,
     checkins: event.checkins.length,
   }));
 }

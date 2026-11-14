@@ -19,8 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress"; // Make sure this is at the top
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { prisma } from "@/lib/db";
-import { getUserWithReimbursement } from "../actions/reimbursement";
+import { db } from "@/lib/db";
 // import type { UserWithReimbursement } from "../actions/reimbursement";
 
 /**
@@ -56,18 +55,24 @@ export default async function ProfilePage() {
   // const canEdit = hasReimb && canEditReimbursement(userSession);
 
   // 3. Grab check-ins
-  const checkIns = await prisma.checkin.findMany({
+  const checkIns = await db.query.checkin.findMany({
     where: { userId: userSession.id },
-    include: { event: true },
+    with: { event: true },
     orderBy: { createdAt: "desc" },
   });
 
   // Get all users' check-in counts
-  const allUserCheckins = await prisma.user.findMany({
-    select: {
+  const allUserCheckins = await db.query.user.findMany({
+    columns: {
       id: true,
-      checkinsAsUser: { select: { id: true } },
     },
+    with: {
+      checkinsAsUser: {
+        columns: {
+          id: true,
+        },
+      }
+    }
   });
 
   const userCheckinCount = checkIns.length;
@@ -83,12 +88,12 @@ export default async function ProfilePage() {
       ? Math.round((usersWithFewerCheckins / totalUsers) * 100)
       : 0;
 
-  const reservationRequest = await prisma.reservationRequest.findUnique({
+  const reservationRequest = await db.query.reservationRequest.findFirst({
     where: { userId: userSession.id },
-    include: { themedRoom: true },
+    with: { themedRoom: true },
   });
 
-  const themedRoomReservation = await prisma.themedRoomReservation.findUnique({
+  const themedRoomReservation = await db.query.themedRoomReservation.findFirst({
     where: { userId: userSession.id },
   });
 
@@ -108,19 +113,19 @@ export default async function ProfilePage() {
     .slice(0, 10);
 
   // Get participant info for those top users
-  const topUserDetails = await prisma.user.findMany({
+  const topUserDetails = await db.query.user.findMany({
     where: {
       id: { in: topUsers.map((u) => u.id) },
     },
-    include: {
-      ParticipantInfo: true,
+    with: {
+      participantInfo: true,
     },
   });
 
   const leaderboard = topUsers.map((u, index) => {
     const userInfo = topUserDetails.find((info) => info.id === u.id);
-    const participantName = userInfo?.ParticipantInfo
-      ? `${userInfo.ParticipantInfo.firstName} ${userInfo.ParticipantInfo.lastName}` : null;
+    const participantName = userInfo?.participantInfo
+      ? `${userInfo.participantInfo.firstName} ${userInfo.participantInfo.lastName}` : null;
     const backupName = userInfo?.email ? "Unregiststered User" : "Anonymous User";
     return {
       rank: index + 1,
@@ -130,7 +135,7 @@ export default async function ProfilePage() {
   });
 
   // Participant info
-  const participant = userSession.ParticipantInfo;
+  const participant = userSession.participantInfo;
   const fullName = participant
     ? `${participant.firstName} ${participant.lastName}`
     : null;
@@ -140,17 +145,23 @@ export default async function ProfilePage() {
     ? userSession.id
     : "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 
-  const pendingInvites = await prisma.reimbursementInvite.findMany({
+  const pendingInvites = await db.query.reimbursementInvite.findMany({
     where: {
       userId: userSession.id,
       status: "PENDING",
     },
-    include: {
+    with: {
       reimbursement: {
-        select: {
-          userId: true, // Group leader's ID
-          creator: { select: { email: true } }, // Group leader's email
+        columns: {
+          userId: true,
         },
+        with: {
+          creator: {
+            columns: {
+              email: true,
+            },
+          }
+        }
       },
     },
   });

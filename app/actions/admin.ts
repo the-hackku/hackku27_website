@@ -1,35 +1,18 @@
 "use server";
 
-import { and, eq, ilike, type SQL } from "drizzle-orm";
+import { eq, ilike, or } from "drizzle-orm";
 import { headers } from "next/headers";
 import {
   checkin as checkinTable,
   event as eventTable,
   participantInfo as participantInfoTable,
+  reservationRequest as reservationRequestTable,
   scanAttempt as scanAttemptTable,
+  themedRoom as themedRoomTable,
   user as userTable,
 } from "@/db/schema";
 import { auth, hasPermissions } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
-import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
-
-type AdminThemedRoom = {
-  id: string;
-  name: string;
-  location: string;
-};
-
-type AdminReservationRequest = {
-  id: string;
-  teamName: string;
-  userEmail: string;
-  memberEmails: string;
-  outOfState: boolean;
-  themedRoomId: string | null;
-  themedRoomName: string | null;
-  themedRoomLocation: string | null;
-  createdAt: Date;
-};
 
 type ValidateQrCodeResult =
   | {
@@ -49,16 +32,12 @@ type ValidateQrCodeResult =
       message: string;
     };
 
-// CRUD operations for the admin dashboard
-
-// Fetch all users and return their names and emails
 export async function getUsers(page = 1, pageSize = 20, searchQuery = "") {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { user_data: ["view"] });
 
-  // const skip = (page - 1) * pageSize;
   const users = await db.query.user.findMany({
     where: {
       OR: [
@@ -76,6 +55,8 @@ export async function getUsers(page = 1, pageSize = 20, searchQuery = "") {
     with: {
       participantInfo: true,
     },
+    limit: pageSize,
+    offset: (page - 1) * pageSize,
     orderBy: { createdAt: "desc" },
   });
 
@@ -88,8 +69,6 @@ export async function getCheckins(page = 1, pageSize = 20, searchQuery = "") {
     headers: await headers(),
   });
   await hasPermissions(session, { checkins: ["view"] });
-
-  //const skip = (page - 1) * pageSize;
 
   const checkins = await db.query.checkin.findMany({
     with: {
@@ -117,14 +96,14 @@ export async function getCheckins(page = 1, pageSize = 20, searchQuery = "") {
         },
       },
     },
+    limit: pageSize,
+    offset: (page - 1) * pageSize,
     orderBy: { createdAt: "desc" },
   });
 
   return { checkins, totalCheckins: checkins.length };
 }
-/**
- * Batch update check-ins
- */
+
 export async function batchUpdateCheckins(
   changes: Record<string, Partial<typeof checkinTable._.columns>>,
 ) {
@@ -142,7 +121,6 @@ export async function batchUpdateCheckins(
   return updatedCheckins;
 }
 
-// Create a new event
 export async function createEvent(data: typeof eventTable.$inferInsert) {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -201,7 +179,6 @@ export async function updateEvent(
     });
 }
 
-// Delete an event
 export async function deleteEvent(eventId: string) {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -491,7 +468,6 @@ export async function updateUserField(
     .returning({ id: userTable.id });
 }
 
-// Update participant field
 export async function updateParticipantField(
   participantId: string,
   field: string,
@@ -647,54 +623,58 @@ export async function getReservationRequests(
   page = 1,
   pageSize = 10,
   searchQuery = "",
-): Promise<{ requests: AdminReservationRequest[]; total: number }> {
+): Promise<{
+  requests: (typeof reservationRequestTable.$inferSelect)[];
+  total: number;
+}> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { room_reservations: ["view"] });
-  const skip = (page - 1) * pageSize;
-  const where = searchQuery
-    ? {
-        OR: [
-          { teamName: { contains: searchQuery, mode: "insensitive" as const } },
-          {
-            memberEmails: {
-              contains: searchQuery,
-              mode: "insensitive" as const,
+
+  const rawRequests = await db.query.reservationRequest.findMany({
+    where: searchQuery
+      ? {
+          OR: [
+            { teamName: { ilike: `%${searchQuery}%` } },
+            { memberEmails: { ilike: `%${searchQuery}%` } },
+          ],
+        }
+      : {},
+    with: {
+      themedRoom: true,
+      members: {
+        columns: {
+          id: true,
+          email: true,
+        },
+        with: {
+          participantInfo: {
+            columns: {
+              firstName: true,
+              lastName: true,
             },
           },
-        ],
-      }
-    : {};
-
-  const rawRequests = await prisma.reservationRequest.findMany({
-    where,
-    include: { themedRoom: true },
-    skip,
-    take: pageSize,
+        },
+      },
+    },
+    limit: pageSize,
+    offset: (page - 1) * pageSize,
     orderBy: { createdAt: "desc" },
   });
-  const total = await prisma.reservationRequest.count({ where });
 
-  const userIds = rawRequests.map((r) => r.userId);
-  const users = await prisma.user.findMany({
-    where: { id: { in: userIds } },
-    select: { id: true, email: true },
-  });
-  const emailMap = Object.fromEntries(users.map((u) => [u.id, u.email]));
+  const total = await db.$count(
+    reservationRequestTable,
+    searchQuery
+      ? or(
+          ilike(reservationRequestTable.teamName, `%${searchQuery}%`),
+          ilike(reservationRequestTable.memberEmails, `%${searchQuery}%`),
+        )
+      : undefined,
+  );
 
   return {
-    requests: rawRequests.map((r) => ({
-      id: r.id,
-      teamName: r.teamName,
-      userEmail: emailMap[r.userId] ?? "N/A",
-      memberEmails: r.memberEmails,
-      outOfState: r.outOfState,
-      themedRoomId: r.themedRoomId,
-      themedRoomName: r.themedRoom?.name ?? null,
-      themedRoomLocation: r.themedRoom?.location ?? null,
-      createdAt: r.createdAt,
-    })),
+    requests: rawRequests,
     total,
   };
 }
@@ -707,10 +687,10 @@ export async function assignRoomToRequest(
     headers: await headers(),
   });
   await hasPermissions(session, { room_reservations: ["manage"] });
-  await prisma.reservationRequest.update({
-    where: { id: requestId },
-    data: { themedRoomId },
-  });
+  await db
+    .update(reservationRequestTable)
+    .set({ themedRoomId })
+    .where(eq(reservationRequestTable.id, requestId));
 }
 
 export async function deleteReservationRequest(
@@ -720,15 +700,19 @@ export async function deleteReservationRequest(
     headers: await headers(),
   });
   await hasPermissions(session, { room_reservations: ["delete"] });
-  await prisma.reservationRequest.delete({ where: { id: requestId } });
+  await db
+    .delete(reservationRequestTable)
+    .where(eq(reservationRequestTable.id, requestId));
 }
 
-export async function getThemedRooms(): Promise<AdminThemedRoom[]> {
+export async function getThemedRooms(): Promise<
+  (typeof themedRoomTable.$inferSelect)[]
+> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { room_reservations: ["view"] });
-  return prisma.themedRoom.findMany({ orderBy: { name: "asc" } });
+  return await db.query.themedRoom.findMany({ orderBy: { name: "asc" } });
 }
 
 export async function createThemedRoom(data: {
@@ -739,10 +723,10 @@ export async function createThemedRoom(data: {
     headers: await headers(),
   });
   await hasPermissions(session, { themed_rooms: ["create"] });
-  await prisma.themedRoom.create({ data });
+  await db.insert(themedRoomTable).values(data);
 }
 
-export async function updateAdminThemedRoom(
+export async function updateThemedRoom(
   id: string,
   data: { name?: string; location?: string },
 ): Promise<void> {
@@ -750,15 +734,13 @@ export async function updateAdminThemedRoom(
     headers: await headers(),
   });
   await hasPermissions(session, { themed_rooms: ["manage"] });
-  await prisma.themedRoom.update({ where: { id }, data });
+  await db.update(themedRoomTable).set(data).where(eq(themedRoomTable.id, id));
 }
 
-export async function deleteAdminThemedRoom(id: string): Promise<void> {
+export async function deleteThemedRoom(id: string): Promise<void> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { themed_rooms: ["delete"] });
-  await prisma.themedRoom.delete({ where: { id } });
+  await db.delete(themedRoomTable).where(eq(themedRoomTable.id, id));
 }
-
-export type { AdminReservationRequest, AdminThemedRoom };

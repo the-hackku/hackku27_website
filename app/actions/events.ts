@@ -1,21 +1,21 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { type EventType, event as eventTable } from "@/db/schema";
 import { auth, hasPermissions } from "@/lib/auth/auth";
-import { prisma } from "@/lib/db";
-import type { EventType } from "@/prisma/generated/client";
+import { db } from "@/lib/db";
 
 export async function fetchEvents() {
-  return await prisma.event.findMany({
-    select: {
+  return await db.query.event.findMany({
+    columns: {
       id: true,
       name: true,
-      startDate: true, // ⬅️ add this
+      startDate: true,
+      endDate: true,
     },
-    orderBy: {
-      startDate: "asc", // ⬅️ optionally sort here instead of the frontend
-    },
+    orderBy: { startDate: "asc" },
   });
 }
 
@@ -26,22 +26,22 @@ export async function updateEvent(
     description: string;
     location: string;
     eventType: EventType;
-    startDate: string; // ISO
-    endDate: string; // ISO
+    startDate: string;
+    endDate: string;
   },
 ) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { events: ["manage"] });
-  await prisma.event.update({
-    where: { id },
-    data: {
+  await db
+    .update(eventTable)
+    .set({
       ...data,
       startDate: new Date(data.startDate),
       endDate: new Date(data.endDate),
-    },
-  });
+    })
+    .where(eq(eventTable.id, id));
 
   revalidatePath("/schedule");
 }

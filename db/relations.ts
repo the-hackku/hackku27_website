@@ -217,6 +217,10 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.reservationRequest.themedRoomId,
       to: r.themedRoom.id,
     }),
+    members: r.many.user({
+      from: r.reservationRequest.memberEmails,
+      to: r.user.email,
+    }),
   },
   themedRoom: {
     reservationRequests: r.many.reservationRequest(),
