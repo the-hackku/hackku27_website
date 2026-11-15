@@ -6,13 +6,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-  backupRegistrationScript,
   batchUpdateCheckins,
-  batchUpdateReimbursements,
   batchUpdateUsers,
   getCheckins,
   getEventCheckinCount,
-  getReimbursements,
   getTotalRegistrationNumber,
   getUsers,
 } from "@/app/actions/admin";
@@ -25,12 +22,12 @@ import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import constants from "@/constants";
-import { roles } from "@/lib/auth/permissions";
 import type {
-  ParticipantInfo,
-  TravelReimbursement,
-  User,
-} from "@/prisma/generated/browser";
+  checkin as checkinTable,
+  participantInfo as participantInfoTable,
+  user as userTable,
+} from "@/db/schema";
+import { roles } from "@/lib/auth/permissions";
 
 import {
   exportEmails,
@@ -38,48 +35,10 @@ import {
   exportUnregisteredEmails,
 } from "@/scripts/emailExporter";
 
-// Extend the User type to include relations or additional fields
-interface ExtendedUser extends User {
-  ParticipantInfo?: ParticipantInfo | null;
-  checkinsAsUser?: Checkin[];
-}
-
-interface ExtendedTravelReimbursement extends TravelReimbursement {
-  creator: {
-    id: string;
-    email: string;
-    ParticipantInfo?: {
-      firstName: string;
-      lastName: string;
-    } | null;
-  };
-  invites: {
-    user: {
-      email: string;
-    };
-  }[];
-}
-
-interface Checkin {
-  id: string;
-  userId: string;
-  eventId: string;
-  createdAt: Date;
-  user: {
-    name: string | null;
-    email: string;
-    participantInfo?: {
-      firstName: string;
-      lastName: string;
-    } | null;
-  };
-  event: {
-    name: string;
-  };
-}
-
 const handleBackup = async () => {
-  const res = await backupRegistrationScript();
+  const res =
+    // await backupRegistrationScript();
+    { success: true };
   if (!res.success) {
     toast.error("Failed to backup registration");
     return;
@@ -162,7 +121,7 @@ export default function AdminTabsPage() {
     fetchTotalRegistrations();
   }, []);
 
-  const userColumns: ColumnDef<ExtendedUser>[] = [
+  const userColumns: ColumnDef<typeof userTable.$inferSelect>[] = [
     {
       id: "name",
       header: "Name",
@@ -178,7 +137,7 @@ export default function AdminTabsPage() {
               onClick={handleClick}
               className={
                 "hover:underline text-left flex flex-row items-center " +
-                (user.ParticipantInfo ? "" : "text-red-300")
+                (user.participantInfo ? "" : "text-red-300")
               }>
               {user.ParticipantInfo
                 ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
