@@ -23,8 +23,12 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import constants from "@/constants";
 import type {
+  CheckinSelect,
   checkin as checkinTable,
+  EventSelect,
+  ParticipantInfoSelect,
   participantInfo as participantInfoTable,
+  UserSelect,
   user as userTable,
 } from "@/db/schema";
 import { roles } from "@/lib/auth/permissions";
@@ -74,384 +78,398 @@ const handleDownloadUnregisteredEmails = async () => {
 };
 
 export default function AdminTabsPage() {
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null); // Track event selection
-  const [totalRegistrations, setTotalRegistrations] = useState<number | null>(
-    null,
-  );
-  const [hackathonCheckinCount, setHackathonCheckinCount] = useState<
-    number | null
-  >(null);
+  return <div>Coming soon</div>;
+  // const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  // const [selectedEventId, setSelectedEventId] = useState<string | null>(null); // Track event selection
+  // const [totalRegistrations, setTotalRegistrations] = useState<number | null>(
+  //   null,
+  // );
+  // const [hackathonCheckinCount, setHackathonCheckinCount] = useState<
+  //   number | null
+  // >(null);
 
-  const onUserOpenChange = (open: boolean) => {
-    if (!open) {
-      setSelectedUserId(null);
-    }
-  };
+  // const onUserOpenChange = (open: boolean) => {
+  //   if (!open) {
+  //     setSelectedUserId(null);
+  //   }
+  // };
 
-  const onEventOpenChange = (open: boolean) => {
-    if (!open) {
-      setSelectedEventId(null);
-    }
-  };
+  // const onEventOpenChange = (open: boolean) => {
+  //   if (!open) {
+  //     setSelectedEventId(null);
+  //   }
+  // };
 
-  useEffect(() => {
-    const fetchCheckinCount = async () => {
-      try {
-        const count = await getEventCheckinCount(constants.checkinEventId);
-        setHackathonCheckinCount(count);
-      } catch (error) {
-        console.error("Failed to fetch check-in count:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchCheckinCount = async () => {
+  //     try {
+  //       const count = await getEventCheckinCount(constants.checkinEventId);
+  //       setHackathonCheckinCount(count);
+  //     } catch (error) {
+  //       console.error("Failed to fetch check-in count:", error);
+  //     }
+  //   };
 
-    fetchCheckinCount();
-  }, []);
+  //   fetchCheckinCount();
+  // }, []);
 
-  useEffect(() => {
-    const fetchTotalRegistrations = async () => {
-      try {
-        const total = await getTotalRegistrationNumber();
-        setTotalRegistrations(total);
-      } catch (error) {
-        console.error("Error fetching total registration number:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTotalRegistrations = async () => {
+  //     try {
+  //       const total = await getTotalRegistrationNumber();
+  //       setTotalRegistrations(total);
+  //     } catch (error) {
+  //       console.error("Error fetching total registration number:", error);
+  //     }
+  //   };
 
-    fetchTotalRegistrations();
-  }, []);
+  //   fetchTotalRegistrations();
+  // }, []);
 
-  const userColumns: ColumnDef<typeof userTable.$inferSelect>[] = [
-    {
-      id: "name",
-      header: "Name",
-      cell: ({ row }) => {
-        const user = row.original;
-        const handleClick = () => {
-          setSelectedUserId(user.id);
-        };
-        return (
-          <div className="flex items-center">
-            <button
-              type="button"
-              onClick={handleClick}
-              className={
-                "hover:underline text-left flex flex-row items-center " +
-                (user.participantInfo ? "" : "text-red-300")
-              }>
-              {user.ParticipantInfo
-                ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
-                : "Unknown"}
-              <IconArrowUpRight size={12} className="ml-1" />
-            </button>
-          </div>
-        );
-      },
-    },
-    {
-      id: "email",
-      header: "Email",
-      cell: ({ row }) => {
-        return row.original.email;
-      },
-    },
-    {
-      id: "role",
-      header: "Role",
-      accessorFn: (row) => row.role,
-      meta: {
-        selectOptions: Object.keys(roles).map((role) => ({
-          value: role,
-          label: role,
-        })),
-      },
-    },
-  ];
+  // const userColumns: ColumnDef<
+  //   UserSelect & { participantInfo?: ParticipantInfoSelect }
+  // >[] = [
+  //   {
+  //     id: "name",
+  //     header: "Name",
+  //     cell: ({ row }) => {
+  //       const user = row.original;
+  //       const handleClick = () => {
+  //         setSelectedUserId(user.id);
+  //       };
+  //       return (
+  //         <div className="flex items-center">
+  //           <button
+  //             type="button"
+  //             onClick={handleClick}
+  //             className={
+  //               "hover:underline text-left flex flex-row items-center " +
+  //               (user.participantInfo ? "" : "text-red-300")
+  //             }>
+  //             {user.participantInfo
+  //               ? `${user.participantInfo.firstName} ${user.participantInfo.lastName}`
+  //               : "Unknown"}
+  //             <IconArrowUpRight size={12} className="ml-1" />
+  //           </button>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     id: "email",
+  //     header: "Email",
+  //     cell: ({ row }) => {
+  //       return row.original.email;
+  //     },
+  //   },
+  //   {
+  //     id: "role",
+  //     header: "Role",
+  //     accessorFn: (row) => row.role,
+  //     meta: {
+  //       selectOptions: Object.keys(roles).map((role) => ({
+  //         value: role,
+  //         label: role,
+  //       })),
+  //     },
+  //   },
+  // ];
 
-  const reimbursementColumns: ColumnDef<ExtendedTravelReimbursement>[] = [
-    {
-      id: "user",
-      header: "User",
-      cell: ({ row }) => {
-        const reimbursement = row.original;
-        const participantInfo = reimbursement.creator?.ParticipantInfo;
-        const userName = participantInfo
-          ? `${participantInfo.firstName} ${participantInfo.lastName}`
-          : "Unknown";
-        const handleClick = () => {
-          setSelectedUserId(reimbursement.creator.id);
-        };
+  // // const reimbursementColumns: ColumnDef<ExtendedTravelReimbursement>[] = [
+  // //   {
+  // //     id: "user",
+  // //     header: "User",
+  // //     cell: ({ row }) => {
+  // //       const reimbursement = row.original;
+  // //       const participantInfo = reimbursement.creator?.ParticipantInfo;
+  // //       const userName = participantInfo
+  // //         ? `${participantInfo.firstName} ${participantInfo.lastName}`
+  // //         : "Unknown";
+  // //       const handleClick = () => {
+  // //         setSelectedUserId(reimbursement.creator.id);
+  // //       };
 
-        return (
-          <button
-            type="button"
-            onClick={handleClick}
-            className="hover:underline text-left">
-            {userName} ({reimbursement.creator.email})
-          </button>
-        );
-      },
-    },
-    {
-      id: "transportationMethod",
-      header: "Transport",
-      accessorFn: (row) => row.transportationMethod,
-    },
-    {
-      id: "address",
-      header: "Address",
-      accessorFn: (row) => row.address,
-    },
-    {
-      id: "distance",
-      header: "Distance (miles)",
-      accessorFn: (row) => row.distance,
-    },
-    {
-      id: "estimatedCost",
-      header: "Estimated Cost ($)",
-      accessorFn: (row) => row.estimatedCost,
-    },
-    {
-      id: "reason",
-      header: "Reason",
-      accessorFn: (row) => row.reason,
-    },
-  ];
+  // //       return (
+  // //         <button
+  // //           type="button"
+  // //           onClick={handleClick}
+  // //           className="hover:underline text-left">
+  // //           {userName} ({reimbursement.creator.email})
+  // //         </button>
+  // //       );
+  // //     },
+  // //   },
+  // //   {
+  // //     id: "transportationMethod",
+  // //     header: "Transport",
+  // //     accessorFn: (row) => row.transportationMethod,
+  // //   },
+  // //   {
+  // //     id: "address",
+  // //     header: "Address",
+  // //     accessorFn: (row) => row.address,
+  // //   },
+  // //   {
+  // //     id: "distance",
+  // //     header: "Distance (miles)",
+  // //     accessorFn: (row) => row.distance,
+  // //   },
+  // //   {
+  // //     id: "estimatedCost",
+  // //     header: "Estimated Cost ($)",
+  // //     accessorFn: (row) => row.estimatedCost,
+  // //   },
+  // //   {
+  // //     id: "reason",
+  // //     header: "Reason",
+  // //     accessorFn: (row) => row.reason,
+  // //   },
+  // // ];
 
-  const checkinColumns: ColumnDef<Checkin>[] = [
-    {
-      id: "user",
-      header: "User",
-      cell: ({ row }) => {
-        const checkin = row.original;
-        const userName = checkin.user.participantInfo
-          ? `${checkin.user.participantInfo.firstName} ${checkin.user.participantInfo.lastName}`
-          : checkin.user.name || "Unknown";
-        const handleClick = () => {
-          setSelectedUserId(checkin.userId);
-        };
-        return (
-          <button
-            type="button"
-            onClick={handleClick} // Show user details dialog
-            className="hover:underline text-left">
-            {userName}
-          </button>
-        );
-      },
-    },
-    {
-      id: "event",
-      header: "Event",
-      cell: ({ row }) => {
-        const checkin = row.original;
-        const handleClick = () => {
-          setSelectedEventId(checkin.eventId); // Show event details dialog
-        };
-        return (
-          <button
-            type="button"
-            onClick={handleClick} // Show event details dialog
-            className="hover:underline text-left">
-            {checkin.event.name}
-          </button>
-        );
-      },
-    },
-    {
-      id: "timestamp",
-      header: "Time",
-      cell: ({ row }) => {
-        const date = new Date(row.original.createdAt);
-        // Format the date using Intl.DateTimeFormat
-        return Intl.DateTimeFormat("en-US", {
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        }).format(date);
-      },
-    },
-  ];
+  // const checkinColumns: ColumnDef<
+  //   CheckinSelect & {
+  //     userUser: UserSelect & { participantInfo: ParticipantInfoSelect };
+  //   } & { event: EventSelect }
+  // >[] = [
+  //   {
+  //     id: "user",
+  //     header: "User",
+  //     cell: ({ row }) => {
+  //       const checkin = row.original;
+  //       const userName = checkin.userUser.participantInfo
+  //         ? `${checkin.userUser.participantInfo.firstName} ${checkin.userUser.participantInfo.lastName}`
+  //         : checkin.userUser.name || "Unknown";
+  //       const handleClick = () => {
+  //         setSelectedUserId(checkin.userId);
+  //       };
+  //       return (
+  //         <button
+  //           type="button"
+  //           onClick={handleClick} // Show user details dialog
+  //           className="hover:underline text-left">
+  //           {userName}
+  //         </button>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     id: "event",
+  //     header: "Event",
+  //     cell: ({ row }) => {
+  //       const checkin = row.original;
+  //       const handleClick = () => {
+  //         setSelectedEventId(checkin.eventId); // Show event details dialog
+  //       };
+  //       return (
+  //         <button
+  //           type="button"
+  //           onClick={handleClick} // Show event details dialog
+  //           className="hover:underline text-left">
+  //           {checkin.event.name}
+  //         </button>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     id: "timestamp",
+  //     header: "Time",
+  //     cell: ({ row }) => {
+  //       const date = new Date(row.original.createdAt);
+  //       // Format the date using Intl.DateTimeFormat
+  //       return Intl.DateTimeFormat("en-US", {
+  //         month: "long",
+  //         day: "numeric",
+  //         year: "numeric",
+  //         hour: "numeric",
+  //         minute: "2-digit",
+  //         hour12: true,
+  //       }).format(date);
+  //     },
+  //   },
+  // ];
 
-  return (
-    <div className="container mx-auto max-w-5xl py-8">
-      {/* Add total registrations display */}
-      <div className="mb-4 p-4 border rounded-lg flex flex-row">
-        <h2 className="text-xl font-semibold flex flex-row gap-2">
-          <span>
-            {" "}
-            Total Registrations:{" "}
-            {totalRegistrations !== null ? totalRegistrations : "Loading..."}
-          </span>
-          -
-          <span>
-            People Checked in: {hackathonCheckinCount ?? "Loading..."}
-          </span>
-        </h2>
-      </div>
+  // return (
+  //   <div className="container mx-auto max-w-5xl py-8">
+  //     {/* Add total registrations display */}
+  //     <div className="mb-4 p-4 border rounded-lg flex flex-row">
+  //       <h2 className="text-xl font-semibold flex flex-row gap-2">
+  //         <span>
+  //           {" "}
+  //           Total Registrations:{" "}
+  //           {totalRegistrations !== null ? totalRegistrations : "Loading..."}
+  //         </span>
+  //         -
+  //         <span>
+  //           People Checked in: {hackathonCheckinCount ?? "Loading..."}
+  //         </span>
+  //       </h2>
+  //     </div>
 
-      {/* User Details Dialog */}
-      <UserDetailsDialog
-        userId={selectedUserId}
-        onOpenChange={onUserOpenChange}
-      />
+  //     {/* User Details Dialog */}
+  //     <UserDetailsDialog
+  //       userId={selectedUserId}
+  //       onOpenChange={onUserOpenChange}
+  //     />
 
-      {/* Event Details Dialog */}
-      <EventDetailsDialog
-        eventId={selectedEventId}
-        onOpenChange={onEventOpenChange}
-      />
+  //     {/* Event Details Dialog */}
+  //     <EventDetailsDialog
+  //       eventId={selectedEventId}
+  //       onOpenChange={onEventOpenChange}
+  //     />
 
-      <Tabs defaultValue="analytics">
-        <div className="flex flex-col items-start gap-2">
-          <div className="flex flex-row gap-2">
-            <TabsList className="mb-4">
-              <TabsTrigger value="users">Users</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="checkins">Check-ins</TabsTrigger>
-            </TabsList>
-            <TabsList className="mb-4 hidden md:block">
-              <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
-              <Link href="/admin/events">
-                <TabsTrigger value="events">Manage Events</TabsTrigger>
-              </Link>
-              <TabsTrigger value="rooms">Room Reservations</TabsTrigger>
-              <TabsTrigger value="actions">Admin Actions</TabsTrigger>
-            </TabsList>
-          </div>
-          <div className="flex flex-row gap-2">
-            <Link
-              href="https://docs.google.com/spreadsheets/d/1BHgfhH0E5Ro5FuzsFgvt-wtNWI9sQ4QPqdk7aNInUi0/edit?gid=0#gid=0"
-              target="_blank">
-              <Button className="bg-green-600 mb-4">Go to Google Sheet</Button>
-            </Link>
-            <Link href="/scanner">
-              <Button className="bg-blue-400 mb-4">Scan In Hackers</Button>
-            </Link>
-          </div>
-        </div>
+  //     <Tabs defaultValue="analytics">
+  //       <div className="flex flex-col items-start gap-2">
+  //         <div className="flex flex-row gap-2">
+  //           <TabsList className="mb-4">
+  //             <TabsTrigger value="users">Users</TabsTrigger>
+  //             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+  //             <TabsTrigger value="checkins">Check-ins</TabsTrigger>
+  //           </TabsList>
+  //           <TabsList className="mb-4 hidden md:block">
+  //             <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
+  //             <Link href="/admin/events">
+  //               <TabsTrigger value="events">Manage Events</TabsTrigger>
+  //             </Link>
+  //             <TabsTrigger value="rooms">Room Reservations</TabsTrigger>
+  //             <TabsTrigger value="actions">Admin Actions</TabsTrigger>
+  //           </TabsList>
+  //         </div>
+  //         <div className="flex flex-row gap-2">
+  //           <Link
+  //             href="https://docs.google.com/spreadsheets/d/1BHgfhH0E5Ro5FuzsFgvt-wtNWI9sQ4QPqdk7aNInUi0/edit?gid=0#gid=0"
+  //             target="_blank">
+  //             <Button className="bg-green-600 mb-4">Go to Google Sheet</Button>
+  //           </Link>
+  //           <Link href="/scanner">
+  //             <Button className="bg-blue-400 mb-4">Scan In Hackers</Button>
+  //           </Link>
+  //         </div>
+  //       </div>
 
-        <TabsContent value="users">
-          <GenericDataContainer<User>
-            title="Users"
-            fetchFunction={async (page, pageSize, searchQuery) => {
-              const { users, totalUsers } = await getUsers(
-                page,
-                pageSize,
-                searchQuery,
-              );
-              return { data: users, total: totalUsers };
-            }}
-            updateFunction={async (editedData) => {
-              await batchUpdateUsers(
-                editedData as Parameters<typeof batchUpdateUsers>[0],
-              );
-            }}
-            columns={userColumns}
-            pageSize={20}
-            debounceTime={250}
-          />
-        </TabsContent>
-        <TabsContent value="checkins">
-          <GenericDataContainer<Checkin>
-            title="Check-ins"
-            fetchFunction={async (page, pageSize, searchQuery) => {
-              const { checkins, totalCheckins } = await getCheckins(
-                page,
-                pageSize,
-                searchQuery,
-              );
-              return { data: checkins, total: totalCheckins };
-            }}
-            updateFunction={async (editedData) => {
-              await batchUpdateCheckins(editedData);
-            }}
-            columns={checkinColumns}
-            debounceTime={250}
-          />
-        </TabsContent>
-        <TabsContent value="reimbursements">
-          <GenericDataContainer<ExtendedTravelReimbursement>
-            title="Reimbursements"
-            fetchFunction={async (page, pageSize, searchQuery) => {
-              const { reimbursements, totalReimbursements } =
-                await getReimbursements(page, pageSize, searchQuery);
+  //       <TabsContent value="users">
+  //         <GenericDataContainer<
+  //           UserSelect & { participantInfo: ParticipantInfoSelect | null }
+  //         >
+  //           title="Users"
+  //           fetchFunction={async (page, pageSize, searchQuery) => {
+  //             const { users, totalUsers } = await getUsers(
+  //               page,
+  //               pageSize,
+  //               searchQuery,
+  //             );
+  //             return { data: users, total: totalUsers };
+  //           }}
+  //           updateFunction={async (editedData) => {
+  //             await batchUpdateUsers(
+  //               editedData as Parameters<typeof batchUpdateUsers>[0],
+  //             );
+  //           }}
+  //           columns={userColumns}
+  //           pageSize={20}
+  //           debounceTime={250}
+  //         />
+  //       </TabsContent>
+  //       <TabsContent value="checkins">
+  //         <GenericDataContainer<
+  //           CheckinSelect & {
+  //             userUser: UserSelect & { participantInfo: ParticipantInfoSelect };
+  //             event: EventSelect;
+  //           }
+  //         >
+  //           title="Check-ins"
+  //           fetchFunction={async (page, pageSize, searchQuery) => {
+  //             const { checkins, totalCheckins } = await getCheckins(
+  //               page,
+  //               pageSize,
+  //               searchQuery,
+  //             );
+  //             return { data: checkins, total: totalCheckins };
+  //           }}
+  //           updateFunction={async (editedData) => {
+  //             await batchUpdateCheckins(editedData);
+  //           }}
+  //           columns={checkinColumns}
+  //           debounceTime={250}
+  //         />
+  //       </TabsContent>
+  //       <TabsContent value="reimbursements">
+  //         <GenericDataContainer<ExtendedTravelReimbursement>
+  //           title="Reimbursements"
+  //           fetchFunction={async (page, pageSize, searchQuery) => {
+  //             const { reimbursements, totalReimbursements } =
+  //               await getReimbursements(page, pageSize, searchQuery);
 
-              // ✅ Ensure `creator` is included correctly
-              const formattedReimbursements: ExtendedTravelReimbursement[] =
-                reimbursements.map((reimbursement) => ({
-                  ...reimbursement,
-                  creator: {
-                    id: reimbursement.creator.id,
-                    email: reimbursement.creator.email,
-                    ParticipantInfo: reimbursement.creator.ParticipantInfo
-                      ? {
-                          firstName:
-                            reimbursement.creator.ParticipantInfo.firstName,
-                          lastName:
-                            reimbursement.creator.ParticipantInfo.lastName,
-                        }
-                      : null,
-                  },
-                  invites: reimbursement.invites.map((invite) => ({
-                    user: {
-                      email: invite.user.email,
-                    },
-                  })),
-                }));
+  //             // ✅ Ensure `creator` is included correctly
+  //             const formattedReimbursements: ExtendedTravelReimbursement[] =
+  //               reimbursements.map((reimbursement) => ({
+  //                 ...reimbursement,
+  //                 creator: {
+  //                   id: reimbursement.creator.id,
+  //                   email: reimbursement.creator.email,
+  //                   ParticipantInfo: reimbursement.creator.ParticipantInfo
+  //                     ? {
+  //                         firstName:
+  //                           reimbursement.creator.ParticipantInfo.firstName,
+  //                         lastName:
+  //                           reimbursement.creator.ParticipantInfo.lastName,
+  //                       }
+  //                     : null,
+  //                 },
+  //                 invites: reimbursement.invites.map((invite) => ({
+  //                   user: {
+  //                     email: invite.user.email,
+  //                   },
+  //                 })),
+  //               }));
 
-              return {
-                data: formattedReimbursements,
-                total: totalReimbursements,
-              };
-            }}
-            updateFunction={async (editedData) => {
-              await batchUpdateReimbursements(editedData);
-            }}
-            columns={reimbursementColumns}
-            debounceTime={250}
-          />
-        </TabsContent>
+  //             return {
+  //               data: formattedReimbursements,
+  //               total: totalReimbursements,
+  //             };
+  //           }}
+  //           updateFunction={async (editedData) => {
+  //             await batchUpdateReimbursements(editedData);
+  //           }}
+  //           columns={reimbursementColumns}
+  //           debounceTime={250}
+  //         />
+  //       </TabsContent>
 
-        <TabsContent value="rooms">
-          <RoomReservationsTab />
-        </TabsContent>
+  //       <TabsContent value="rooms">
+  //         <RoomReservationsTab />
+  //       </TabsContent>
 
-        <TabsContent value="scanner">
-          <div className="flex flex-col items-start space-y-2">
-            <p className="text-sm text-muted-foreground">
-              Use our QR Code scanner to check participants in:
-            </p>
-            <Link href="/scanner" className="underline text-blue-600">
-              Go to Scanner
-            </Link>
-          </div>
-        </TabsContent>
-        <TabsContent value="actions">
-          <div className="flex flex-col items-start space-y-2">
-            <Button onClick={handleBackup}>
-              Batch Backup Registration Data
-            </Button>
-            <Button onClick={handleDownloadUserEmails}>
-              Download User Emails
-            </Button>
-            <Button onClick={handleDownloadRegistrantEmails}>
-              Download Registrant Emails
-            </Button>
-            <Button onClick={handleDownloadUnregisteredEmails}>
-              Download Unregistered Emails
-            </Button>
-          </div>
-        </TabsContent>
-        <TabsContent value="analytics">
-          <AnalyticsChart />
-          <CombinedDashboard />
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
+  //       <TabsContent value="scanner">
+  //         <div className="flex flex-col items-start space-y-2">
+  //           <p className="text-sm text-muted-foreground">
+  //             Use our QR Code scanner to check participants in:
+  //           </p>
+  //           <Link href="/scanner" className="underline text-blue-600">
+  //             Go to Scanner
+  //           </Link>
+  //         </div>
+  //       </TabsContent>
+  //       <TabsContent value="actions">
+  //         <div className="flex flex-col items-start space-y-2">
+  //           <Button onClick={handleBackup}>
+  //             Batch Backup Registration Data
+  //           </Button>
+  //           <Button onClick={handleDownloadUserEmails}>
+  //             Download User Emails
+  //           </Button>
+  //           <Button onClick={handleDownloadRegistrantEmails}>
+  //             Download Registrant Emails
+  //           </Button>
+  //           <Button onClick={handleDownloadUnregisteredEmails}>
+  //             Download Unregistered Emails
+  //           </Button>
+  //         </div>
+  //       </TabsContent>
+  //       <TabsContent value="analytics">
+  //         <AnalyticsChart />
+  //         <CombinedDashboard />
+  //       </TabsContent>
+  //     </Tabs>
+  //   </div>
+  // );
 }

@@ -108,15 +108,18 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.checkin.adminId,
       to: r.user.id,
       alias: "checkin_adminId_user_id",
+      optional: false,
     }),
     event: r.one.event({
       from: r.checkin.eventId,
       to: r.event.id,
+      optional: false,
     }),
     userUser: r.one.user({
       from: r.checkin.userId,
       to: r.user.id,
       alias: "checkin_userId_user_id",
+      optional: false,
     }),
     scanAttempts: r.many.scanAttempt(),
   },
@@ -169,6 +172,7 @@ export const relations = defineRelations(schema, (r) => ({
     user: r.one.user({
       from: r.participantInfo.userId,
       to: r.user.id,
+      optional: false,
     }),
   },
   passkey: {
@@ -216,6 +220,7 @@ export const relations = defineRelations(schema, (r) => ({
     themedRoom: r.one.themedRoom({
       from: r.reservationRequest.themedRoomId,
       to: r.themedRoom.id,
+      optional: false,
     }),
     members: r.many.user({
       from: r.reservationRequest.memberEmails,
@@ -230,6 +235,7 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.scanAttempt.adminId,
       to: r.user.id,
       alias: "scanAttempt_adminId_user_id",
+      optional: false,
     }),
     checkin: r.one.checkin({
       from: r.scanAttempt.checkinId,
@@ -238,11 +244,13 @@ export const relations = defineRelations(schema, (r) => ({
     event: r.one.event({
       from: r.scanAttempt.eventId,
       to: r.event.id,
+      optional: false,
     }),
     userUser: r.one.user({
       from: r.scanAttempt.userId,
       to: r.user.id,
       alias: "scanAttempt_userId_user_id",
+      optional: false,
     }),
   },
   session: {
@@ -261,12 +269,14 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.ticket.createdById,
       to: r.user.id,
       alias: "ticket_createdById_user_id",
+      optional: false,
     }),
   },
   twoFactor: {
     user: r.one.user({
       from: r.twoFactor.userId,
       to: r.user.id,
+      optional: false,
     }),
   },
 }));

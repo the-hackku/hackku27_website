@@ -4,15 +4,13 @@ import { IconLoader, IconX } from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-  type AdminReservationRequest,
-  type AdminThemedRoom,
   assignRoomToRequest,
   createThemedRoom,
-  deleteAdminThemedRoom,
   deleteReservationRequest,
+  deleteThemedRoom,
   getReservationRequests,
   getThemedRooms,
-  updateAdminThemedRoom,
+  updateThemedRoom,
 } from "@/app/actions/admin";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { ThemedRoomSelect } from "@/db/schema";
 
 const PAGE_SIZE = 10;
 
@@ -45,15 +44,17 @@ const EMPTY_ROOM_FORM = { name: "", location: "" };
 
 export function RoomReservationsTab() {
   // ── Themed Rooms ──────────────────────────────────────────────────────────
-  const [rooms, setRooms] = useState<AdminThemedRoom[]>([]);
+  const [rooms, setRooms] = useState<ThemedRoomSelect[]>([]);
   const [roomsLoading, setRoomsLoading] = useState(false);
   const [roomDialogOpen, setRoomDialogOpen] = useState(false);
   const [roomForm, setRoomForm] = useState(EMPTY_ROOM_FORM);
-  const [editingRoom, setEditingRoom] = useState<AdminThemedRoom | null>(null);
+  const [editingRoom, setEditingRoom] = useState<ThemedRoomSelect | null>(null);
   const [roomSaving, setRoomSaving] = useState(false);
 
   // ── Reservation Requests ──────────────────────────────────────────────────
-  const [requests, setRequests] = useState<AdminReservationRequest[]>([]);
+  const [requests, setRequests] = useState<
+    Awaited<ReturnType<typeof getReservationRequests>>["requests"]
+  >([]);
   const [requestsTotal, setRequestsTotal] = useState(0);
   const [requestsPage, setRequestsPage] = useState(1);
   const [requestsSearch, setRequestsSearch] = useState("");
@@ -112,7 +113,7 @@ export function RoomReservationsTab() {
     setRoomDialogOpen(true);
   }
 
-  function openEditRoom(room: AdminThemedRoom) {
+  function openEditRoom(room: ThemedRoomSelect) {
     setEditingRoom(room);
     setRoomForm({ name: room.name, location: room.location });
     setRoomDialogOpen(true);
@@ -126,7 +127,7 @@ export function RoomReservationsTab() {
     setRoomSaving(true);
     try {
       if (editingRoom) {
-        await updateAdminThemedRoom(editingRoom.id, roomForm);
+        await updateThemedRoom(editingRoom.id, roomForm);
         toast.success("Room updated.");
       } else {
         await createThemedRoom(roomForm);
@@ -144,10 +145,11 @@ export function RoomReservationsTab() {
   async function handleDeleteRoom(id: string) {
     if (
       !window.confirm("Delete this room? Existing assignments will be cleared.")
-    )
+    ) {
       return;
+    }
     try {
-      await deleteAdminThemedRoom(id);
+      await deleteThemedRoom(id);
       toast.success("Room deleted.");
       fetchRooms();
       fetchRequests(); // assignments may have been cleared
@@ -179,8 +181,9 @@ export function RoomReservationsTab() {
   async function handleCancelRequest(requestId: string) {
     if (
       !window.confirm("Delete this reservation request? This cannot be undone.")
-    )
+    ) {
       return;
+    }
     try {
       await deleteReservationRequest(requestId);
       toast.success("Request cancelled.");

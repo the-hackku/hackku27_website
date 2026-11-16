@@ -73,7 +73,7 @@ export function UserDetailsDialog({
                 <CardHeader>
                   <CardTitle>
                     Basic Information{" "}
-                    {userDetails.ParticipantInfo ? (
+                    {userDetails.participantInfo ? (
                       ""
                     ) : (
                       <span className="text-sm text-red-400">
@@ -99,13 +99,13 @@ export function UserDetailsDialog({
                 </CardContent>
               </Card>
 
-              {userDetails.ParticipantInfo && (
+              {userDetails.participantInfo && (
                 <Card>
                   <CardHeader>
                     <CardTitle>Participant Information</CardTitle>
                   </CardHeader>
                   <CardContent className="grid grid-cols-2 gap-4">
-                    {Object.entries(userDetails.ParticipantInfo)
+                    {Object.entries(userDetails.participantInfo)
                       .filter(
                         ([key, value]) =>
                           value &&

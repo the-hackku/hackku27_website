@@ -58,11 +58,11 @@ export function EventForm() {
 
       await createEvent({
         name: data.name,
-        startDate: eventStart.toISOString(),
-        endDate: eventEnd.toISOString(),
+        startDate: eventStart,
+        endDate: eventEnd,
         location: data.location || "",
         description: data.description,
-        eventType: data.eventType,
+        type: data.eventType,
       });
 
       form.reset();

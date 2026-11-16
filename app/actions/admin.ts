@@ -1,6 +1,6 @@
 "use server";
 
-import { eq, ilike, or } from "drizzle-orm";
+import { eq, ilike, or, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 import {
   checkin as checkinTable,
@@ -623,10 +623,7 @@ export async function getReservationRequests(
   page = 1,
   pageSize = 10,
   searchQuery = "",
-): Promise<{
-  requests: (typeof reservationRequestTable.$inferSelect)[];
-  total: number;
-}> {
+) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -657,6 +654,12 @@ export async function getReservationRequests(
           },
         },
       },
+    },
+    extras: {
+      userEmail: (table) =>
+        sql<string>`(SELECT email FROM ${userTable} WHERE ${userTable.id} = ${table.userId})`.as(
+          "userEmail",
+        ),
     },
     limit: pageSize,
     offset: (page - 1) * pageSize,
