@@ -14,9 +14,8 @@ The **HackKU Management System** manages hackathon logistics for HackKU 2027, fr
 
 ## Tech Stack
 
-- **Frontend**: Next.js 16 (App Router), React, TypeScript, Tailwind CSS, shadcn/ui
-- **Backend**: Next.js server actions, Prisma ORM, PostgreSQL
-- **Auth**: Better Auth v1.6 — email magic links + Google / GitHub / Discord OAuth
+- **Frontend**: Next.js 16 (App Router), React, Tailwind CSS, shadcn/ui
+- **Backend**: Next.js 16, Drizzle ORM, Better Auth, PostgreSQL
 - **Storage**: Vercel Blob (resume PDFs)
 - **Email**: Resend
 - **Deployment**: Vercel

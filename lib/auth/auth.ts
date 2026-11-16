@@ -14,7 +14,17 @@ import { eq } from "drizzle-orm";
 import { forbidden, unauthorized } from "next/navigation";
 import { jsx } from "react/jsx-runtime";
 import MagicLink from "@/components/email/MagicLink";
-import { account } from "@/db/schema";
+import {
+  account as accountTable,
+  invitation as invitationTable,
+  member as memberTable,
+  organization as organizationTable,
+  passkey as passkeyTable,
+  session as sessionTable,
+  twoFactor as twoFactorTable,
+  user as userTable,
+  verification as verificationTable,
+} from "@/db/schema";
 import { ac, roles } from "@/lib/auth/permissions";
 import { db } from "@/lib/db";
 import { resend } from "@/lib/resend";
@@ -35,6 +45,17 @@ export const auth = betterAuth({
   },
   database: drizzleAdapter(db, {
     provider: "pg",
+    schema: {
+      user: userTable,
+      account: accountTable,
+      session: sessionTable,
+      verification: verificationTable,
+      twoFactor: twoFactorTable,
+      passkey: passkeyTable,
+      organization: organizationTable,
+      member: memberTable,
+      invitation: invitationTable,
+    },
   }),
   user: {
     additionalFields: {
@@ -221,8 +242,8 @@ export const auth = betterAuth({
             };
           }
           const existingAccounts = await db.$count(
-            account,
-            eq(account.userId, acc.userId),
+            accountTable,
+            eq(accountTable.userId, acc.userId),
           );
           if (existingAccounts === 0) {
             return {

@@ -78,14 +78,17 @@ bun run dev
 
 Visit `http://localhost:3000`.
 
-## Other useful commands
+## Command Reference
 
 ```bash
+bun run dev            # Starts a developer server on http://localhost:3000
 bun run build          # Production build
+bun run start          # Starts a production server (if already built)
 bun run biome          # Runs Biome.js checks and writes safe fixes/formatting
-bun run generate       # Generates the Prisma client (use for typechecking, before running the server)
-bun run db:down        # Stop the local Postgres container
-bun run db:studio      # Browse the database in a GUI
-
-cwebp -preset drawing -q 50 -m 6 -af -sns 80 -alpha_q 50 -mt doodle.png -o doodle.webp # Compress doodle to WEBP
+bun run db:down        # Removes the local database
+bun run db:seed        # Seeds the linked database with example data
+bun run db:dev         # Forces schema changes onto the linked database (may cause data loss)
+bun run db:generate    # Generates a SQL migration for schema changes
+bun run db:migrate     # Applies available and unapplied SQL migrations to the linked database
+bun run db:studio      # Browse the linked database in a GUI
 ```

@@ -446,7 +446,7 @@ export async function fetchScanHistory() {
       scan.userUser?.participantInfo?.lastName
         ? `${scan.userUser.participantInfo.firstName} ${scan.userUser.participantInfo.lastName}`
         : scan.userUser?.name || "Unknown User",
-    eventName: scan.event?.name,
+    eventName: scan.event?.name || "Unnamed Event",
     successful: scan.successful,
     timestamp: scan.createdAt.toISOString(),
   }));

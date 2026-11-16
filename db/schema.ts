@@ -97,6 +97,8 @@ export const user = pgTable("user", {
     .notNull()
     .default(sql`ARRAY[]::text[]`),
 });
+export type UserSelect = typeof user.$inferSelect;
+export type UserInsert = typeof user.$inferInsert;
 
 export const account = pgTable(
   "account",
@@ -127,6 +129,8 @@ export const account = pgTable(
     ),
   ],
 );
+export type AccountSelect = typeof account.$inferSelect;
+export type AccountInsert = typeof account.$inferInsert;
 
 export const session = pgTable(
   "session",
@@ -149,6 +153,8 @@ export const session = pgTable(
   },
   (table) => [index("session_userId_idx").on(table.userId)],
 );
+export type SessionSelect = typeof session.$inferSelect;
+export type SessionInsert = typeof session.$inferInsert;
 
 export const verification = pgTable(
   "verification",
@@ -165,6 +171,8 @@ export const verification = pgTable(
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
+export type VerificationSelect = typeof verification.$inferSelect;
+export type VerificationInsert = typeof verification.$inferInsert;
 
 export const twoFactor = pgTable(
   "two_factor",
@@ -184,6 +192,8 @@ export const twoFactor = pgTable(
     index("twoFactor_userId_idx").on(table.userId),
   ],
 );
+export type TwoFactorSelect = typeof twoFactor.$inferSelect;
+export type TwoFactorInsert = typeof twoFactor.$inferInsert;
 
 export const passkey = pgTable(
   "passkey",
@@ -207,12 +217,14 @@ export const passkey = pgTable(
     index("passkey_credentialID_idx").on(table.credentialID),
   ],
 );
+export type PasskeySelect = typeof passkey.$inferSelect;
+export type PasskeyInsert = typeof passkey.$inferInsert;
 
 // ==========================================
 // Custom Event & Checkin Tables
 // ==========================================
 
-export const event = pgTable("Event", {
+export const event = pgTable("event", {
   id: text()
     .primaryKey()
     .$defaultFn(() => createId()),
@@ -229,9 +241,11 @@ export const event = pgTable("Event", {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });
+export type EventSelect = typeof event.$inferSelect;
+export type EventInsert = typeof event.$inferInsert;
 
 export const checkin = pgTable(
-  "Checkin",
+  "checkin",
   {
     id: text()
       .primaryKey()
@@ -267,9 +281,11 @@ export const checkin = pgTable(
       .onDelete("restrict"),
   ],
 );
+export type CheckinSelect = typeof checkin.$inferSelect;
+export type CheckinInsert = typeof checkin.$inferInsert;
 
 export const scanAttempt = pgTable(
-  "ScanAttempt",
+  "scanAttempt",
   {
     id: text()
       .primaryKey()
@@ -314,9 +330,11 @@ export const scanAttempt = pgTable(
       .onDelete("restrict"),
   ],
 );
+export type ScanAttemptSelect = typeof scanAttempt.$inferSelect;
+export type ScanAttemptInsert = typeof scanAttempt.$inferInsert;
 
 export const participantInfo = pgTable(
-  "ParticipantInfo",
+  "participantInfo",
   {
     id: text()
       .primaryKey()
@@ -370,6 +388,8 @@ export const participantInfo = pgTable(
     ),
   ],
 );
+export type ParticipantInfoSelect = typeof participantInfo.$inferSelect;
+export type ParticipantInfoInsert = typeof participantInfo.$inferInsert;
 
 // ==========================================
 // Better Auth Organization Tables
@@ -390,6 +410,8 @@ export const organization = pgTable(
   },
   (table) => [uniqueIndex("organization_creatorId_key").on(table.creatorId)],
 );
+export type OrganizationSelect = typeof organization.$inferSelect;
+export type OrganizationInsert = typeof organization.$inferInsert;
 
 export const member = pgTable(
   "member",
@@ -409,6 +431,8 @@ export const member = pgTable(
     index("member_userId_idx").on(table.userId),
   ],
 );
+export type MemberSelect = typeof member.$inferSelect;
+export type MemberInsert = typeof member.$inferInsert;
 
 export const invitation = pgTable(
   "invitation",
@@ -432,13 +456,15 @@ export const invitation = pgTable(
     index("invitation_email_idx").on(table.email),
   ],
 );
+export type InvitationSelect = typeof invitation.$inferSelect;
+export type InvitationInsert = typeof invitation.$inferInsert;
 
 // ==========================================
 // Custom Project, Travel & Logistics Tables
 // ==========================================
 
 export const project = pgTable(
-  "Project",
+  "project",
   {
     id: text()
       .primaryKey()
@@ -480,9 +506,11 @@ export const project = pgTable(
     ),
   ],
 );
+export type ProjectSelect = typeof project.$inferSelect;
+export type ProjectInsert = typeof project.$inferInsert;
 
 export const travelReimbursement = pgTable(
-  "TravelReimbursement",
+  "travelReimbursement",
   {
     id: text()
       .primaryKey()
@@ -514,9 +542,11 @@ export const travelReimbursement = pgTable(
     ),
   ],
 );
+export type TravelReimbursementSelect = typeof travelReimbursement.$inferSelect;
+export type TravelReimbursementInsert = typeof travelReimbursement.$inferInsert;
 
 export const reimbursementInvite = pgTable(
-  "ReimbursementInvite",
+  "reimbursementInvite",
   {
     id: text()
       .primaryKey()
@@ -553,17 +583,21 @@ export const reimbursementInvite = pgTable(
     ),
   ],
 );
+export type ReimbursementInviteSelect = typeof reimbursementInvite.$inferSelect;
+export type ReimbursementInviteInsert = typeof reimbursementInvite.$inferInsert;
 
-export const themedRoom = pgTable("ThemedRoom", {
+export const themedRoom = pgTable("themedRoom", {
   id: text()
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text().notNull(),
   location: text().notNull(),
 });
+export type ThemedRoomSelect = typeof themedRoom.$inferSelect;
+export type ThemedRoomInsert = typeof themedRoom.$inferInsert;
 
 export const reservationRequest = pgTable(
-  "ReservationRequest",
+  "reservationRequest",
   {
     id: text()
       .primaryKey()
@@ -594,9 +628,11 @@ export const reservationRequest = pgTable(
     ),
   ],
 );
+export type ReservationRequestSelect = typeof reservationRequest.$inferSelect;
+export type ReservationRequestInsert = typeof reservationRequest.$inferInsert;
 
 export const themedRoomReservation = pgTable(
-  "ThemedRoomReservation",
+  "themedRoomReservation",
   {
     id: text()
       .primaryKey()
@@ -625,8 +661,12 @@ export const themedRoomReservation = pgTable(
     ),
   ],
 );
+export type ThemedRoomReservationSelect =
+  typeof themedRoomReservation.$inferSelect;
+export type ThemedRoomReservationInsert =
+  typeof themedRoomReservation.$inferInsert;
 
-export const infoPageContent = pgTable("InfoPageContent", {
+export const infoPageContent = pgTable("infoPageContent", {
   id: text().default("singleton").primaryKey(),
   title: text().default("HackKU Hacker Doc").notNull(),
   content: text().default("").notNull(),
@@ -636,9 +676,11 @@ export const infoPageContent = pgTable("InfoPageContent", {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });
+export type InfoPageContentSelect = typeof infoPageContent.$inferSelect;
+export type InfoPageContentInsert = typeof infoPageContent.$inferInsert;
 
 export const ticket = pgTable(
-  "Ticket",
+  "ticket",
   {
     id: text()
       .primaryKey()
@@ -674,3 +716,5 @@ export const ticket = pgTable(
       .onDelete("cascade"),
   ],
 );
+export type TicketSelect = typeof ticket.$inferSelect;
+export type TicketInsert = typeof ticket.$inferInsert;
