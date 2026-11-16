@@ -84,7 +84,8 @@ Visit `http://localhost:3000`.
 bun run dev            # Starts a developer server on http://localhost:3000
 bun run build          # Production build
 bun run start          # Starts a production server (if already built)
-bun run biome          # Runs Biome.js checks and writes safe fixes/formatting
+bun run fix            # Runs Biome.js checks and writes safe fixes/formatting
+bun run fix:error      # Runs Biome.js checks (errors only) and writes safe fixes/formatting
 bun run db:down        # Removes the local database
 bun run db:seed        # Seeds the linked database with example data
 bun run db:dev         # Forces schema changes onto the linked database (may cause data loss)
