@@ -43,7 +43,3 @@ const constants = {
   endDate: "2026-04-04T20:00:00.000Z", // closing ceremony ends (3 PM CDT Sunday)
 };
 ```
-
-### `prisma/schema.prisma`
-
-Database schema. After edits, run `npx prisma migrate dev` to apply changes and regenerate the client.
