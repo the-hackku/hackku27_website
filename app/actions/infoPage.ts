@@ -1,25 +1,16 @@
 "use server";
 
 import { headers } from "next/headers";
+import { infoPageContent as infoPageContentTable } from "@/db/schema";
 import { auth, hasPermissions } from "@/lib/auth/auth";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/db";
 
-export type InfoPageData = {
-  id: string;
-  title: string;
-  content: string;
-  titleImageUrl: string | null;
-  logoUrl: string | null;
-  updatedAt: Date;
-};
-
-export async function getInfoPage(): Promise<InfoPageData> {
-  const page = await prisma.infoPageContent.upsert({
+export async function getInfoPage(): Promise<
+  typeof infoPageContentTable.$inferSelect
+> {
+  return (await db.query.infoPageContent.findFirst({
     where: { id: "singleton" },
-    create: { id: "singleton" },
-    update: {},
-  });
-  return page;
+  })) as typeof infoPageContentTable.$inferSelect;
 }
 
 export async function updateInfoPage(data: {
@@ -27,16 +18,20 @@ export async function updateInfoPage(data: {
   content?: string;
   titleImageUrl?: string | null;
   logoUrl?: string | null;
-}): Promise<InfoPageData> {
+}): Promise<typeof infoPageContentTable.$inferSelect> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   await hasPermissions(session, { info_pages: ["manage"] });
 
-  const page = await prisma.infoPageContent.upsert({
+  await db
+    .insert(infoPageContentTable)
+    .values({ id: "singleton", updatedAt: new Date(), ...data })
+    .onConflictDoUpdate({
+      target: infoPageContentTable.id,
+      set: data,
+    });
+  return (await db.query.infoPageContent.findFirst({
     where: { id: "singleton" },
-    create: { id: "singleton", ...data },
-    update: data,
-  });
-  return page;
+  })) as typeof infoPageContentTable.$inferSelect;
 }

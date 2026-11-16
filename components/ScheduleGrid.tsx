@@ -23,7 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import type { EventType } from "@/prisma/generated/browser";
+import type { EventType } from "@/db/schema";
 import activityBg from "@/public/images/schedule/activities.png";
 import foodBg from "@/public/images/schedule/food.png";
 import dawnBg from "@/public/images/schedule/required dawn.png";
@@ -439,7 +439,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     (acc, event) => {
       // Format the event start date as a local date string
       const eventDate = new Date(event.startDate).toLocaleDateString("en-US"); // Use local time zone by default
-      if (!acc[eventDate]) acc[eventDate] = [];
+      if (!acc[eventDate]) {
+        acc[eventDate] = [];
+      }
       acc[eventDate].push(event);
       return acc;
     },
@@ -463,7 +465,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
   // Helper function to get the next event based on the current event
   const getNextEvent = (currentEvent: ScheduleEvent | null) => {
-    if (!currentEvent) return null;
+    if (!currentEvent) {
+      return null;
+    }
     const currentIndex = filteredEvents.findIndex(
       (event) => event.id === currentEvent.id,
     );
@@ -474,7 +478,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
   // Helper function to get the previous event based on the current event
   const getPreviousEvent = (currentEvent: ScheduleEvent | null) => {
-    if (!currentEvent) return null;
+    if (!currentEvent) {
+      return null;
+    }
     const currentIndex = filteredEvents.findIndex(
       (event) => event.id === currentEvent.id,
     );
@@ -532,7 +538,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const filteredGroupedEvents = filteredEvents.reduce(
     (acc, event) => {
       const eventDate = new Date(event.startDate).toLocaleDateString("en-US"); // Use local time
-      if (!acc[eventDate]) acc[eventDate] = [];
+      if (!acc[eventDate]) {
+        acc[eventDate] = [];
+      }
       acc[eventDate].push(event);
       return acc;
     },
@@ -555,11 +563,12 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       : filteredGroupedEvents[selectedDay] || [];
 
   // Determine base hour (earliest event start hour)
-  const baseHour = dayEvents.length
-    ? Math.min(
-        ...dayEvents.map((event) => new Date(event.startDate).getHours()),
-      )
-    : 6;
+  const baseHour =
+    dayEvents.length > 0
+      ? Math.min(
+          ...dayEvents.map((event) => new Date(event.startDate).getHours()),
+        )
+      : 6;
 
   // Define timezone-aware end-of-day
   const getEndOfDaySlot = (events: ScheduleEvent[]) => {

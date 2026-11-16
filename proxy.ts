@@ -1,7 +1,7 @@
 import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function proxy(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
 
   if (request.nextUrl.pathname === "/signin") {
@@ -19,5 +19,12 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/signin", "/signup"],
+  matcher: [
+    "/signin",
+    "/signup",
+    "/register",
+    "/profile",
+    "/admin",
+    "/admin/:path*",
+  ],
 };

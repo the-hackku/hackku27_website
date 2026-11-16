@@ -1,0 +1,1 @@
+git diff --quiet HEAD^ HEAD -- app components lib db drizzle providers public types bun.lock constants.ts env.ts next.config.ts package.json postcss.config.mjs drizzle.config.ts proxy.ts tailwind.config.ts tsconfig.json vercel.json

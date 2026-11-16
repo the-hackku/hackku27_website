@@ -4,7 +4,11 @@ import { IconLoader } from "@tabler/icons-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { updateEvent } from "@/app/actions/events";
-import { type Event, EventType } from "@/prisma/generated/browser";
+import {
+  type EventSelect as Event,
+  type EventType,
+  eventType,
+} from "@/db/schema";
 import { Button } from "../ui/button";
 
 type Props = {
@@ -40,7 +44,7 @@ export default function AdminEventEditor({ events }: Props) {
         name: ev.name,
         description: ev.description ?? "",
         location: ev.location ?? "",
-        eventType: ev.eventType ?? "",
+        eventType: ev.type ?? "",
         startDate: toLocalISOString(new Date(ev.startDate)),
         endDate: toLocalISOString(new Date(ev.endDate)),
       });
@@ -49,7 +53,9 @@ export default function AdminEventEditor({ events }: Props) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!selectedId) return;
+    if (!selectedId) {
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -143,7 +149,7 @@ export default function AdminEventEditor({ events }: Props) {
             onChange={(e) =>
               setFormData({ ...formData, eventType: e.target.value })
             }>
-            {Object.values(EventType).map((type) => (
+            {Object.values(eventType.enumValues).map((type) => (
               <option key={type} value={type}>
                 {type}
               </option>

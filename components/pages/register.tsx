@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
 import constants from "@/constants";
 import { auth } from "@/lib/auth/auth";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/db";
 import type { RegistrationData } from "@/types/schemas/participant";
 
 export async function Register() {
@@ -11,12 +11,12 @@ export async function Register() {
     headers: await headers(),
   });
 
-  if (!session) {
+  if (!session?.session) {
     redirect("/signin");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session?.session.userId },
+  const user = await db.query.user.findFirst({
+    where: { id: session.session.userId },
   });
 
   const participant = user?.isRegistered;
