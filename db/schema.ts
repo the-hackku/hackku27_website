@@ -67,6 +67,22 @@ export const ticketStatus = pgEnum("TicketStatus", [
 ]);
 export type TicketStatus = (typeof ticketStatus.enumValues)[number];
 
+export const eventTrack = pgEnum("EventTrack", ["GENERAL", "THEME"]);
+export type EventTrack = (typeof eventTrack.enumValues)[number];
+
+export const projectVisitType = pgEnum("ProjectVisitType", [
+  "TRACK",
+  "SPONSOR",
+]);
+export type ProjectVisitType = (typeof projectVisitType.enumValues)[number];
+
+export const projectVisitStatus = pgEnum("ProjectVisitStatus", [
+  "BUSY",
+  "COMPLETED",
+  "ABSENT",
+]);
+export type ProjectVisitStatus = (typeof projectVisitStatus.enumValues)[number];
+
 // ==========================================
 // Better Auth Core Tables
 // ==========================================
@@ -96,6 +112,13 @@ export const user = pgTable("user", {
     .array()
     .notNull()
     .default(sql`ARRAY[]::text[]`),
+  judgeTrackAssignment: eventTrack("judge_track_assignment"),
+  judgeSponsorAssignment: text("judge_sponsor_assignment").references(
+    () => challenge.id,
+    {
+      onDelete: "set null",
+    },
+  ),
 });
 export type UserSelect = typeof user.$inferSelect;
 export type UserInsert = typeof user.$inferInsert;
@@ -403,7 +426,11 @@ export const organization = pgTable(
     slug: text("slug").notNull().unique(),
     logo: text("logo"),
     metadata: text("metadata"),
-    createdAt: timestamp("created_at").notNull(),
+    createdAt: timestamp("created_at", { precision: 3 }).notNull(),
+    updatedAt: timestamp("updated_at", { precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
     creatorId: text("creator_id").references(() => user.id, {
       onDelete: "cascade",
     }),
@@ -424,7 +451,11 @@ export const member = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     role: text("role").default("member").notNull(),
-    createdAt: timestamp("created_at").notNull(),
+    createdAt: timestamp("created_at", { precision: 3 }).notNull(),
+    updatedAt: timestamp("updated_at", { precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
   },
   (table) => [
     index("member_organizationId_idx").on(table.organizationId),
@@ -460,8 +491,24 @@ export type InvitationSelect = typeof invitation.$inferSelect;
 export type InvitationInsert = typeof invitation.$inferInsert;
 
 // ==========================================
-// Custom Project, Travel & Logistics Tables
+// Judging and Project Tables
 // ==========================================
+
+export const challenge = pgTable("challenge", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  isSponsor: boolean("is_sponsor").default(false).notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at", { precision: 3 })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { precision: 3 })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+export type ChallengeSelect = typeof challenge.$inferSelect;
+export type ChallengeInsert = typeof challenge.$inferInsert;
 
 export const project = pgTable(
   "project",
@@ -469,11 +516,16 @@ export const project = pgTable(
     id: text()
       .primaryKey()
       .$defaultFn(() => createId()),
-    teamId: text(),
-    creatorId: text(),
+    teamId: text("team_id"),
+    creatorId: text("creator_id"),
     name: text().notNull(),
-    description: text(),
-    devpostURL: text().notNull(),
+    description: text().notNull().default("No description provided."),
+    repoURL: text().notNull(),
+    location: text(),
+    track: eventTrack(),
+    challengeIds: text("challenge_ids").array(),
+    currentJudgeId: text("current_judge_id"),
+    judgeLockExpiresAt: timestamp({ precision: 3 }),
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -496,6 +548,13 @@ export const project = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
+    foreignKey({
+      columns: [table.currentJudgeId],
+      foreignColumns: [user.id],
+      name: "Project_currentJudgeId_fkey",
+    })
+      .onUpdate("cascade")
+      .onDelete("set null"),
     uniqueIndex("Project_creatorId_key").using(
       "btree",
       table.creatorId.asc().nullsLast(),
@@ -508,6 +567,97 @@ export const project = pgTable(
 );
 export type ProjectSelect = typeof project.$inferSelect;
 export type ProjectInsert = typeof project.$inferInsert;
+
+export const projectVisit = pgTable(
+  "projectVisit",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    previousProjectId: text(),
+    currentProjectId: text().notNull(),
+    judgeId: text().notNull(),
+    rating: integer(),
+    comment: text(),
+    challengeRatings: jsonb(),
+    type: projectVisitType().default("TRACK").notNull(),
+    status: projectVisitStatus().default("BUSY").notNull(),
+    createdAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.previousProjectId],
+      foreignColumns: [project.id],
+      name: "ProjectVisit_previousProjectId_fkey",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    foreignKey({
+      columns: [table.currentProjectId],
+      foreignColumns: [project.id],
+      name: "ProjectVisit_currentProjectId_fkey",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    foreignKey({
+      columns: [table.judgeId],
+      foreignColumns: [user.id],
+      name: "ProjectVisit_judgeId_fkey",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+  ],
+);
+export type ProjectVisitSelect = typeof projectVisit.$inferSelect;
+export type ProjectVisitInsert = typeof projectVisit.$inferInsert;
+
+export const judgePodium = pgTable(
+  "judgePodium",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    projectId: text().notNull(),
+    judgeId: text().notNull(),
+    rank: integer().notNull(),
+    createdAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.projectId],
+      foreignColumns: [project.id],
+      name: "JudgePodium_projectId_fkey",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    foreignKey({
+      columns: [table.judgeId],
+      foreignColumns: [user.id],
+      name: "JudgePodium_judgeId_fkey",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    uniqueIndex("JudgePodium_projectId_judgeId_key").using(
+      "btree",
+      table.projectId.asc().nullsLast(),
+      table.judgeId.asc().nullsLast(),
+    ),
+    uniqueIndex("JudgePodium_judgeId_rank_key").using(
+      "btree",
+      table.judgeId.asc().nullsLast(),
+      table.rank.asc().nullsLast(),
+    ),
+  ],
+);
+export type JudgePodiumSelect = typeof judgePodium.$inferSelect;
+export type JudgePodiumInsert = typeof judgePodium.$inferInsert;
 
 export const travelReimbursement = pgTable(
   "travelReimbursement",
