@@ -112,13 +112,6 @@ export const user = pgTable("user", {
     .array()
     .notNull()
     .default(sql`ARRAY[]::text[]`),
-  judgeTrackAssignment: eventTrack("judge_track_assignment"),
-  judgeSponsorAssignment: text("judge_sponsor_assignment").references(
-    () => challenge.id,
-    {
-      onDelete: "set null",
-    },
-  ),
 });
 export type UserSelect = typeof user.$inferSelect;
 export type UserInsert = typeof user.$inferInsert;
@@ -494,6 +487,50 @@ export type InvitationInsert = typeof invitation.$inferInsert;
 // Judging and Project Tables
 // ==========================================
 
+export const judgeInfo = pgTable(
+  "judgeInfo",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    userId: text().notNull(),
+    track: eventTrack(),
+    sponsorAssignment: text().references(() => challenge.id, {
+      onDelete: "set null",
+    }),
+    isPresent: boolean().default(false).notNull(),
+    createdAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp({ precision: 3 })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.userId],
+      foreignColumns: [user.id],
+      name: "JudgeInfo_userId_fkey",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    foreignKey({
+      columns: [table.sponsorAssignment],
+      foreignColumns: [challenge.id],
+      name: "JudgeInfo_sponsorAssignment_fkey",
+    })
+      .onUpdate("cascade")
+      .onDelete("set null"),
+    uniqueIndex("JudgeInfo_userId_key").using(
+      "btree",
+      table.userId.asc().nullsLast(),
+    ),
+  ],
+);
+export type JudgeInfoSelect = typeof judgeInfo.$inferSelect;
+export type JudgeInfoInsert = typeof judgeInfo.$inferInsert;
+
 export const challenge = pgTable("challenge", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -525,6 +562,7 @@ export const project = pgTable(
     track: eventTrack(),
     challengeIds: text("challenge_ids").array(),
     currentJudgeId: text("current_judge_id"),
+    isAbsent: boolean().default(false).notNull(),
     judgeLockExpiresAt: timestamp({ precision: 3 }),
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -555,11 +593,11 @@ export const project = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("set null"),
-    uniqueIndex("Project_creatorId_key").using(
+    uniqueIndex("Project_creatorId_fkey").using(
       "btree",
       table.creatorId.asc().nullsLast(),
     ),
-    uniqueIndex("Project_teamId_key").using(
+    uniqueIndex("Project_teamId_fkey").using(
       "btree",
       table.teamId.asc().nullsLast(),
     ),

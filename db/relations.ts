@@ -56,6 +56,9 @@ export const relations = defineRelations(schema, (r) => ({
       alias: "travelReimbursement_userId_user_id",
     }),
     twoFactors: r.many.twoFactor(),
+    judgeInfo: r.one.judgeInfo({
+      alias: "judgeInfo_userId_user_id",
+    }),
     currentlyJudgingProject: r.one.project({
       alias: "project_currentJudgeId_user_id",
     }),
@@ -118,6 +121,13 @@ export const relations = defineRelations(schema, (r) => ({
     organization: r.one.organization({
       from: r.invitation.organizationId,
       to: r.organization.id,
+    }),
+  },
+  judgeInfo: {
+    user: r.one.user({
+      from: r.judgeInfo.userId,
+      to: r.user.id,
+      alias: "judgeInfo_userId_user_id",
     }),
   },
   member: {
