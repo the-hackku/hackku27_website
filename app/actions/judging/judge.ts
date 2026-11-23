@@ -1,6 +1,6 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { headers } from "next/headers";
 import constants from "@/constants";
 import {
@@ -17,6 +17,7 @@ export async function startJudgingProject({
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),
+    query: { disableCookieCache: true },
   });
   if (!session) {
     throw new Error("Not authenticated");
@@ -54,22 +55,45 @@ export async function startJudgingProject({
   ) {
     throw new Error("Project is currently locked by another judge");
   }
-  await db.transaction(async (tx) => {
-    await tx.update(projectTable).set({
-      currentJudgeId: session.session.userId,
-      judgeLockExpiresAt: new Date(Date.now() + constants.judgeLockDuration),
-    });
+  const result = await db.transaction(async (tx) => {
+    const projectResult = await tx
+      .update(projectTable)
+      .set({
+        currentJudgeId: session.session.userId,
+        judgeLockExpiresAt: new Date(Date.now() + constants.judgeLockDuration),
+      })
+      .where(
+        and(
+          eq(projectTable.id, projectId),
+          isNull(projectTable.currentJudgeId),
+        ),
+      )
+      .returning({
+        id: projectTable.id,
+        currentJudgeId: projectTable.currentJudgeId,
+        judgeLockExpiresAt: projectTable.judgeLockExpiresAt,
+      });
+    if (projectResult[0].currentJudgeId !== session.session.userId) {
+      tx.rollback();
+      return false;
+    }
     await tx.insert(projectVisitTable).values({
       previousProjectId: null,
       currentProjectId: projectId,
       judgeId: session.session.userId,
     });
   });
+  if (!result) {
+    throw new Error(
+      "Failed to lock project for judging. It may be locked by another judge.",
+    );
+  }
 }
 
 export async function unlockProject({ projectId }: { projectId: string }) {
   const session = await auth.api.getSession({
     headers: await headers(),
+    query: { disableCookieCache: true },
   });
   if (!session) {
     throw new Error("Not authenticated");
@@ -107,19 +131,26 @@ export async function unlockProject({ projectId }: { projectId: string }) {
     throw new Error("Project visit not in a busy state");
   }
   await db.transaction(async (tx) => {
-    await tx.update(projectTable).set({
-      currentJudgeId: null,
-      judgeLockExpiresAt: null,
-    });
-    await tx.update(projectVisitTable).set({
-      status: "COMPLETED",
-    });
+    await tx
+      .update(projectTable)
+      .set({
+        currentJudgeId: null,
+        judgeLockExpiresAt: null,
+      })
+      .where(eq(projectTable.id, projectId));
+    await tx
+      .update(projectVisitTable)
+      .set({
+        status: "COMPLETED",
+      })
+      .where(eq(projectVisitTable.currentProjectId, projectId));
   });
 }
 
 export async function markProjectAbsent({ projectId }: { projectId: string }) {
   const session = await auth.api.getSession({
     headers: await headers(),
+    query: { disableCookieCache: true },
   });
   if (!session) {
     throw new Error("Not authenticated");
@@ -161,14 +192,20 @@ export async function markProjectAbsent({ projectId }: { projectId: string }) {
   }
   // TODO: Discuss whether just one judge can mark a project as absent, or if two judges need to mark it as absent before it is considered absent
   await db.transaction(async (tx) => {
-    await tx.update(projectTable).set({
-      currentJudgeId: null,
-      judgeLockExpiresAt: null,
-      isAbsent: true,
-    });
-    await tx.update(projectVisitTable).set({
-      status: "ABSENT",
-    });
+    await tx
+      .update(projectTable)
+      .set({
+        currentJudgeId: null,
+        judgeLockExpiresAt: null,
+        isAbsent: true,
+      })
+      .where(eq(projectTable.id, projectId));
+    await tx
+      .update(projectVisitTable)
+      .set({
+        status: "ABSENT",
+      })
+      .where(eq(projectVisitTable.currentProjectId, projectId));
   });
 }
 
@@ -187,6 +224,7 @@ export async function judgeProject({
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),
+    query: { disableCookieCache: true },
   });
   if (!session) {
     throw new Error("Not authenticated");
@@ -230,26 +268,28 @@ export async function judgeProject({
     throw new Error("Project visit not in a busy state");
   }
   if (previousProjectId) {
-    const previousProject = await db.query.project.findFirst({
+    // TODO: This should attempt to find the most recent project visit for this judge that wasn't an absent project, and ensure that the previousProjectId matches that project. This is to prevent a judge from skipping projects and judging them out of order.
+    const previousProject = await db.query.projectVisit.findFirst({
       where: {
-        id: previousProjectId,
+        currentProjectId: previousProjectId,
+        judgeId: session.session.userId,
       },
     });
     if (!previousProject) {
-      throw new Error("Previous project not found");
+      throw new Error("Previous project visit not found");
     }
-    if (previousProject.track !== judgeInfo.track) {
-      throw new Error("Judge is not assigned to the previous project's track");
-    }
-    if (previousProject.currentJudgeId !== session.session.userId) {
-      throw new Error("Judge is not assigned to the previous project");
+    if (previousProject.status !== "COMPLETED") {
+      throw new Error("Previous project visit not in a completed state");
     }
   }
   await db.transaction(async (tx) => {
-    await tx.update(projectTable).set({
-      currentJudgeId: null,
-      judgeLockExpiresAt: null,
-    });
+    await tx
+      .update(projectTable)
+      .set({
+        currentJudgeId: null,
+        judgeLockExpiresAt: null,
+      })
+      .where(eq(projectTable.id, currentProjectId));
     await tx
       .update(projectVisitTable)
       .set({

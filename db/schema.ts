@@ -83,6 +83,13 @@ export const projectVisitStatus = pgEnum("ProjectVisitStatus", [
 ]);
 export type ProjectVisitStatus = (typeof projectVisitStatus.enumValues)[number];
 
+export const judgePanelType = pgEnum("JudgePanelType", [
+  "GENERAL",
+  "THEME",
+  "CHALLENGE",
+]);
+export type JudgePanelType = (typeof judgePanelType.enumValues)[number];
+
 // ==========================================
 // Better Auth Core Tables
 // ==========================================
@@ -560,7 +567,11 @@ export const project = pgTable(
     repoURL: text().notNull(),
     location: text(),
     track: eventTrack(),
-    challengeIds: text("challenge_ids").array(),
+    challengeIds: text("challenge_ids")
+      .array()
+      .references(() => challenge.id, {
+        onDelete: "set null",
+      }),
     currentJudgeId: text("current_judge_id"),
     isAbsent: boolean().default(false).notNull(),
     judgeLockExpiresAt: timestamp({ precision: 3 }),
@@ -646,6 +657,11 @@ export const projectVisit = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
+    uniqueIndex("ProjectVisit_judgeId_currentProjectId_key").using(
+      "btree",
+      table.judgeId.asc().nullsLast(),
+      table.currentProjectId.asc().nullsLast(),
+    ),
   ],
 );
 export type ProjectVisitSelect = typeof projectVisit.$inferSelect;

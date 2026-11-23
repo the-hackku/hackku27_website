@@ -27,8 +27,8 @@ export const relations = defineRelations(schema, (r) => ({
       alias: "organization_id_user_id_via_member",
     }),
     members: r.many.member(),
-    organizationsCreatorId: r.one.organization({
-      alias: "organization_creatorId_user_id",
+    organizationsCreated: r.many.organization({
+      alias: "organization_id_user_id_via_creatorId",
     }),
     participantInfo: r.one.participantInfo(),
     passkeys: r.many.passkey(),
@@ -104,7 +104,7 @@ export const relations = defineRelations(schema, (r) => ({
       alias: "organization_id_user_id_via_member",
     }),
     members: r.many.member(),
-    user: r.one.user({
+    creator: r.one.user({
       from: r.organization.creatorId,
       to: r.user.id,
       alias: "organization_creatorId_user_id",
