@@ -500,12 +500,16 @@ export const judgeInfo = pgTable(
     id: text()
       .primaryKey()
       .$defaultFn(() => createId()),
-    userId: text().notNull(),
+    userId: text(),
     track: eventTrack(),
-    sponsorAssignment: text().references(() => challenge.id, {
-      onDelete: "set null",
-    }),
+    sponsorAssignmentId: text(),
     isPresent: boolean().default(false).notNull(),
+    isPanel: boolean().default(false).notNull(),
+    panelType: judgePanelType(),
+    panelUserIds: text("panel_user_ids")
+      .array()
+      .notNull()
+      .default(sql`ARRAY[]::text[]`),
     createdAt: timestamp({ precision: 3 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -523,9 +527,9 @@ export const judgeInfo = pgTable(
       .onUpdate("cascade")
       .onDelete("cascade"),
     foreignKey({
-      columns: [table.sponsorAssignment],
+      columns: [table.sponsorAssignmentId],
       foreignColumns: [challenge.id],
-      name: "JudgeInfo_sponsorAssignment_fkey",
+      name: "JudgeInfo_sponsorAssignmentId_fkey",
     })
       .onUpdate("cascade")
       .onDelete("set null"),
@@ -567,11 +571,7 @@ export const project = pgTable(
     repoURL: text().notNull(),
     location: text(),
     track: eventTrack(),
-    challengeIds: text("challenge_ids")
-      .array()
-      .references(() => challenge.id, {
-        onDelete: "set null",
-      }),
+    challengeIds: text("challenge_ids").array(),
     currentJudgeId: text("current_judge_id"),
     isAbsent: boolean().default(false).notNull(),
     judgeLockExpiresAt: timestamp({ precision: 3 }),
@@ -599,7 +599,7 @@ export const project = pgTable(
       .onDelete("cascade"),
     foreignKey({
       columns: [table.currentJudgeId],
-      foreignColumns: [user.id],
+      foreignColumns: [judgeInfo.id],
       name: "Project_currentJudgeId_fkey",
     })
       .onUpdate("cascade")
@@ -652,8 +652,8 @@ export const projectVisit = pgTable(
       .onDelete("cascade"),
     foreignKey({
       columns: [table.judgeId],
-      foreignColumns: [user.id],
-      name: "ProjectVisit_judgeId_fkey",
+      foreignColumns: [judgeInfo.id],
+      name: "ProjectVisit_judgeInfoId_fkey",
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
@@ -693,7 +693,7 @@ export const judgePodium = pgTable(
       .onDelete("cascade"),
     foreignKey({
       columns: [table.judgeId],
-      foreignColumns: [user.id],
+      foreignColumns: [judgeInfo.id],
       name: "JudgePodium_judgeId_fkey",
     })
       .onUpdate("cascade")
@@ -703,7 +703,7 @@ export const judgePodium = pgTable(
       table.projectId.asc().nullsLast(),
       table.judgeId.asc().nullsLast(),
     ),
-    uniqueIndex("JudgePodium_judgeId_rank_key").using(
+    uniqueIndex("JudgePodium_judgeInfoId_rank_key").using(
       "btree",
       table.judgeId.asc().nullsLast(),
       table.rank.asc().nullsLast(),

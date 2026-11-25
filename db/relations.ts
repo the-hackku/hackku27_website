@@ -59,15 +59,6 @@ export const relations = defineRelations(schema, (r) => ({
     judgeInfo: r.one.judgeInfo({
       alias: "judgeInfo_userId_user_id",
     }),
-    currentlyJudgingProject: r.one.project({
-      alias: "project_currentJudgeId_user_id",
-    }),
-    projectVisitsJudged: r.many.projectVisit({
-      alias: "projectVisit_judgeId_user_id",
-    }),
-    judgePodiums: r.many.judgePodium({
-      alias: "JudgePodium_judgeId_user_id",
-    }),
   },
   checkin: {
     userAdmin: r.one.user({
@@ -129,6 +120,39 @@ export const relations = defineRelations(schema, (r) => ({
       to: r.user.id,
       alias: "judgeInfo_userId_user_id",
     }),
+    panelUsers: r.many.user({
+      from: r.judgeInfo.panelUserIds,
+      to: r.user.id,
+      alias: "judgeInfo_panelUserIds_user_id",
+    }),
+    currentlyJudgingProject: r.one.project({
+      alias: "project_currentJudgeId_judgeInfo_id",
+    }),
+    projectVisitsJudged: r.many.projectVisit({
+      alias: "projectVisit_judgeId_judgeInfo_id",
+    }),
+    judgePodiums: r.many.judgePodium({
+      alias: "JudgePodium_judgeId_judgeInfo_id",
+    }),
+    sponsorAssignment: r.one.challenge({
+      from: r.judgeInfo.sponsorAssignmentId,
+      to: r.challenge.id,
+      alias: "judgeInfo_sponsorAssignmentId_challenge_id",
+    }),
+  },
+  judgePodium: {
+    project: r.one.project({
+      from: r.judgePodium.projectId,
+      to: r.project.id,
+      alias: "JudgePodium_projectId_project_id",
+      optional: false,
+    }),
+    judge: r.one.judgeInfo({
+      from: r.judgePodium.judgeId,
+      to: r.judgeInfo.id,
+      alias: "JudgePodium_judgeId_judgeInfo_id",
+      optional: false,
+    }),
   },
   member: {
     organization: r.one.organization({
@@ -164,16 +188,16 @@ export const relations = defineRelations(schema, (r) => ({
       to: r.organization.id,
       alias: "project_teamId_organization_id",
     }),
-    currentJudge: r.one.user({
+    currentJudge: r.one.judgeInfo({
       from: r.project.currentJudgeId,
-      to: r.user.id,
-      alias: "project_currentJudgeId_user_id",
+      to: r.judgeInfo.id,
+      alias: "project_currentJudgeId_judgeInfo_id",
     }),
     visitsAsPrevious: r.many.projectVisit({
-      alias: "project_id_projectVisit_id_via_previousProjectId",
+      alias: "projectVisit_previousProjectId_project_id",
     }),
     visitsAsCurrent: r.many.projectVisit({
-      alias: "project_id_projectVisit_id_via_currentProjectId",
+      alias: "projectVisit_currentProjectId_project_id",
     }),
     judgePodiums: r.many.judgePodium({
       alias: "JudgePodium_projectId_project_id",
@@ -189,23 +213,13 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.projectVisit.currentProjectId,
       to: r.project.id,
       alias: "projectVisit_currentProjectId_project_id",
+      optional: false,
     }),
-    judge: r.one.user({
+    judge: r.one.judgeInfo({
       from: r.projectVisit.judgeId,
-      to: r.user.id,
-      alias: "projectVisit_judgeId_user_id",
-    }),
-  },
-  judgePodium: {
-    project: r.one.project({
-      from: r.judgePodium.projectId,
-      to: r.project.id,
-      alias: "JudgePodium_projectId_project_id",
-    }),
-    judge: r.one.user({
-      from: r.judgePodium.judgeId,
-      to: r.user.id,
-      alias: "JudgePodium_judgeId_user_id",
+      to: r.judgeInfo.id,
+      alias: "projectVisit_judgeId_judgeInfo_id",
+      optional: false,
     }),
   },
   travelReimbursement: {

@@ -10,11 +10,7 @@ import {
 import { auth, hasPermissions } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 
-export async function startJudgingProject({
-  projectId,
-}: {
-  projectId: string;
-}) {
+export async function getNextProject() {
   const session = await auth.api.getSession({
     headers: await headers(),
     query: { disableCookieCache: true },
@@ -27,68 +23,108 @@ export async function startJudgingProject({
     where: {
       userId: session.session.userId,
     },
+    with: {
+      currentlyJudgingProject: true,
+      sponsorAssignment: true,
+    },
   });
   if (!judgeInfo) {
     throw new Error("Judge info not found");
   }
   if (judgeInfo.track === null) {
-    throw new Error("Judge does not have a track assigned");
-  }
-  const project = await db.query.project.findFirst({
-    where: {
-      id: projectId,
-    },
-  });
-  if (!project) {
-    throw new Error("Project not found");
-  }
-  if (project.isAbsent) {
-    throw new Error("Project is marked as absent");
-  }
-  if (project.track !== judgeInfo.track) {
-    throw new Error("Judge is not assigned to the project's track");
-  }
-  if (
-    project.currentJudgeId !== null &&
-    project.judgeLockExpiresAt &&
-    project.judgeLockExpiresAt > new Date()
-  ) {
-    throw new Error("Project is currently locked by another judge");
-  }
-  const result = await db.transaction(async (tx) => {
-    const projectResult = await tx
-      .update(projectTable)
-      .set({
-        currentJudgeId: session.session.userId,
-        judgeLockExpiresAt: new Date(Date.now() + constants.judgeLockDuration),
-      })
-      .where(
-        and(
-          eq(projectTable.id, projectId),
-          isNull(projectTable.currentJudgeId),
-        ),
-      )
-      .returning({
-        id: projectTable.id,
-        currentJudgeId: projectTable.currentJudgeId,
-        judgeLockExpiresAt: projectTable.judgeLockExpiresAt,
-      });
-    if (projectResult[0].currentJudgeId !== session.session.userId) {
-      tx.rollback();
-      return false;
+    if (judgeInfo.sponsorAssignment) {
+      // In a transaction, find the next project that is participating in this challenge, lock it, and return it. Retry if the lock fails. If n retries fail, error and inform client to try again soon.
+    } else {
+      throw new Error(
+        "Judge does not have a track or sponsor challenge assigned.",
+      );
     }
-    await tx.insert(projectVisitTable).values({
-      previousProjectId: null,
-      currentProjectId: projectId,
-      judgeId: session.session.userId,
-    });
-  });
-  if (!result) {
-    throw new Error(
-      "Failed to lock project for judging. It may be locked by another judge.",
-    );
   }
+  if (judgeInfo.currentlyJudgingProject) {
+    return judgeInfo.currentlyJudgingProject;
+  }
+  // TODO: In a transaction, use the algorithm to find the next project for this judge, lock it, and return it. Retry if the lock fails. If n retries fail, error and inform client to try again soon.
 }
+
+// export async function startJudgingProject({
+//   projectId,
+// }: {
+//   projectId: string;
+// }) {
+//   const session = await auth.api.getSession({
+//     headers: await headers(),
+//     query: { disableCookieCache: true },
+//   });
+//   if (!session) {
+//     throw new Error("Not authenticated");
+//   }
+//   await hasPermissions(session, { judging: ["participate"] });
+//   const judgeInfo = await db.query.judgeInfo.findFirst({
+//     where: {
+//       userId: session.session.userId,
+//     },
+//   });
+//   if (!judgeInfo) {
+//     throw new Error("Judge info not found");
+//   }
+//   if (judgeInfo.track === null) {
+//     throw new Error("Judge does not have a track assigned");
+//   }
+//   const project = await db.query.project.findFirst({
+//     where: {
+//       id: projectId,
+//     },
+//   });
+//   if (!project) {
+//     throw new Error("Project not found");
+//   }
+//   if (project.isAbsent) {
+//     throw new Error("Project is marked as absent");
+//   }
+//   if (project.track !== judgeInfo.track) {
+//     throw new Error("Judge is not assigned to the project's track");
+//   }
+//   if (
+//     project.currentJudgeId !== null &&
+//     project.judgeLockExpiresAt &&
+//     project.judgeLockExpiresAt > new Date()
+//   ) {
+//     throw new Error("Project is currently locked by another judge");
+//   }
+//   const result = await db.transaction(async (tx) => {
+//     const projectResult = await tx
+//       .update(projectTable)
+//       .set({
+//         currentJudgeId: session.session.userId,
+//         judgeLockExpiresAt: new Date(Date.now() + constants.judgeLockDuration),
+//       })
+//       .where(
+//         and(
+//           eq(projectTable.id, projectId),
+//           isNull(projectTable.currentJudgeId),
+//         ),
+//       )
+//       .returning({
+//         id: projectTable.id,
+//         currentJudgeId: projectTable.currentJudgeId,
+//         judgeLockExpiresAt: projectTable.judgeLockExpiresAt,
+//       });
+//     if (projectResult[0].currentJudgeId !== session.session.userId) {
+//       tx.rollback();
+//       return false;
+//     }
+//     await tx.insert(projectVisitTable).values({
+//       previousProjectId: null,
+//       currentProjectId: projectId,
+//       judgeId: session.session.userId,
+//     });
+//   });
+//   if (!result) {
+//     throw new Error(
+//       "Failed to lock project for judging. It may be locked by another judge.",
+//     );
+//   }
+// }
 
 export async function unlockProject({ projectId }: { projectId: string }) {
   const session = await auth.api.getSession({
@@ -293,6 +329,7 @@ export async function judgeProject({
     await tx
       .update(projectVisitTable)
       .set({
+        status: "COMPLETED",
         previousProjectId,
         rating,
         comment,
@@ -300,4 +337,55 @@ export async function judgeProject({
       })
       .where(eq(projectVisitTable.currentProjectId, currentProjectId));
   });
+}
+
+export async function getJudgePodium() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    throw new Error("Not authenticated");
+  }
+  await hasPermissions(session, { judging: ["participate"] });
+  const judgeInfo = await db.query.judgeInfo.findFirst({
+    where: {
+      userId: session.session.userId,
+    },
+    with: {
+      judgePodiums: {
+        with: {
+          project: {
+            columns: {
+              id: true,
+              name: true,
+              location: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!judgeInfo) {
+    throw new Error("Judge info not found");
+  }
+  return judgeInfo.judgePodiums;
+}
+
+export async function generateJudgePodium() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    throw new Error("Not authenticated");
+  }
+  await hasPermissions(session, { judging: ["participate"] });
+  const judgeInfo = await db.query.judgeInfo.findFirst({
+    where: {
+      userId: session.session.userId,
+    },
+  });
+  if (!judgeInfo) {
+    throw new Error("Judge info not found");
+  }
+  // TODO: Implement the logic to generate a judge podium based on the judge's visits and ratings.
 }
